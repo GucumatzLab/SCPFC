@@ -20,9 +20,9 @@ create table Puesto (
 	 id serial primary key,
 	 nombre varchar(100) not null,
 	 tipoComida integer not null references TipoComida(id),
+	referencias varChar(100) NOT NULL,
  	 latitud float not null,
- 	 longitud float not null,
- 	 rutaImagen varchar(200)
+ 	 longitud float not null
 );
 
 create table Comentario (
@@ -38,4 +38,10 @@ create table Calificacion (
   calificacion float not null,
   puesto_id integer not null references Puesto(id),
   usuario_id integer not null references Usuario(id)
+);
+
+CREATE TABLE FotosPuesto (
+	idPuesto Integer REFERENCES Puesto(id),
+	url varChar(100) NOT NULL,
+	PRIMARY KEY (idPuesto, url)
 );
