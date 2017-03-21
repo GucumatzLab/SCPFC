@@ -1,6 +1,6 @@
 <html>
         <head>
-                <title>SCPFC | Mapa</title>
+                <title>SCPFC | Nombre del puesto</title>
                 <style>
                                 #map {
                                         height: 400px;
@@ -72,7 +72,7 @@
               }
             </script>
             <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2A2vIybClb6npOfNcdDt_zA6J7HEiFYk&callback=initMap">
             </script>
         </body>
 </html>
