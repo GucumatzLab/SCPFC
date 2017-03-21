@@ -12,11 +12,16 @@ CREATE TABLE Puesto {
 	referencias varChar(100) NOT NULL,
 	longitud Float NOT NULL,
 	latitud Float NOT NULL,
-	urlFoto varChar(100)
 };
 
+CREATE TABLE FotosPuesto {
+	idPuesto Integer REFERENCES Puesto(id),
+	url varChar(100) NOT NULL,
+	PRIMARY KEY (idPuesto, url)
+}
+
 CREATE TABLE PuestoTipoComida {
-	idPuesto Integer NOT NULL,
-	idComida Integer NOT NULL,
+	idPuesto Integer NOT NULL REFERENCES Puesto(id),
+	idComida Integer NOT NULL REFERENCES TipoComida(id),
 	PRIMARY KEY (idPuesto, idComida)
 };
