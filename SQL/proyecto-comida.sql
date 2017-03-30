@@ -2,8 +2,8 @@ use gucumatz;
 
 create table Usuario (
   id serial primary key,
-  nombre varchar(100) not null,
-  correoElectronico varchar(100) not null,
+  nombre varchar(100) not null unique,
+  correoElectronico varchar(100) not null unique,
   contrasena varchar(100) not null,
   codigoDeActivacion varchar(100), -- Para los correos de confirmación
   esAdministrador bool not null default false,
@@ -11,15 +11,10 @@ create table Usuario (
   rutaImagen varchar(100)
 );
 
-create table TipoComida(
-	id serial primary key,
-	nombre varchar(100) not null,
-	productos varchar(500) not null
-);
 create table Puesto (
 	 id serial primary key,
 	 nombre varchar(100) not null,
-	 tipoComida integer not null references TipoComida(id),
+	 tipoComida varchar(200) not null,
 	referencias varChar(100) NOT NULL,
  	 latitud float not null,
  	 longitud float not null
