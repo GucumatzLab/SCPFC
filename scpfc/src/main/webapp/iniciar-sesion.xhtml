@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+  <h:head>
+    <title>Iniciar Sesión</title>
+    <style type="text/css">
+      .form-signin {
+        margin: auto;
+        max-width: 500px;
+        padding: 40px;
+      }
+    </style>
+  </h:head>
+  <h:body style="padding: 0px;">
+    <b:navBar brand="SCPCF" brandHref="#" fixed="top">
+
+      <b:navbarLinks pull="right" rendered="#{sesionActiva.usuario eq null}">
+        <b:navLink icon-align="right" value="Crear cuenta" href="crear-cuenta.xhtml"></b:navLink>
+        <b:navLink icon-align="right" value="Iniciar sesión" href="iniciar-sesion.xhtml"></b:navLink>
+      </b:navbarLinks>
+
+      <h:form rendered="#{not (sesionActiva.usuario eq null)}">
+        <b:navbarLinks pull="right">
+          <b:navLink icon-align="right" value="#{sesionActiva.usuario.nombre} (#{sesionActiva.usuario.correoElectronico})" href="#"></b:navLink>
+          <b:navCommandLink icon-align="right" value="Cerrar sesión" href="iniciar-sesion.xhtml" action="#{sesionActiva.cerrarSesion()}"></b:navCommandLink>
+        </b:navbarLinks>
+      </h:form>
+
+    </b:navBar>
+    <b:container fluid="true">
+      <b:row>
+        <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+          <center>
+            <h:form styleClass="form-signin">
+              <h1 class="form-signin-heading">Iniciar Sesión</h1>
+
+              <b:messages/>
+
+              <b:inputText id="cuenta" placeholder="Nombre de usuario"
+                           value="#{inicioDeSesion.cuenta}"
+                           required="true">
+                <f:facet name="prepend">
+                  <b:icon name="user"/>
+                </f:facet>
+              </b:inputText>
+              <h:message for="cuenta"/>
+
+              <b:inputText id="contrasena" placeholder="Contraseña"
+                           type="password"
+                           value="#{inicioDeSesion.contrasena}"
+                           required="true">
+                <f:facet name="prepend">
+                  <b:iconAwesome name="key"/>
+                </f:facet>
+              </b:inputText>
+              <h:message for="contrasena"/>
+
+
+              <b:commandButton look="primary btn-block" value="Iniciar sesión"
+                               icon="log-in" size="lg"
+                               action="#{inicioDeSesion.iniciarSesion()}"/>
+            </h:form>
+          </center>
+        </b:column>
+      </b:row>
+    </b:container>
+  </h:body>
+</html>
