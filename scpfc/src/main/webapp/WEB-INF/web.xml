@@ -20,4 +20,14 @@
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
 
+  <!--  -->
+  <servlet>
+    <servlet-name>ActivacionDeCuenta</servlet-name>
+    <servlet-class>gucumatz.scpfc.web.ActivacionDeCuenta</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActivacionDeCuenta</servlet-name>
+    <url-pattern>/activar-cuenta</url-pattern>
+  </servlet-mapping>
+
 </web-app>

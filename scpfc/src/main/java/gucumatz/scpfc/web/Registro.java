@@ -13,6 +13,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+import javax.faces.context.ExternalContext;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.servlet.http.HttpServletRequest;
 
 //
 @ManagedBean
@@ -97,7 +106,8 @@ public class Registro implements Serializable {
 
         jpaUsuario.create(u);
 
-        return null;
+        enviarCorreoDeActivacion(u);
+        return "index.xhtml";
     }
 
     private void comprobarNombreDeUsuarioDisponible() {
@@ -131,6 +141,38 @@ public class Registro implements Serializable {
         FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
         facesContext.addMessage(null, facesMessage);
+    }
+
+    public void enviarCorreoDeActivacion(Usuario usuario) {
+        Properties propiedadesSesionEmail = new Properties();
+        propiedadesSesionEmail.setProperty("mail.smtp.port", "2000");
+        propiedadesSesionEmail.setProperty("mail.smtp.host", "localhost");
+        Session sesionEmail = Session.getInstance(propiedadesSesionEmail);
+
+        try {
+            MimeMessage mensaje = new MimeMessage(sesionEmail);
+            mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
+            mensaje.addRecipient(Message.RecipientType.TO,
+                    new InternetAddress(usuario.getCorreoElectronico(), usuario.getNombre()));
+            mensaje.setSubject("SCPFC - Confirma tu cuenta");
+
+            ExternalContext context = facesContext.getExternalContext();
+            HttpServletRequest request = (HttpServletRequest) context.getRequest();
+            String url = request.getRequestURL().toString();
+            String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+
+            String textoMensaje
+                    = "Para confirmar tu cuenta ve a "
+                    + baseUrl
+                    + "/activar-cuenta"
+                    + "?id=" + usuario.getId()
+                    + "&codigo=" + usuario.getCodigoDeActivacion();
+            mensaje.setText(textoMensaje);
+
+            Transport.send(mensaje);
+        } catch (MessagingException | java.io.UnsupportedEncodingException me) {
+
+        }
     }
 
 }
