@@ -14,7 +14,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -98,11 +97,6 @@ public class InicioDeSesion implements Serializable {
             return null;
         }
 
-        HttpSession httpSession = sesionActiva.obtenerSesionActual();
-        if (httpSession.getAttribute("idUsuario") != null) {
-            return null;
-        }
-        httpSession.setAttribute("idUsuario", usuario.getId());
         sesionActiva.setUsuario(usuario);
         return null;
     }
