@@ -23,20 +23,39 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 
-//
 @ManagedBean
 @ViewScoped
 public class Registro implements Serializable {
 
+    /**
+     * Controlador JPA para acceder a la BD.
+     */
     private final UsuarioJpaController jpaUsuario;
 
+    /**
+     * Nombre del nuevo usuario.
+     */
     private String nombreDeUsuario;
+
+    /**
+     * Correo electrónico del nuevo usuario.
+     */
     private String correoElectronico;
+
+    /**
+     * Contraseña del nuevo usuario.
+     */
     private String contrasena;
+
+    /**
+     * Confirmación de la contraseña.
+     */
     private String confirmacionDeContrasena;
 
-    private FacesContext facesContext;
-
+    /**
+     * Bandera para saber si hay errores en los datos recibidos. Cuando es TRUE
+     * no se debe proceder con el registro.
+     */
     private boolean hayErrores;
 
     /**
@@ -80,13 +99,12 @@ public class Registro implements Serializable {
     }
 
     public void validarDatos() {
-        facesContext = FacesContext.getCurrentInstance();
         hayErrores = false;
 
-        comprobarNombreDeUsuarioDisponible();
-        comprobarCorreoElectronicoDisponible();
-        comprobarCorreoElectronicoEsDeCiencias();
-        comprobarContrasenasCoinciden();
+        validarNombreDeUsuarioDisponible();
+        validarCorreoElectronicoDisponible();
+        validarCorreoElectronicoEsDeCiencias();
+        validarContrasenasCoinciden();
     }
 
     public String registrar() {
@@ -107,40 +125,41 @@ public class Registro implements Serializable {
         jpaUsuario.create(u);
 
         enviarCorreoDeActivacion(u);
-        return "index.xhtml";
+        return "index";
     }
 
-    private void comprobarNombreDeUsuarioDisponible() {
+    private void validarNombreDeUsuarioDisponible() {
         Usuario usuario = jpaUsuario.findByNombre(nombreDeUsuario);
         if (usuario != null) {
-            agregarError("El nombre de usuario ya existe", "nombreDeUsuario");
+            agregarError("Ya existe una cuenta con este nombre de usuario", "nombreDeUsuario");
         }
     }
 
-    private void comprobarCorreoElectronicoDisponible() {
+    private void validarCorreoElectronicoDisponible() {
         Usuario usuario = jpaUsuario.findByCorreoElectronico(correoElectronico);
         if (usuario != null) {
-            agregarError("El correo electrónico ya existe", "correoElectronico");
+            agregarError("Ya existe una cuenta con este correo", "correoElectronico");
         }
     }
 
-    private void comprobarCorreoElectronicoEsDeCiencias() {
+    private void validarCorreoElectronicoEsDeCiencias() {
         if (!correoElectronico.endsWith("@ciencias.unam.mx")) {
-            agregarError("El correo electrónico debe ser de @ciencias.unam.mx", "correoElectronico");
+            agregarError("Debes proporcionar un correo @ciencias.unam.mx", "correoElectronico");
         }
     }
 
-    private void comprobarContrasenasCoinciden() {
+    private void validarContrasenasCoinciden() {
         if (!contrasena.equals(confirmacionDeContrasena)) {
-            agregarError("Las contraseñas no coinciden", "confirmacionDeContrasena");
+            agregarError("La confirmación de contraseña no coincide", "confirmacionDeContrasena");
         }
     }
 
     private void agregarError(String mensaje, String elemento) {
         hayErrores = true;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
-        facesContext.addMessage(null, facesMessage);
+        facesContext.addMessage("formulario:" + elemento, facesMessage);
     }
 
     public void enviarCorreoDeActivacion(Usuario usuario) {
@@ -156,7 +175,7 @@ public class Registro implements Serializable {
                     new InternetAddress(usuario.getCorreoElectronico(), usuario.getNombre()));
             mensaje.setSubject("SCPFC - Confirma tu cuenta");
 
-            ExternalContext context = facesContext.getExternalContext();
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
             HttpServletRequest request = (HttpServletRequest) context.getRequest();
             String url = request.getRequestURL().toString();
             String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
@@ -173,6 +192,13 @@ public class Registro implements Serializable {
         } catch (MessagingException | java.io.UnsupportedEncodingException me) {
 
         }
+
+        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Se ha enviado un correo de confirmación a "
+                + usuario.getCorreoElectronico(),
+                null);
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
     }
 
 }
