@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:b="http://bootsfaces.net/ui">
   <h:head>
@@ -34,35 +33,28 @@
       <b:row>
         <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
           <center>
-            <h:form styleClass="form-signin">
-              <h1 class="form-signin-heading">Iniciar Sesión</h1>
-
-              <b:messages/>
-
-              <b:inputText id="cuenta" placeholder="Nombre de usuario"
+            <b:form styleClass="form-signin" id="formulario" inline="true">
+              <b:inputText id="cuenta"
+                           label="Nombre de usuario o correo electrónico" placeholder="usuario"
                            value="#{inicioDeSesion.cuenta}"
-                           required="true">
-                <f:facet name="prepend">
-                  <b:icon name="user"/>
-                </f:facet>
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío.">
               </b:inputText>
-              <h:message for="cuenta"/>
+              <b:message for="cuenta"/>
 
-              <b:inputText id="contrasena" placeholder="Contraseña"
-                           type="password"
+              <b:inputText id="contrasena" type="password"
+                           label="Contraseña" placeholder="********"
                            value="#{inicioDeSesion.contrasena}"
-                           required="true">
-                <f:facet name="prepend">
-                  <b:iconAwesome name="key"/>
-                </f:facet>
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío.">
               </b:inputText>
-              <h:message for="contrasena"/>
+              <b:message for="contrasena"/>
 
 
               <b:commandButton look="primary btn-block" value="Iniciar sesión"
                                icon="log-in" size="lg"
                                action="#{inicioDeSesion.iniciarSesion()}"/>
-            </h:form>
+            </b:form>
           </center>
         </b:column>
       </b:row>

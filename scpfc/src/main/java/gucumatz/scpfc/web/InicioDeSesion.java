@@ -23,6 +23,9 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class InicioDeSesion implements Serializable {
 
+    /**
+     * Controlador de JPA para buscar al usuario en la BD.
+     */
     private final UsuarioJpaController jpaUsuario;
 
     /**
@@ -37,68 +40,56 @@ public class InicioDeSesion implements Serializable {
     private String contrasena;
 
     /**
-     * Contexto para mostrar mensajes al usuario.
-     */
-    private FacesContext facesContext;
-
-    /**
      * Bandera que indica si hay errores en los datos proporcionados. Cuando es
      * TRUE, no se debe permitir iniciar sesión.
      */
     private boolean hayErrores;
 
+    /**
+     * Usuario con el que se quiere iniciar sesión.
+     */
     private Usuario usuario;
 
+    /**
+     * Bean de sesión para recordar el usuario que inicia de sesión.
+     */
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
 
-    /**
-     * Creates a new instance of InicioDeSesionIH
-     */
     public InicioDeSesion() {
         jpaUsuario = new FabricaControladorJpa().obtenerControladorJpaUsuario();
         hayErrores = false;
     }
 
+    /**
+     * Valida que los datos sean correctos y muestra mensajes de error.
+     */
     public void validarDatos() {
-        facesContext = FacesContext.getCurrentInstance();
-
-        usuario = buscarUsuario(cuenta);
-        if (usuario == null) {
-            FacesMessage mensaje
-                    = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El usuario no existe", null);
-            //facesContext.addMessage(null, mensaje);
-            hayErrores = true;
-            return;
-        }
-
-        if (!comprobarContrasenaCorrecta(usuario)) {
-            FacesMessage mensaje
-                    = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "Contraseña incorrecta", null);
-            //facesContext.addMessage(null, mensaje);
-            hayErrores = true;
-            return;
-        }
-
         hayErrores = false;
+
+        validarCuentaExiste();
+        validarCuentaConfirmada();
+        validarContrasenaCorrecta();
     }
 
     /**
-     * Inicia sesión.
+     * Inicia sesión con los datos actuales.
      *
-     * @return La página que debe mostrar.
+     * @return La página que debe mostrar. null si hay errores o index si pudo
+     * iniciar sesión.
      */
     public String iniciarSesion() {
         /* Primero valida que los datos sean correctos. */
         validarDatos();
 
+        /* Si hay errores, permanece en la misma página. */
         if (hayErrores) {
             return null;
         }
 
+        /* Si no hay errores, actualiza la sesión. */
         sesionActiva.setUsuario(usuario);
-        return null;
+        return "index";
     }
 
     public String getCuenta() {
@@ -126,29 +117,44 @@ public class InicioDeSesion implements Serializable {
     }
 
     /**
-     * Comprueba que la contraseña recibida coincida con la del usuario dado.
-     *
-     * @param usuario el usuario contra el que se comprobará la contraseña
-     * @return TRUE si las contraseñas coinciden, y FALSE en otro caso.
+     * Comprueba que la cuenta de usuario exista. Si existe, actualiza el valor
+     * del atributo usuario.
      */
-    private boolean comprobarContrasenaCorrecta(Usuario usuario) {
-        return usuario.getContrasena().equals(contrasena);
+    private void validarCuentaExiste() {
+        usuario = jpaUsuario.buscarUsuario(cuenta);
+
+        if (usuario == null) {
+            agregarError("El usuario no existe", "cuenta");
+        }
     }
 
     /**
-     * Busca un usuario por nombre o correo electrónico.
-     *
-     * @param cuenta nombre de usuario o correo electrónico a buscar.
-     * @return el usuario cuyo nombre o correo electrónico es `cuenta`, o null
-     * si no existe.
+     * Comprueba que la cuenta con la que se quiere inicar sesión esté activada.
      */
-    private Usuario buscarUsuario(String cuenta) {
-        Usuario u = jpaUsuario.findByNombre(cuenta);
-        if (u != null) {
-            return u;
+    private void validarCuentaConfirmada() {
+        if (usuario != null && !usuario.getConfirmada()) {
+            agregarError("Esta cuenta no ha sido confirmada.", "cuenta");
         }
+    }
 
-        return jpaUsuario.findByCorreoElectronico(cuenta);
+    /**
+     * Comprueba que la contraseña recibida coincida con la del usuario dado.
+     *
+     * @param usuario el usuario contra el que se comprobará la contraseña
+     */
+    private void validarContrasenaCorrecta() {
+        if (usuario != null
+                && !usuario.getContrasena().equals(contrasena)) {
+            agregarError("Contraseña incorrecta", "contrasena");
+        }
+    }
+
+    private void agregarError(String mensaje, String elemento) {
+        hayErrores = true;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
+        facesContext.addMessage("formulario:" + elemento, facesMessage);
     }
 
 }

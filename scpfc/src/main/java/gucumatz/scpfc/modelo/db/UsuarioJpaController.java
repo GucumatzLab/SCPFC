@@ -167,4 +167,21 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
+
+    /**
+     * Busca un usuario por nombre o correo electrónico.
+     *
+     * @param cuenta nombre de usuario o correo electrónico a buscar.
+     * @return el usuario cuyo nombre o correo electrónico es `cuenta`, o null
+     * si no existe.
+     */
+    public Usuario buscarUsuario(String cuenta) {
+        Usuario u = findByNombre(cuenta);
+        if (u != null) {
+            return u;
+        }
+
+        return findByCorreoElectronico(cuenta);
+    }
+
 }
