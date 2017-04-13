@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
   <h:head>
     <title>Crear Cuenta</title>
@@ -25,41 +26,47 @@
       <b:row>
         <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
           <center>
-            <h:form styleClass="form-signin" id="crearCuenta">
-              <h1 class="form-signin-heading">Crear cuenta</h1>
-
-              <b:messages />
-
-              <b:inputText id="nombreDeUsuario" placeholder="Nombre de usuario"
+            <b:form styleClass="form-signin" id="formulario" inline="true">
+              <b:inputText id="nombreDeUsuario"
+                           label="Nombre de usuario" placeholder="usuario"
                            value="#{registro.nombreDeUsuario}"
-                           required="true">
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío.">
               </b:inputText>
               <b:message for="nombreDeUsuario"/>
 
-              <b:inputText id="correoElectronico" placeholder="Correo Electrónico @ciencias.unam.mx"
+              <b:inputText id="correoElectronico" type="email"
+                           label="Correo electrónico" placeholder="usuario@ciencias.unam.mx"
                            value="#{registro.correoElectronico}"
-                           required="true">
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío."
+                           validatorMessage="Debes proporcionar un correo @ciencias.unam.mx">
+                <f:validateRegex pattern=".*@ciencias.unam.mx" />
               </b:inputText>
               <b:message for="correoElectronico"/>
 
-              <b:inputText id="contrasena" placeholder="Contraseña"
-                           type="password"
+              <b:inputText id="contrasena" type="password"
+                           label="Contraseña" placeholder="********"
                            value="#{registro.contrasena}"
-                           required="true">
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío.">
+                <f:validateLength minimum="4"/>
               </b:inputText>
               <b:message for="contrasena"/>
 
-              <b:inputText id="confirmacionDeContrasena" placeholder="Confirma tu Contraseña"
-                           type="password"
+              <b:inputText id="confirmacionDeContrasena" type="password"
+                           label="Confirma tu contraseña" placeholder="********"
                            value="#{registro.confirmacionDeContrasena}"
-                           required="true">
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío.">
+                <f:validateLength minimum="4"/>
               </b:inputText>
               <b:message for="confirmacionDeContrasena"/>
 
-              <b:commandButton look="primary btn-block" value="Crear Cuenta"
+              <b:commandButton look="primary btn-block" value="Registrar"
                                icon="log-in" size="lg"
                                action="#{registro.registrar()}"/>
-            </h:form>
+            </b:form>
           </center>
         </b:column>
       </b:row>
