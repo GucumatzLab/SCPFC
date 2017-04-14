@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui">
+  <ui:composition>
+
+    <b:navbarLinks pull="right" rendered="#{sesionActiva.usuario eq null}">
+      <b:navLink icon-align="right" value="Crear cuenta" href="crear-cuenta.xhtml"></b:navLink>
+      <b:navLink icon-align="right" value="Iniciar sesión" href="iniciar-sesion.xhtml"></b:navLink>
+    </b:navbarLinks>
+
+    <h:form rendered="#{not (sesionActiva.usuario eq null)}">
+      <b:navbarLinks pull="right">
+        <b:navLink icon-align="right" value="#{sesionActiva.usuario.nombre} (#{sesionActiva.usuario.correoElectronico})" href="#"></b:navLink>
+        <b:navCommandLink icon-align="right" value="Cerrar sesión" href="iniciar-sesion.xhtml" action="#{sesionActiva.cerrarSesion()}"></b:navCommandLink>
+      </b:navbarLinks>
+    </h:form>
+
+  </ui:composition>
+</html>

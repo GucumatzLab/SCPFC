@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui">
   <h:head>
     <title>Crear Cuenta</title>
@@ -17,10 +17,7 @@
   </h:head>
   <h:body style="padding: 0px;">
     <b:navBar brand="SCPCF" brandHref="#" fixed="top">
-      <b:navbarLinks pull="right">
-        <b:navLink icon-align="right" value="Crear cuenta" href="crear_cuenta"></b:navLink>
-        <b:navLink icon-align="right" value="Iniciar sesión" href="#inicio_sesion"></b:navLink>
-      </b:navbarLinks>
+      <ui:include src="/WEB-INF/sesion.xhtml"/>
     </b:navBar>
     <b:container fluid="true">
       <b:row>
