@@ -1,0 +1,11 @@
+scpfc/src/main/java/gucumatz/scpfc/modelo/db/exceptions/IllegalOrphanException.java
+scpfc/src/main/java/gucumatz/scpfc/modelo/db/exceptions/NonexistentEntityException.java
+scpfc/src/main/java/gucumatz/scpfc/web/ActivacionDeCuenta.java
+scpfc/src/main/java/gucumatz/scpfc/web/SesionActiva.java
+scpfc/src/main/java/gucumatz/scpfc/modelo/db/exceptions/PreexistingEntityException.java
+scpfc/src/main/resources/META-INF/persistence.xml
+scpfc/src/main/java/gucumatz/scpfc/web/InicioDeSesion.java
+scpfc/src/main/java/gucumatz/scpfc/web/Registro.java
+*.xml
+scpfc/nb-configuration.xml
+scpfc/src/main/webapp/WEB-INF/web.xml

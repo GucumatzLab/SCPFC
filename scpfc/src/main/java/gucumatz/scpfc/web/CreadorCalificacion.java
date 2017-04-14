@@ -15,11 +15,6 @@ import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
 
-//TEMP
-import gucumatz.scpfc.modelo.db.UsuarioJpaController;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-
 /**
  *
  * @author Jaz
@@ -28,13 +23,8 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class CreadorCalificacion {
     
-    public float calificacion;
+    private float calificacion;
     private long puestoId;
-    
-    /**
-     * Contexto para mostrar mensajes al usuario.
-     */
-    private FacesContext facesContext;
     
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
@@ -47,6 +37,7 @@ public class CreadorCalificacion {
     CreadorCalificacion(float f, long puestoId) {
         this.calificacion = f;
         this.puestoId = puestoId;
+        sesionActiva = new SesionActiva();
     }
     
     /**
@@ -61,14 +52,11 @@ public class CreadorCalificacion {
         PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = jpaPuesto.findPuesto(this.puestoId);
         
-        // TEMPORAL
-        UsuarioJpaController jpaUsuario = fab.obtenerControladorJpaUsuario();
-        Usuario u = jpaUsuario.findUsuario(new Long(0));
-        
+        // Crear la calificación
         Calificacion c = new Calificacion(new Long(1));
         c.setCalificacion(this.calificacion);
         c.setPuestoId(p);
-        // u = sesionActiva.getUsuario();
+        Usuario u = sesionActiva.getUsuario();
         
         if (u == null)
             return true;

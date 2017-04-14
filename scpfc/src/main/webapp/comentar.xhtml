@@ -18,11 +18,11 @@
             <h:form styleClass="form-signin" prependId="false">
                 <b:row>
                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
-                        <b:slider min="0" max="100" step="5" value="#{calBean.cal}" label="Calificacion"/>
+                        <b:inputText placeholder="Comenta aquí..." value="#{comBean.com}"/>
                     </b:column>
                 </b:row>
                 <b:row>
-                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregar()}"/>
+                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregar()}"/>
                 </b:row>
                 <b:messages/>
             </h:form>

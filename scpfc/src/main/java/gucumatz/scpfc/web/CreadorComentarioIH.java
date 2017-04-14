@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Jaz
  */
-@ManagedBean(name="calBean")
+@ManagedBean(name="comBean")
 @RequestScoped
-public class CreadorCalificacionIH {
+public class CreadorComentarioIH {
 
-    private float cal;
+    private String com;
     private Long puestoId;
     private final HttpServletRequest httpServletRequest; // Obtiene información de todas las peticiones de usuario.
     private final FacesContext faceContext; // Obtiene información de la aplicación
@@ -31,7 +31,7 @@ public class CreadorCalificacionIH {
      * Constructor para inicializar los valores de faceContext y
      * httpServletRequest.
      */
-    public CreadorCalificacionIH() {
+    public CreadorComentarioIH() {
         faceContext = FacesContext.getCurrentInstance();
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
         
@@ -40,21 +40,21 @@ public class CreadorCalificacionIH {
     }
 
     /**
-     * Obtiene la calificación.
+     * Obtiene el comentario.
      *
-     * @return La calificación.
+     * @return El comentario.
      */
-    public float getCal() {
-        return cal;
+    public String getCom() {
+        return com;
     }
 
     /**
-     * Establece la calificación.
+     * Establece el comentario.
      *
-     * @param cal El nuevo valor de la calificación.
+     * @param com El nuevo valor del comentario.
      */
-    public void setCal(float cal) {
-        this.cal = cal;
+    public void setCom(String com) {
+        this.com = com;
     }
     
     /**
@@ -81,18 +81,18 @@ public class CreadorCalificacionIH {
      * @return El nombre de la vista que va a responder.
      */
     public String agregar() {
-        CreadorCalificacion c = new CreadorCalificacion(cal, puestoId);
+        CreadorComentario c = new CreadorComentario(com, puestoId);
         
-        boolean huboError = c.agregarCalificacion();
+        boolean huboError = c.agregarComentario();
         
         if(huboError) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solo los usuarios registrados pueden calificar.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error.", null);
             faceContext.addMessage(null, message);
-            return "calificar";
+            return "comentar";
         }
         
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificacion registrada.", null);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
         faceContext.addMessage(null, message);
-        return "calificar";
+        return "comentar";
     }
 }
