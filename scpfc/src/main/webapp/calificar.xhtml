@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title>Project Name</title>
+        <meta name="author" content="Jaz"></meta>
+    </h:head>
+    <h:body style="padding: 70px;">
+        <b:navBar brand="SCPCF" brandHref="#" fixed="top">
+            <b:navbarLinks pull="right">
+                <b:navLink icon-align="right" value="Crear cuenta" href="crear_cuenta"></b:navLink>
+                <b:navLink icon-align="right" value="Iniciar sesión" href="#inicio_sesion"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container fluid="true">
+            <h:form styleClass="form-signin" prependId="false">
+                <b:row>
+                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                        <b:slider min="0" max="100" step="5" value="#{calBean.cal}" label="Calificacion"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregar()}"/>
+                    <b:messages styleClass="msgs" redisplay="true" for="@parent" recursive="true" id="message"/>
+                </b:row>
+            </h:form>
+        </b:container>
+    </h:body>
+</html>
