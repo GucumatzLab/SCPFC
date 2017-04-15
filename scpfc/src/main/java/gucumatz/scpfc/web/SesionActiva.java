@@ -6,9 +6,11 @@
 package gucumatz.scpfc.web;
 
 import gucumatz.scpfc.modelo.Usuario;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -23,9 +25,6 @@ public class SesionActiva implements Serializable {
      */
     private Usuario usuario;
 
-    /**
-     * Creates a new instance of SesionIH
-     */
     public SesionActiva() {
     }
 
@@ -44,4 +43,31 @@ public class SesionActiva implements Serializable {
     public Usuario obtenerUsuarioActual() {
         return usuario;
     }
+
+    /**
+     * Regresa la foto del usuario actual, o una imagen por omisión si no tiene
+     * o no ha iniciado sesión.
+     */
+    public StreamedContent getFotoUsuarioActual() {
+        try {
+            return new ManejadorDeImagenes().getFotoDeUsuario(usuario);
+        } catch (IOException ioe) {
+            return null;
+        }
+    }
+
+    /**
+     * Dice si se ha iniciado sesión
+     */
+    public boolean getHaySesionActiva() {
+        return usuario != null;
+    }
+
+    /**
+     * Dice si el usuario actual es un administrador.
+     */
+    public boolean getEsAdministrador() {
+        return usuario != null && usuario.getEsAdministrador();
+    }
+
 }

@@ -5,6 +5,7 @@
  */
 package gucumatz.scpfc.web;
 
+import gucumatz.scpfc.modelo.Usuario;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class ManejadorDeImagenes {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         if (facesContext.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-              return new DefaultStreamedContent();
+            return new DefaultStreamedContent();
         } else {
             InputStream in = new FileInputStream(new File(directorio, archivo));
             return new DefaultStreamedContent(in);
@@ -91,6 +92,21 @@ public class ManejadorDeImagenes {
     public StreamedContent getFotoDeUsuario() throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String rutaImagen = facesContext.getExternalContext().getRequestParameterMap().get("rutaImagen");
+        if (rutaImagen == null || rutaImagen.equals("")) {
+            return obtenerFotoDeUsuarioPorOmision();
+        }
+        return obtenerImagenDeArchivo(rutaImagen);
+    }
+
+    /**
+     * Regresa la foto de un usuario. Si no tiene o recibe null, regresa una por
+     * defecto.
+     */
+    public StreamedContent getFotoDeUsuario(Usuario usuario) throws IOException {
+        String rutaImagen = null;
+        if (usuario != null) {
+            rutaImagen = usuario.getRutaImagen();
+        }
         if (rutaImagen == null || rutaImagen.equals("")) {
             return obtenerFotoDeUsuarioPorOmision();
         }
