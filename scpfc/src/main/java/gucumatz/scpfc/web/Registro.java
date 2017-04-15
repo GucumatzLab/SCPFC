@@ -8,20 +8,22 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Properties;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import org.primefaces.model.UploadedFile;
 
 @ManagedBean
 @ViewScoped
@@ -51,6 +53,11 @@ public class Registro implements Serializable {
      * Confirmación de la contraseña.
      */
     private String confirmacionDeContrasena;
+
+    /**
+     * Fotografía del usuario.
+     */
+    private UploadedFile foto;
 
     /**
      * Bandera para saber si hay errores en los datos recibidos. Cuando es TRUE
@@ -98,6 +105,14 @@ public class Registro implements Serializable {
         this.confirmacionDeContrasena = confirmacionDeContrasena;
     }
 
+    public UploadedFile getFoto() {
+        return foto;
+    }
+
+    public void setFoto(UploadedFile foto) {
+        this.foto = foto;
+    }
+
     public void validarDatos() {
         hayErrores = false;
 
@@ -123,6 +138,34 @@ public class Registro implements Serializable {
         u.setCodigoDeActivacion("asdf");
 
         jpaUsuario.create(u);
+
+        if (foto != null) {
+            try {
+                String nombreDeArchivo = foto.getFileName();
+                String extension = null;
+                if (nombreDeArchivo.endsWith(".jpg") || nombreDeArchivo.endsWith(".jpeg")) {
+                    extension = ".jpg";
+                } else if (nombreDeArchivo.endsWith(".png")) {
+                    extension = ".png";
+                }
+
+                if (extension != null) {
+                    nombreDeArchivo = "usuario/" + u.getId() + extension;
+                    ManejadorDeImagenes mdi = new ManejadorDeImagenes();
+                    mdi.escribirImagen(foto, nombreDeArchivo);
+                }
+
+                u.setRutaImagen(nombreDeArchivo);
+                jpaUsuario.edit(u);
+            } catch (Exception e) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                FacesMessage facesMessage
+                        = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Ocurrió un error al guardar tu foto.", null);
+                facesContext.addMessage(null, facesMessage);
+                e.printStackTrace();
+            }
+        }
 
         enviarCorreoDeActivacion(u);
         return "index";
