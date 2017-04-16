@@ -20,7 +20,19 @@ public class FabricaControladorJpa {
         this.emf = Persistence.createEntityManagerFactory("SCPFC-PU");
     }
 
+    public ComentarioJpaController obtenerControladorJpaComentario() {
+        return new ComentarioJpaController(emf);
+    }
+    
+    public CalificacionJpaController obtenerControladorJpaCalificacion() {
+        return new CalificacionJpaController(emf);
+    }
+    
     public UsuarioJpaController obtenerControladorJpaUsuario() {
         return new UsuarioJpaController(emf);
+    }
+    
+    public PuestoJpaController obtenerControladorJpaPuesto() {
+        return new PuestoJpaController(emf);
     }
 }

@@ -1,12 +1,14 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,26 +16,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author lchacon
+ * @author Jaz
  */
 @Entity
 @Table(name = "Usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
-        , @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id")
-        , @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
-        , @NamedQuery(name = "Usuario.findByCorreoElectronico", query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correoElectronico")
-        , @NamedQuery(name = "Usuario.findByContrasena", query = "SELECT u FROM Usuario u WHERE u.contrasena = :contrasena")
-        , @NamedQuery(name = "Usuario.findByCodigoDeActivacion", query = "SELECT u FROM Usuario u WHERE u.codigoDeActivacion = :codigoDeActivacion")
-        , @NamedQuery(name = "Usuario.findByEsAdministrador", query = "SELECT u FROM Usuario u WHERE u.esAdministrador = :esAdministrador")
-        , @NamedQuery(name = "Usuario.findByConfirmada", query = "SELECT u FROM Usuario u WHERE u.confirmada = :confirmada")
-        , @NamedQuery(name = "Usuario.findByRutaImagen", query = "SELECT u FROM Usuario u WHERE u.rutaImagen = :rutaImagen")})
+    , @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id")
+    , @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
+    , @NamedQuery(name = "Usuario.findByCorreoElectronico", query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correoElectronico")
+    , @NamedQuery(name = "Usuario.findByContrasena", query = "SELECT u FROM Usuario u WHERE u.contrasena = :contrasena")
+    , @NamedQuery(name = "Usuario.findByCodigoDeActivacion", query = "SELECT u FROM Usuario u WHERE u.codigoDeActivacion = :codigoDeActivacion")
+    , @NamedQuery(name = "Usuario.findByEsAdministrador", query = "SELECT u FROM Usuario u WHERE u.esAdministrador = :esAdministrador")
+    , @NamedQuery(name = "Usuario.findByConfirmada", query = "SELECT u FROM Usuario u WHERE u.confirmada = :confirmada")
+    , @NamedQuery(name = "Usuario.findByRutaImagen", query = "SELECT u FROM Usuario u WHERE u.rutaImagen = :rutaImagen")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,6 +65,10 @@ public class Usuario implements Serializable {
     private boolean confirmada;
     @Column(name = "rutaImagen")
     private String rutaImagen;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
+    private Collection<Calificacion> calificacionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
+    private Collection<Comentario> comentarioCollection;
 
     public Usuario() {
     }
@@ -140,6 +148,24 @@ public class Usuario implements Serializable {
 
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
+    }
+
+    @XmlTransient
+    public Collection<Calificacion> getCalificacionCollection() {
+        return calificacionCollection;
+    }
+
+    public void setCalificacionCollection(Collection<Calificacion> calificacionCollection) {
+        this.calificacionCollection = calificacionCollection;
+    }
+
+    @XmlTransient
+    public Collection<Comentario> getComentarioCollection() {
+        return comentarioCollection;
+    }
+
+    public void setComentarioCollection(Collection<Comentario> comentarioCollection) {
+        this.comentarioCollection = comentarioCollection;
     }
 
     @Override

@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>SCPFC</title>
+        <meta name="author" content="Jaz"></meta>
+    </h:head>
+    <h:body style="padding: 70px;">
+        <b:navBar brand="SCPCF" brandHref="#" fixed="top">
+            <b:navbarLinks pull="right">
+                <b:navLink icon-align="right" value="Crear cuenta" href="crear_cuenta"></b:navLink>
+                <b:navLink icon-align="right" value="Iniciar sesión" href="#inicio_sesion"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container fluid="true">
+            <h:form styleClass="form-signin" prependId="false">
+                <!-- Setters temporales para el puestoId -->
+                <b:row>
+                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                        <b:slider min="1" max="10" step="1" value="#{calBean.puestoId}" label="PuestoId para calificar"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                        <b:slider min="1" max="10" step="1" value="#{comBean.puestoId}" label="PuestoId para comentar"/>
+                    </b:column>
+                </b:row>
+                
+                <b:row>
+                    <!-- Botón para el overlay de comentar -->
+                    <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
+                        <p:dialog header="Comentar" widgetVar="comOverlay" height="250" width="400">
+                                <b:row>
+                                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                                        <br/>
+                                        <br/>
+                                        <b:inputTextarea placeholder="Comenta aquí..." value="#{comBean.comentario}"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <br/>
+                                    <br/>
+                                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}"/>
+                                </b:row>
+                        </p:dialog>
+                    <!-- Botón para el overlay de calificar -->
+                    <p:commandButton value="Calificar" type="button" onclick="PF('calOverlay').show();"/>
+                        <p:dialog header="Calificar" widgetVar="calOverlay" height="200" width="400">
+                                <b:row>
+                                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                                        <div align="center" draggable="false">
+                                        <h:outputText value="Calificación"/>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <p:rating value="#{calBean.calificacion}" style="width: 96px; margin: 0 auto;"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <br/>
+                                    <br/>
+                                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}"/>
+                                </b:row>
+                        </p:dialog>
+                </b:row>
+                
+                <b:messages/>
+            </h:form>
+        </b:container>
+    </h:body>
+</html>
