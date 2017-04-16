@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
   <h:head>
     <title>Iniciar Sesión</title>
@@ -23,22 +25,26 @@
         <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
           <center>
             <b:form styleClass="form-signin" id="formulario" inline="true">
-              <b:inputText id="cuenta"
+              <b:inputText id="cuenta" binding="#{cuenta}"
                            label="Nombre de usuario o correo electrónico" placeholder="usuario"
                            value="#{inicioDeSesion.cuenta}"
                            required="true"
-                           requiredMessage="El campo no puede estar vacío.">
+                           requiredMessage="El campo no puede estar vacío."
+                           validator="#{inicioDeSesion.validarCuenta}">
+                <p:ajax event="blur" update="msgCuenta"/>
               </b:inputText>
-              <b:message for="cuenta"/>
+              <b:message for="cuenta" id="msgCuenta"/>
 
-              <b:inputText id="contrasena" type="password"
-                           label="Contraseña" placeholder="********"
-                           value="#{inicioDeSesion.contrasena}"
-                           required="true"
-                           requiredMessage="El campo no puede estar vacío.">
-              </b:inputText>
-              <b:message for="contrasena"/>
-
+              <b:inputSecret id="contrasena"
+                             label="Contraseña" placeholder="********"
+                             value="#{inicioDeSesion.contrasena}"
+                             required="true"
+                             requiredMessage="El campo no puede estar vacío."
+                             validator="#{inicioDeSesion.validarContrasena}">
+                <f:attribute name="cuenta" value="#{cuenta}"/>
+                <p:ajax event="blur" update="msgContrasena"/>
+              </b:inputSecret>
+              <b:message for="contrasena" id="msgContrasena"/>
 
               <b:commandButton look="primary btn-block" value="Iniciar sesión"
                                icon="log-in" size="lg"

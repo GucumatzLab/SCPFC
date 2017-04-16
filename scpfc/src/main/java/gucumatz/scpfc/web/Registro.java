@@ -8,14 +8,16 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -28,6 +30,18 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean
 @ViewScoped
 public class Registro implements Serializable {
+
+    /* Mensajes de error. */
+    private static final String MENSAJE_USUARIO_NO_DISPONIBLE
+            = "Ya existe una cuenta con este nombre de usuario";
+    private static final String MENSAJE_CORREO_NO_DISPONIBLE
+            = "Ya existe una cuenta con este correo";
+    private static final String MENSAJE_CORREO_NO_CIENCIAS
+            = "Debes proporcionar un correo @ciencias.unam.mx";
+    private static final String MENSAJE_CONTRASENA_CORTA
+            = "La contraseña debe tener al menos 4 caracteres";
+    private static final String MENSAJE_CONFIRMACION_INCORRECTA
+            = "La confirmación de contraseña no coincide";
 
     /**
      * Controlador JPA para acceder a la BD.
@@ -50,27 +64,12 @@ public class Registro implements Serializable {
     private String contrasena;
 
     /**
-     * Confirmación de la contraseña.
-     */
-    private String confirmacionDeContrasena;
-
-    /**
      * Fotografía del usuario.
      */
     private UploadedFile foto;
 
-    /**
-     * Bandera para saber si hay errores en los datos recibidos. Cuando es TRUE
-     * no se debe proceder con el registro.
-     */
-    private boolean hayErrores;
-
-    /**
-     * Creates a new instance of Registro
-     */
     public Registro() {
         jpaUsuario = new FabricaControladorJpa().obtenerControladorJpaUsuario();
-        hayErrores = false;
     }
 
     public String getNombreDeUsuario() {
@@ -97,14 +96,6 @@ public class Registro implements Serializable {
         this.contrasena = contrasena;
     }
 
-    public String getConfirmacionDeContrasena() {
-        return confirmacionDeContrasena;
-    }
-
-    public void setConfirmacionDeContrasena(String confirmacionDeContrasena) {
-        this.confirmacionDeContrasena = confirmacionDeContrasena;
-    }
-
     public UploadedFile getFoto() {
         return foto;
     }
@@ -113,22 +104,7 @@ public class Registro implements Serializable {
         this.foto = foto;
     }
 
-    public void validarDatos() {
-        hayErrores = false;
-
-        validarNombreDeUsuarioDisponible();
-        validarCorreoElectronicoDisponible();
-        validarCorreoElectronicoEsDeCiencias();
-        validarContrasenasCoinciden();
-    }
-
     public String registrar() {
-        validarDatos();
-
-        if (hayErrores) {
-            return null;
-        }
-
         Usuario u = new Usuario();
         u.setNombre(nombreDeUsuario);
         u.setCorreoElectronico(correoElectronico);
@@ -171,38 +147,84 @@ public class Registro implements Serializable {
         return "index";
     }
 
-    private void validarNombreDeUsuarioDisponible() {
+    /**
+     * Comprueba que el nombre de usuario esté disponible.
+     */
+    public void validarNombreDeUsuario(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
+        String nombreDeUsuario = (String) value;
+
+        /* Si es vacío, el atributo required lo rechazará. */
+        if (nombreDeUsuario == null || nombreDeUsuario.isEmpty()) {
+            return;
+        }
+
+        /* Verifica que el nombre esté disponible. */
         Usuario usuario = jpaUsuario.findByNombre(nombreDeUsuario);
         if (usuario != null) {
-            agregarError("Ya existe una cuenta con este nombre de usuario", "nombreDeUsuario");
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_USUARIO_NO_DISPONIBLE));
         }
     }
 
-    private void validarCorreoElectronicoDisponible() {
+    /**
+     * Comprueba que el correo electrónico sea de @ciencias.unam.mx y que no se
+     * haya usado para otra cuenta.
+     */
+    public void validarCorreoElectronico(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
+        String correoElectronico = (String) value;
+
+        /* Si es vacío, el atributo required lo rechazará. */
+        if (correoElectronico == null || correoElectronico.isEmpty()) {
+            return;
+        }
+
+        /* Verifica que el correo sea de @ciencias.unam.mx. */
+        if (!correoElectronico.endsWith("@ciencias.unam.mx")) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_CIENCIAS));
+        }
+
+        /* Verifica que el correo electrónico no se haya usado. */
         Usuario usuario = jpaUsuario.findByCorreoElectronico(correoElectronico);
         if (usuario != null) {
-            agregarError("Ya existe una cuenta con este correo", "correoElectronico");
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_DISPONIBLE));
         }
     }
 
-    private void validarCorreoElectronicoEsDeCiencias() {
-        if (!correoElectronico.endsWith("@ciencias.unam.mx")) {
-            agregarError("Debes proporcionar un correo @ciencias.unam.mx", "correoElectronico");
+    /**
+     * Verifica que la contraseña sea del tamaño adecuado y que la confirmación
+     * sea correcta.
+     */
+    public void validarContrasena(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+        String contrasena = (String) value;
+
+        /* Obtiene al componente con la confirmación y la extrae. */
+        UIInput componenteConfirmacion = (UIInput) component.getAttributes().get("confirmacion");
+        String confirmacion = (String) componenteConfirmacion.getSubmittedValue();
+
+        /* Si alguno está vacío, el atributo required lo rechaza. */
+        if (contrasena == null || contrasena.isEmpty()
+                || confirmacion == null || confirmacion.isEmpty()) {
+            return;
+        }
+
+        /* Verifica el tamaño de la contraseña. */
+        if (contrasena.length() < 4) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_CONTRASENA_CORTA));
+        }
+
+        /* Verifica que la confirmación coincida. */
+        if (!confirmacion.equals(contrasena)) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_CONFIRMACION_INCORRECTA));
         }
     }
 
-    private void validarContrasenasCoinciden() {
-        if (!contrasena.equals(confirmacionDeContrasena)) {
-            agregarError("La confirmación de contraseña no coincide", "confirmacionDeContrasena");
-        }
-    }
-
-    private void agregarError(String mensaje, String elemento) {
-        hayErrores = true;
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage
-                = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
-        facesContext.addMessage("formulario:" + elemento, facesMessage);
+    /**
+     * Crea un nuevo mensaje de error. El mensaje no contiene detalles y tiene
+     * severidad de error.
+     */
+    private FacesMessage crearMensajeDeError(String mensaje) {
+        return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
     }
 
     public void enviarCorreoDeActivacion(Usuario usuario) {
