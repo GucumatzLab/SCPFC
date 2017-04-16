@@ -243,12 +243,12 @@ public class Registro implements Serializable {
             ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
             HttpServletRequest request = (HttpServletRequest) context.getRequest();
             String url = request.getRequestURL().toString();
-            String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+            String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
 
             String textoMensaje
                     = "Para confirmar tu cuenta ve a "
                     + baseUrl
-                    + "/activar-cuenta"
+                    + "/activar-cuenta.xhtml"
                     + "?id=" + usuario.getId()
                     + "&codigo=" + usuario.getCodigoDeActivacion();
             mensaje.setText(textoMensaje);

@@ -3,29 +3,33 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
-public class ActivacionDeCuenta extends HttpServlet {
+@ManagedBean(name = "activador")
+@RequestScoped
+public class ActivacionDeCuenta implements Serializable {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        activaCuenta(request, response);
+    private Long idUsuario;
+
+    private String codigoDeActivacion;
+
+    @ManagedProperty("#{sesionActiva}")
+    private SesionActiva sesionActiva;
+
+    public ActivacionDeCuenta() {
     }
 
-    private void activaCuenta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idUsuario = request.getParameter("id");
-        String codigoDeActivacion = request.getParameter("codigo");
-
+    public String activarCuenta() {
         if (idUsuario != null && codigoDeActivacion != null) {
             UsuarioJpaController jpaUsuario
                     = new FabricaControladorJpa().obtenerControladorJpaUsuario();
-            Long id = Long.parseLong(idUsuario);
 
-            Usuario usuario = jpaUsuario.findUsuario(id);
+            Usuario usuario = jpaUsuario.findUsuario(idUsuario);
             if (usuario != null
                     && codigoDeActivacion.equals(usuario.getCodigoDeActivacion())) {
                 usuario.setCodigoDeActivacion(null);
@@ -33,12 +37,41 @@ public class ActivacionDeCuenta extends HttpServlet {
 
                 try {
                     jpaUsuario.edit(usuario);
+                    sesionActiva.setUsuario(usuario);
+                    FacesMessage mensaje
+                            = new FacesMessage("Tu cuenta ha sido confirmada.");
+                    FacesContext.getCurrentInstance().addMessage(null, mensaje);
                 } catch (Exception ex) {
 
                 }
             }
         }
 
-        response.sendRedirect("index.xhtml");
+        return "index";
     }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getCodigoDeActivacion() {
+        return codigoDeActivacion;
+    }
+
+    public void setCodigoDeActivacion(String codigoDeActivacion) {
+        this.codigoDeActivacion = codigoDeActivacion;
+    }
+
+    public SesionActiva getSesionActiva() {
+        return sesionActiva;
+    }
+
+    public void setSesionActiva(SesionActiva sesionActiva) {
+        this.sesionActiva = sesionActiva;
+    }
+
 }
