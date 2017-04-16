@@ -5,46 +5,93 @@
  */
 package gucumatz.scpfc.web;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import gucumatz.scpfc.modelo.db.PuestoJpaController;
-import gucumatz.scpfc.modelo.db.CalificacionJpaController;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
+import gucumatz.scpfc.modelo.db.CalificacionJpaController;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+import gucumatz.scpfc.modelo.db.PuestoJpaController;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
+ * ManagedBean para la calificación de un puesto
+ *
  * @author Jaz
  */
-@ManagedBean
-@ViewScoped
+@ManagedBean(name="calBean")
+@RequestScoped
 public class CreadorCalificacion {
-    
+
     private float calificacion;
-    private long puestoId;
+    private Long puestoId;
+    private final HttpServletRequest httpServletRequest; // Obtiene información de todas las peticiones de usuario.
+    private final FacesContext faceContext; // Obtiene información de la aplicación
+    private FacesMessage message;
     
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
-    
+
     /**
-     * Creador simple que toma la calificación como <code>float</code> y el ID
-     * del puesto asociado
-     * @param f La calificacion en escala de 0.0 a 5.0
+     * Constructor para inicializar los valores de faceContext y
+     * httpServletRequest.
      */
-    CreadorCalificacion(float f, long puestoId) {
-        this.calificacion = f;
-        this.puestoId = puestoId;
+    public CreadorCalificacion() {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        
+        //TEMP
+        puestoId = new Long(1);
         sesionActiva = new SesionActiva();
+    }
+
+    /**
+     * Obtiene la calificación.
+     *
+     * @return La calificación.
+     */
+    public float getCalificacion() {
+        return calificacion;
+    }
+
+    /**
+     * Establece la calificación.
+     *
+     * @param calificacion El nuevo valor de la calificación.
+     */
+    public void setCalificacion(float calificacion) {
+        this.calificacion = calificacion;
     }
     
     /**
-     * Método que toma los atributos del objeto para añadirlos a la BD
-     * @return true si hubo error, false e.o.c.
+     * Obtiene el puesto asociado.
+     *
+     * @return El id del puesto.
      */
-    public boolean agregarCalificacion() {
+    public float getPuestoId() {
+        return puestoId;
+    }
+
+    /**
+     * Establece el puesto asociado.
+     *
+     * @param puestoId El nuevo valor del puesto asociado.
+     */
+    public void setPuestoId(Long puestoId) {
+        this.puestoId = puestoId;
+    }
+
+    /**
+     * Método encargado de crear la calificación.
+     *
+     * @return El nombre de la vista que va a responder.
+     */
+    public String agregarCalificacion() {
         FabricaControladorJpa fab = new FabricaControladorJpa();
         CalificacionJpaController jpaCalificacion = fab.obtenerControladorJpaCalificacion();
         
@@ -53,19 +100,27 @@ public class CreadorCalificacion {
         Puesto p = jpaPuesto.findPuesto(this.puestoId);
         
         // Crear la calificación
-        Calificacion c = new Calificacion(new Long(1));
+        Calificacion c = new Calificacion();
         c.setCalificacion(this.calificacion);
         c.setPuestoId(p);
         Usuario u = sesionActiva.getUsuario();
         
-        if (u == null)
-            return true;
+        // Manejo de errores, no hay usuario válido
+        if (u == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, solo los usuarios registrados pueden calificar.", null);
+            faceContext.addMessage(null, message);
+            
+            return "calycom";
+        }
         
         c.setUsuarioId(u);
         
         jpaCalificacion.create(c);
         
-        return false;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación registrada.", null);
+        faceContext.addMessage(null, message);
+
+        return "calycom";
     }
     
     public SesionActiva getSesionActiva() {
@@ -74,9 +129,5 @@ public class CreadorCalificacion {
 
     public void setSesionActiva(SesionActiva sesionActiva) {
         this.sesionActiva = sesionActiva;
-    }
-    
-    public CreadorCalificacion() {
-    
     }
 }

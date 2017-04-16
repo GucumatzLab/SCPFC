@@ -9,3 +9,5 @@ scpfc/src/main/java/gucumatz/scpfc/web/Registro.java
 *.xml
 scpfc/nb-configuration.xml
 scpfc/src/main/webapp/WEB-INF/web.xml
+scpfc/src/main/resources/META-INF/persistence.xml
+*.xml
