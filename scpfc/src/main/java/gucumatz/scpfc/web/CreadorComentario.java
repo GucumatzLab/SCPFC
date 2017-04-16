@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * ManagedBean para la calificación de un puesto
+ * ManagedBean para el comentario de un puesto
  *
  * @author Jaz
  */
