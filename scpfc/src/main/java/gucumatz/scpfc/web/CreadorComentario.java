@@ -113,6 +113,14 @@ public class CreadorComentario {
         PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = jpaPuesto.findPuesto(this.puestoId);
         
+        // Validación del puesto
+        if (p == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Puesto no válido.", null);
+            faceContext.addMessage(null, message);
+            
+            return "calycom";
+        }
+        
         // Crear el comentario
         Comentario c = new Comentario();
 
