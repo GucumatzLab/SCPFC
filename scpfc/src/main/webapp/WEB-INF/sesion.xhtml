@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+  <ui:composition>
+    <style>
+      .imgCirculo {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+    </style>
+    <b:navbarLinks pull="right" rendered="#{not sesionActiva.haySesionActiva}">
+      <b:navLink icon-align="right" value="Crear cuenta" href="crear-cuenta.xhtml"></b:navLink>
+      <b:navLink icon-align="right" value="Iniciar sesión" href="iniciar-sesion.xhtml"></b:navLink>
+    </b:navbarLinks>
+
+    <h:form rendered="#{sesionActiva.haySesionActiva}">
+      <b:navbarLinks pull="right">
+        <b:navLink icon-align="right" value="#{sesionActiva.usuario.nombre} (#{sesionActiva.usuario.correoElectronico})" href="#">
+          <p:graphicImage
+            styleClass="imgCirculo"
+            value="#{sesionActiva.fotoUsuarioActual}"/>
+        </b:navLink>
+        <b:navCommandLink icon-align="right" value="Cerrar sesión" href="iniciar-sesion.xhtml" action="#{sesionActiva.cerrarSesion()}"></b:navCommandLink>
+      </b:navbarLinks>
+    </h:form>
+
+  </ui:composition>
+</html>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+  <f:metadata>
+    <f:viewParam name="id" value="#{activador.idUsuario}" />
+    <f:viewParam name="codigo" value="#{activador.codigoDeActivacion}" />
+    <f:viewAction action="#{activador.activarCuenta}" />
+  </f:metadata>
+</html>

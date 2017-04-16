@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
+  <h:head>
+    <title>Crear Cuenta</title>
+    <style type="text/css">
+      .form-signin {
+        margin: auto;
+        max-width: 500px;
+        padding: 40px;
+      }
+    </style>
+  </h:head>
+  <h:body style="padding: 0px;">
+    <b:navBar brand="SCPCF" brandHref="#" fixed="top">
+      <ui:include src="/WEB-INF/sesion.xhtml"/>
+    </b:navBar>
+    <b:container fluid="true">
+      <b:row>
+        <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+          <center>
+            <b:form styleClass="form-signin" id="formulario" inline="true"
+                    enytype="multipart/form-data">
+              <b:inputText id="nombreDeUsuario"
+                           label="Nombre de usuario" placeholder="usuario"
+                           value="#{registro.nombreDeUsuario}"
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío."
+                           validator="#{registro.validarNombreDeUsuario}"
+                           >
+                <p:ajax event="blur" update="msgNombreDeUsuario" />
+              </b:inputText>
+              <b:message for="nombreDeUsuario" id="msgNombreDeUsuario"/>
+
+              <b:inputText id="correoElectronico" type="email"
+                           label="Correo electrónico" placeholder="usuario@ciencias.unam.mx"
+                           value="#{registro.correoElectronico}"
+                           required="true"
+                           requiredMessage="El campo no puede estar vacío."
+                           validator="#{registro.validarCorreoElectronico}"
+                           >
+                <p:ajax event="blur" update="msgCorreoElectronico" />
+              </b:inputText>
+              <b:message for="correoElectronico" id="msgCorreoElectronico"/>
+
+              <b:inputSecret id="contrasena"
+                             label="Contraseña" placeholder="********"
+                             value="#{registro.contrasena}"
+                             required="true"
+                             requiredMessage="El campo no puede estar vacío."
+                             validator="#{registro.validarContrasena}"
+                             >
+                <f:attribute name="confirmacion" value="#{confirmacionDeContrasena}"/>
+                <p:ajax event="blur" update="msgContrasena" />
+              </b:inputSecret>
+              <b:message for="contrasena" id="msgContrasena"/>
+
+              <b:inputSecret id="confirmacionDeContrasena" binding="#{confirmacionDeContrasena}"
+                             label="Confirma tu contraseña" placeholder="********"
+                             required="true"
+                             requiredMessage="El campo no puede estar vacío.">
+              </b:inputSecret>
+              <b:message for="confirmacionDeContrasena"/>
+
+              <p:fileUpload id="foto"
+                            value="#{registro.foto}"
+                            required="false"
+                            allowTypes="/(\.|\/)(jpe?g|png)$/"
+                            fileLimit="1"
+                            sizeLimit="#{4 * 1024 * 1024}"
+                            invalidSizeMessage="La fotografía no puede ser más grande que 4MB"
+                            invalidFileMessage="Sólo se aceptan fotografías en formato JPG o PNG"
+                            label="Subir foto"
+                            />
+              <b:message for="foto"/>
+
+              <b:commandButton look="primary btn-block" value="Registrar"
+                               icon="log-in" size="lg"
+                               action="#{registro.registrar()}"/>
+            </b:form>
+          </center>
+        </b:column>
+      </b:row>
+    </b:container>
+  </h:body>
+</html>
