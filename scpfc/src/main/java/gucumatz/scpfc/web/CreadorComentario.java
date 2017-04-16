@@ -5,42 +5,88 @@
  */
 package gucumatz.scpfc.web;
 
-import java.util.Date;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import gucumatz.scpfc.modelo.db.PuestoJpaController;
-import gucumatz.scpfc.modelo.db.ComentarioJpaController;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
+import gucumatz.scpfc.modelo.db.ComentarioJpaController;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+import gucumatz.scpfc.modelo.db.PuestoJpaController;
+import java.util.Date;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
+ * ManagedBean para la calificación de un puesto
+ *
  * @author Jaz
  */
-@ManagedBean
-@ViewScoped
+@ManagedBean(name="comBean")
+@RequestScoped
 public class CreadorComentario {
-    
+
     private String comentario;
     private Long puestoId;
+    private final HttpServletRequest httpServletRequest; // Obtiene información de todas las peticiones de usuario.
+    private final FacesContext faceContext; // Obtiene información de la aplicación
+    private FacesMessage message;
     
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
-    
+
     /**
-     * Creador simple que toma el comentario en <code>String</code> y el ID
-     * del puesto asociado.
-     * @param f La comentario en escala de 0.0 a 5.0
+     * Constructor para inicializar los valores de faceContext y
+     * httpServletRequest.
      */
-    CreadorComentario(String s, long puestoId) {
-        this.comentario = s;
-        this.puestoId = puestoId;
+    public CreadorComentario() {
+        faceContext = FacesContext.getCurrentInstance();
+        httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
+        
+        //TEMP
+        puestoId = new Long(1);
         sesionActiva = new SesionActiva();
     }
+
+    /**
+     * Obtiene el comentario.
+     *
+     * @return El comentario.
+     */
+    public String getComentario() {
+        return comentario;
+    }
+
+    /**
+     * Establece el comentario.
+     *
+     * @param comentario El nuevo valor del comentario.
+     */
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
     
+    /**
+     * Obtiene el puesto asociado.
+     *
+     * @return El id del puesto.
+     */
+    public float getPuestoId() {
+        return puestoId;
+    }
+
+    /**
+     * Establece el puesto asociado.
+     *
+     * @param puestoId El nuevo valor del puesto asociado.
+     */
+    public void setPuestoId(Long puestoId) {
+        this.puestoId = puestoId;
+    }
+
     private boolean comentarioValido() {
         
         if(this.comentario.equals(""))
@@ -52,10 +98,11 @@ public class CreadorComentario {
     }
     
     /**
-     * Método que toma los atributos del objeto para añadirlos a la BD
-     * @return true si hubo error, false e.o.c.
+     * Método encargado de crear el comentario.
+     *
+     * @return El nombre de la vista que va a responder.
      */
-    public boolean agregarComentario() {
+    public String agregarComentario() {
         FabricaControladorJpa fab = new FabricaControladorJpa();
         ComentarioJpaController jpaComentario = fab.obtenerControladorJpaComentario();
         
@@ -66,17 +113,25 @@ public class CreadorComentario {
         // Crear el comentario
         Comentario c = new Comentario(new Long(1));
         
-        // Validar el text
-        if(!comentarioValido())
-            return true;
+        // Validar el comentario, error si es necesario
+        if(!comentarioValido()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Comentario no válido", null);
+            faceContext.addMessage(null, message);
+            
+            return "calycom";
+        }
         
         c.setComentario(this.comentario);
         c.setPuestoId(p);
         Usuario u = sesionActiva.getUsuario();
         
-        // Validar al usuario
-        if (u == null)
-            return true;
+        // Manejo de errores, no hay usuario válido
+        if (u == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solo los usuarios registrados pueden comentar.", null);
+            faceContext.addMessage(null, message);
+            
+            return "calycom";
+        }
         
         c.setUsuarioId(u);
         
@@ -86,7 +141,10 @@ public class CreadorComentario {
         
         jpaComentario.create(c);
         
-        return false;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
+        faceContext.addMessage(null, message);
+
+        return "calycom";
     }
     
     public SesionActiva getSesionActiva() {
@@ -95,9 +153,5 @@ public class CreadorComentario {
 
     public void setSesionActiva(SesionActiva sesionActiva) {
         this.sesionActiva = sesionActiva;
-    }
-    
-    public CreadorComentario() {
-    
     }
 }

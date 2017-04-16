@@ -107,7 +107,7 @@ public class CreadorCalificacion {
         
         // Manejo de errores, no hay usuario válido
         if (u == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error, solo los usuarios registrados pueden calificar.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solo los usuarios registrados pueden calificar.", null);
             faceContext.addMessage(null, message);
             
             return "calycom";
