@@ -86,6 +86,10 @@ public class CreadorComentario {
         this.puestoId = puestoId;
     }
 
+    /**
+     * Método interno para comprobar la validez del comentario
+     * @return true si el comentairo es válido, false e.o.c.
+     */
     private boolean comentarioValido() {
         
         if(this.comentario.equals(""))

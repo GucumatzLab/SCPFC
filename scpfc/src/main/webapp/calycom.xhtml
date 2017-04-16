@@ -17,6 +17,7 @@
         </b:navBar>
         <b:container fluid="true">
             <h:form styleClass="form-signin" prependId="false">
+                <!-- Setters temporales para el puestoId -->
                 <b:row>
                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
                         <b:slider min="1" max="10" step="1" value="#{calBean.puestoId}" label="PuestoId para calificar"/>
@@ -29,32 +30,30 @@
                 </b:row>
                 
                 <b:row>
+                    <!-- Botón para el overlay de comentar -->
                     <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
                         <p:dialog header="Comentar" widgetVar="comOverlay" height="400" width="400">
-                            <h:form styleClass="form-signin" prependId="false">
                                 <b:row>
                                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
-                                        <b:inputText placeholder="Comenta aquí..." value="#{comBean.comentario}"/>
+                                        <b:inputTextarea placeholder="Comenta aquí..." value="#{comBean.comentario}"/>
                                     </b:column>
                                 </b:row>
                                 <b:row>
                                     <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}"/>
                                 </b:row>
-                            </h:form>
                         </p:dialog>
-               
+                    <!-- Botón para el overlay de calificar -->
                     <p:commandButton value="Calificar" type="button" onclick="PF('calOverlay').show();"/>
                         <p:dialog header="Calificar" widgetVar="calOverlay" height="400" width="400">
-                            <h:form styleClass="form-signin" prependId="false">
                                 <b:row>
                                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
-                                        <b:slider min="0" max="100" step="5" value="#{calBean.calificacion}" label="Calificacion"/>
+                                        <h:outputText value="Calificación"/>
+                                        <p:rating value="#{calBean.calificacion}" style="display:block; text-align:center"/>
                                     </b:column>
                                 </b:row>
                                 <b:row>
                                     <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}"/>
                                 </b:row>
-                            </h:form>
                         </p:dialog>
                 </b:row>
                 

@@ -54,8 +54,8 @@ public class CreadorCalificacion {
      *
      * @return La calificación.
      */
-    public float getCalificacion() {
-        return calificacion;
+    public int getCalificacion() {
+        return (int) calificacion;
     }
 
     /**
@@ -63,7 +63,7 @@ public class CreadorCalificacion {
      *
      * @param calificacion El nuevo valor de la calificación.
      */
-    public void setCalificacion(float calificacion) {
+    public void setCalificacion(int calificacion) {
         this.calificacion = calificacion;
     }
     
