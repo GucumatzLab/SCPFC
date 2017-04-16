@@ -46,7 +46,6 @@ public class CreadorCalificacion {
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
         
         //TEMP
-        puestoId = new Long(1);
         sesionActiva = new SesionActiva();
     }
 
@@ -73,7 +72,7 @@ public class CreadorCalificacion {
      *
      * @return El id del puesto.
      */
-    public float getPuestoId() {
+    public Long getPuestoId() {
         return puestoId;
     }
 

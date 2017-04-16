@@ -47,7 +47,6 @@ public class CreadorComentario {
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
         
         //TEMP
-        puestoId = new Long(1);
         sesionActiva = new SesionActiva();
     }
 
@@ -74,7 +73,7 @@ public class CreadorComentario {
      *
      * @return El id del puesto.
      */
-    public float getPuestoId() {
+    public Long getPuestoId() {
         return puestoId;
     }
 
@@ -111,8 +110,8 @@ public class CreadorComentario {
         Puesto p = jpaPuesto.findPuesto(this.puestoId);
         
         // Crear el comentario
-        Comentario c = new Comentario(new Long(1));
-        
+        Comentario c = new Comentario();
+
         // Validar el comentario, error si es necesario
         if(!comentarioValido()) {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Comentario no válido", null);
@@ -120,11 +119,11 @@ public class CreadorComentario {
             
             return "calycom";
         }
-        
+
         c.setComentario(this.comentario);
         c.setPuestoId(p);
         Usuario u = sesionActiva.getUsuario();
-        
+
         // Manejo de errores, no hay usuario válido
         if (u == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solo los usuarios registrados pueden comentar.", null);
@@ -132,18 +131,17 @@ public class CreadorComentario {
             
             return "calycom";
         }
-        
+
         c.setUsuarioId(u);
-        
+
         // Finalmente, la fecha
         Date fecha = new Date();
         c.setFecha(fecha);
-        
         jpaComentario.create(c);
         
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
         faceContext.addMessage(null, message);
-
+        
         return "calycom";
     }
     
