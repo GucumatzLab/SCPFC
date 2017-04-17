@@ -8,6 +8,7 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.Properties;
 import javax.faces.application.FacesMessage;
@@ -158,6 +159,12 @@ public class Registro implements Serializable {
                             "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
                             null);
             facesContext.addMessage(null, facesMessage);
+
+            /* Si no se pudo enviar el correo, eliminamos al usuario. */
+            try {
+	            jpaUsuario.destroy(u.getId());
+            } catch (NonexistentEntityException nee) {
+            }
             return null;
         }
         FacesMessage facesMessage
