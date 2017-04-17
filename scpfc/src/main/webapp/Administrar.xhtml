@@ -1,39 +1,38 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Administrar</title>
-    </h:head>
-    <h:body>
-        <center>
-            <b:container>
-                <b:column>
-                    <b:row>
-                        <h1 style="font-family: arial;font-size: 40px;font-weight: bold">Administración de Puestos</h1>
-                    </b:row>
-                    <b:row>
-                        <a href="AgregadorPuesto.xhtml"><button type="button" class="btn btn-default" style="background-color: blue;font-family:arial;color:white;width:50%;height:40%;font-size:20px;font-weight:bold">Agregar Puesto</button></a>
-                    </b:row>
-                    <b:row>
-                        <p> </p>
-                    </b:row>
-                    <b:row>
-                        <a href=""><button type="button" class="btn btn-default" style="background-color:blue;font-family:arial;color:white;width:50%;height:40%;font-size:20px;font-weight:bold">Modificar Puesto</button></a>
-                    </b:row>
-                    <b:row>
-                        <p> </p>
-                    </b:row>
-                    <b:row>
-                        <a href="EliminadorPuesto.xhtml"><button type="button" class="btn btn-default" style="background-color:blue;font-family:arial;color:white;width:50%;height:40%;font-size:20px;font-weight:bold">Eliminar Puesto</button></a>
-                    </b:row>
-                    <b:row>
-                        <p:messages id="messages" autoUpdate="true" closable="true"/>
-                    </b:row>
-                </b:column>
-            </b:container>
-        </center>
-    </h:body>
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">Administrar</ui:define>
+
+    <ui:define name="contenido">
+      <b:container>
+        <b:column>
+          <b:row>
+            <h1 style="font-family: arial;font-size: 40px;font-weight: bold">Administración de Puestos</h1>
+          </b:row>
+          <b:row>
+            <a href="AgregadorPuesto.xhtml"><button type="button" class="btn btn-default" style="background-color: blue;font-family:arial;color:white;width:50%;height:40%;font-size:20px;font-weight:bold">Agregar Puesto</button></a>
+          </b:row>
+          <b:row>
+            <p> </p>
+          </b:row>
+          <b:row>
+            <a href=""><button type="button" class="btn btn-default" style="background-color:blue;font-family:arial;color:white;width:50%;height:40%;font-size:20px;font-weight:bold">Modificar Puesto</button></a>
+          </b:row>
+          <b:row>
+            <p> </p>
+          </b:row>
+          <b:row>
+            <a href="EliminadorPuesto.xhtml"><button type="button" class="btn btn-default" style="background-color:blue;font-family:arial;color:white;width:50%;height:40%;font-size:20px;font-weight:bold">Eliminar Puesto</button></a>
+          </b:row>
+          <b:row>
+            <p:messages id="messages" autoUpdate="true" closable="true"/>
+          </b:row>
+        </b:column>
+      </b:container>
+    </ui:define>
+  </ui:composition>
 </html>

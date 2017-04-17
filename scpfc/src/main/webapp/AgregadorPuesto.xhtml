@@ -1,75 +1,68 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Agregar Puesto</title>
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-        <script src="http://maps.google.com/maps/api/js?key=AIzaSyBlEYhBfp104jOYDy-TOhTYkSd8YBtkLFI" type="text/javascript"></script>
-    </h:head>
-    <h:body>
-        <b:container>
-            <center>
-                <h1>Registro de nuevo Puesto</h1> 
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">Agregar Puesto</ui:define>
 
-                <h:form id="myForm">
-                    <table>
-                        <tr>
-                            <td><h:outputText value="Nombre de Puesto : "/></td>
-                            <td><p:inputText value="#{agregadorPuesto.puesto.nombre}" required="true" id="NombrePuesto"/></td>
-                        </tr>
-                        <tr>
-                            <td><h:outputText value="Tipo de Comida : "/></td>
-                            <td><p:inputText value="#{agregadorPuesto.puesto.tipoComida}" required="true" id="TipoComida"/></td>
-                        </tr>
-                        <tr>
-                            <td><h:outputText value="Referencias (opcional): "/></td>
-                            <td><p:inputText value="#{agregadorPuesto.puesto.referencias}"/></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p:commandButton value="Localizar" type="button" onclick="PF('dlg1').show();"/>
-                                <p:dialog header="Localizando" widgetVar="dlg1" height="400" width="400">
-                                    <p:gmap id="gmap" center="19.324328359583355,-99.17934268712997" zoom="18"
-                                            type="HYBRID" model="#{mapa.advancedModel}" onPointClick="handlePointClick2(event)"
-                                            style="width:100%;height:100%" 
-                                            widgetVar="map">
-                                    </p:gmap>
-                                    <h:inputHidden id ="lng" value ="#{agregadorPuesto.puesto.longitud}" required="true" />
-                                    <h:inputHidden id ="lat" value="#{agregadorPuesto.puesto.latitud}" required="true" />
-                                    <center>
-                                    <p:commandButton value ="Hecho" onclick="PF('dlg1').hide()"/>
-                                    </center>
-                                </p:dialog>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" align="center">
-                                <p:commandButton action="#{agregadorPuesto.agrega()}" value="Agregar"/>
-                                <p:commandButton value="Reset" update="myForm" process="@this"  >
-                                    <p:resetInput target="myForm" />
-                                </p:commandButton>
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr>
-                            <td><p:messages id="messages" autoUpdate="true" closable="true" /></td>
-                        </tr>
-                    </table>
-                </h:form>
-            </center>
-        </b:container>
+    <ui:define name="contenido">
+      <h1>Registro de nuevo Puesto</h1> 
 
-    </h:body>
-    <script type="text/javascript">
+      <h:form id="myForm">
+        <table>
+          <tr>
+            <td><h:outputText value="Nombre de Puesto : "/></td>
+            <td><p:inputText value="#{agregadorPuesto.puesto.nombre}" required="true" id="NombrePuesto"/></td>
+          </tr>
+          <tr>
+            <td><h:outputText value="Tipo de Comida : "/></td>
+            <td><p:inputText value="#{agregadorPuesto.puesto.tipoComida}" required="true" id="TipoComida"/></td>
+          </tr>
+          <tr>
+            <td><h:outputText value="Referencias (opcional): "/></td>
+            <td><p:inputText value="#{agregadorPuesto.puesto.referencias}"/></td>
+          </tr>
+          <tr>
+            <td>
+              <p:commandButton value="Localizar" type="button" onclick="PF('dlg1').show();"/>
+              <p:dialog header="Localizando" widgetVar="dlg1" height="400" width="400">
+                <p:gmap id="gmap" center="19.324328359583355,-99.17934268712997" zoom="18"
+                        type="HYBRID" model="#{mapa.advancedModel}" onPointClick="handlePointClick2(event)"
+                        style="width:100%;height:100%" 
+                        widgetVar="map">
+                </p:gmap>
+                <h:inputHidden id ="lng" value ="#{agregadorPuesto.puesto.longitud}" required="true" />
+                <h:inputHidden id ="lat" value="#{agregadorPuesto.puesto.latitud}" required="true" />
+                <center>
+                  <p:commandButton value ="Hecho" onclick="PF('dlg1').hide()"/>
+                </center>
+              </p:dialog>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">
+              <p:commandButton action="#{agregadorPuesto.agrega()}" value="Agregar"/>
+              <p:commandButton value="Reset" update="myForm" process="@this"  >
+                <p:resetInput target="myForm" />
+              </p:commandButton>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td><p:messages id="messages" autoUpdate="true" closable="true" /></td>
+          </tr>
+        </table>
+      </h:form>
+
+      <script type="text/javascript">
         function handlePointClick2(event) {
-            document.getElementById("myForm:lat").value = event.latLng.lat();
-            document.getElementById("myForm:lng").value = event.latLng.lng();
+          document.getElementById("myForm:lat").value = event.latLng.lat();
+          document.getElementById("myForm:lng").value = event.latLng.lng();
         }
-
-    </script>
+      </script>
+    </ui:define>
+  </ui:composition>
 </html>
