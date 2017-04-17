@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    #{visorPuesto.obtenerPuesto(param['id'])}
+    <h:head>
+        <title>SCPFC | <h:outputText value="#{visorPuesto.puesto.nombre}"/></title>
+        <style>
+            #gmap {
+                height: 400px;
+                width: 50%;
+                float: left;
+            }
+            #info {
+                width: 50%;
+                float: left;
+            }
+            #fotos {
+                width: 100%;
+            }
+        </style>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2A2vIybClb6npOfNcdDt_zA6J7HEiFYk" type="text/javascript"></script>
+    </h:head>
+    <h:body>
+            <div>            
+                <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
+                                  type="HYBRID" model="#{mapa.advancedModel}"
+                                  onPointClick="handlePoinDEtClick(event);"
+                                  widgetVar="map">
+                            #{mapa.addMarker(visorPuesto.puesto.latitud, visorPuesto.puesto.longitud, visorPuesto.puesto.nombre)}
+                            <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
+
+                            <p:gmapInfoWindow id="infoWindow">
+                              <p:outputPanel style="text-align: center; display: block; margin: auto">
+
+                                <h:outputText value="#{mapa.marker.title}" />
+                                <br/>
+                                <h:outputText value="#{mapa.marker.data}"/>
+
+                              </p:outputPanel>
+                            </p:gmapInfoWindow>
+                </p:gmap>
+              <div id="info">
+                <div id="fotos">
+                  <img style="width: 32%" src="./images/img(1).jpg"></img>
+                  <img style="width: 32%" src="./images/img(2).jpg"></img>
+                  <img style="width: 32%" src="./images/img(3).jpg"></img>
+                </div>
+                <div>
+                  <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
+                  <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
+                  <div>
+                    <img style="width: 5%" src="./images/star.png"></img>
+                    <img style="width: 5%" src="./images/star.png"></img>
+                    <img style="width: 5%" src="./images/star.png"></img>
+                    <img style="width: 5%" src="./images/star.png"></img>
+                    <img style="width: 5%" src="./images/star.png"></img>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </h:body>
+</html>

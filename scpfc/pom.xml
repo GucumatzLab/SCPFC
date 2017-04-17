@@ -55,17 +55,16 @@
 
     <!-- Soporte para Primefaces y Bootsfaces -->
     <dependency>
-      <groupId>org.primefaces</groupId>
-      <artifactId>primefaces</artifactId>
-      <version>6.0</version>
-    </dependency>
-    <dependency>
       <groupId>net.bootsfaces</groupId>
       <artifactId>bootsfaces</artifactId>
       <version>1.0.1</version>
       <scope>compile</scope>
     </dependency>
-
+    <dependency>
+        <groupId>org.primefaces.extensions</groupId>
+        <artifactId>primefaces-extensions</artifactId>
+        <version>6.0.0</version>
+    </dependency>
     <!-- Soporte para JPA -->
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
@@ -103,4 +102,12 @@
 	</plugins>
 
   </build>
+    <repositories>
+        <repository>
+            <url>http://repository.primefaces.org/</url>
+            <id>PrimeFaces-maven-lib</id>
+            <layout>default</layout>
+            <name>Repository for library PrimeFaces-maven-lib</name>
+        </repository>
+    </repositories>
 </project>
