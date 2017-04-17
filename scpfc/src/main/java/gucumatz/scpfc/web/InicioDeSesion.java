@@ -68,7 +68,7 @@ public class InicioDeSesion implements Serializable {
     public String iniciarSesion() {
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
         sesionActiva.setUsuario(usuario);
-        return "index";
+        return "index?faces-redirect=true";
     }
 
     public String getCuenta() {

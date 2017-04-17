@@ -144,7 +144,7 @@ public class Registro implements Serializable {
         }
 
         enviarCorreoDeActivacion(u);
-        return "index";
+        return "index?faces-redirect=true";
     }
 
     /**
