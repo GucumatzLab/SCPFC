@@ -1,12 +1,12 @@
 use gucumatz;
 
-drop table if exists Comentario;
-drop table if exists Calificacion;
-drop table if exists FotosPuesto;
-drop table if exists Usuario;
-drop table if exists Puesto;
+drop table if exists comentario;
+drop table if exists calificacion;
+drop table if exists fotospuesto;
+drop table if exists usuario;
+drop table if exists puesto;
 
-create table Usuario (
+create table usuario (
   id serial primary key,
   nombre varchar(100) not null unique,
   correoElectronico varchar(100) not null unique,
@@ -17,7 +17,7 @@ create table Usuario (
   rutaImagen varchar(100)
 );
 
-create table Puesto (
+create table puesto (
    id serial primary key,
    nombre varchar(100) not null,
    tipoComida varchar(200) not null,
@@ -26,28 +26,28 @@ create table Puesto (
    longitud float not null
 );
 
-create table Comentario (
+create table comentario (
   id serial primary key,
   comentario varchar(1024) not null,
   fecha date not null,
   puesto_id bigint unsigned not null,
   usuario_id bigint unsigned not null,
-  foreign key (puesto_id) references Puesto(id),
-  foreign key (usuario_id) references Usuario(id)
+  foreign key (puesto_id) references puesto(id),
+  foreign key (usuario_id) references usuario(id)
 );
 
-create table Calificacion (
+create table calificacion (
   id serial primary key,
   calificacion float not null,
   puesto_id bigint unsigned not null,
   usuario_id bigint unsigned not null,
-  foreign key (puesto_id) references Puesto(id),
-  foreign key (usuario_id) references Usuario(id)
+  foreign key (puesto_id) references puesto(id),
+  foreign key (usuario_id) references usuario(id)
 );
 
-CREATE TABLE FotosPuesto (
+CREATE TABLE fotospuesto (
   idPuesto bigint unsigned,
   url varChar(100) NOT NULL,
   PRIMARY KEY (idPuesto, url),
-  foreign key (idPuesto) references Puesto(id)
+  foreign key (idPuesto) references puesto(id)
 );
