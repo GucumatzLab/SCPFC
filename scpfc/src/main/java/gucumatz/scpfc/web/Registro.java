@@ -38,10 +38,15 @@ public class Registro implements Serializable {
             = "Ya existe una cuenta con este correo";
     private static final String MENSAJE_CORREO_NO_CIENCIAS
             = "Debes proporcionar un correo @ciencias.unam.mx";
+    private static final String MENSAJE_CORREO_NO_VALIDO
+            = "Esta no es una dirección de correo válida.";
     private static final String MENSAJE_CONTRASENA_CORTA
             = "La contraseña debe tener al menos 4 caracteres";
     private static final String MENSAJE_CONFIRMACION_INCORRECTA
             = "La confirmación de contraseña no coincide";
+
+    /* Único dominio aceptado en los correos electrónicos. */
+    private static final String DOMINIO_CORREO = "@ciencias.unam.mx";
 
     /**
      * Controlador JPA para acceder a la BD.
@@ -105,6 +110,8 @@ public class Registro implements Serializable {
     }
 
     public String registrar() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
         Usuario u = new Usuario();
         u.setNombre(nombreDeUsuario);
         u.setCorreoElectronico(correoElectronico);
@@ -143,7 +150,21 @@ public class Registro implements Serializable {
             }
         }
 
-        enviarCorreoDeActivacion(u);
+        try {
+            enviarCorreoDeActivacion(u);
+        } catch (MessagingException me) {
+            FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
+                            null);
+            facesContext.addMessage(null, facesMessage);
+            return null;
+        }
+        FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Se ha enviado un correo de confirmación a la dirección " + correoElectronico,
+                        null);
+        facesContext.addMessage(null, facesMessage);
         return "index?faces-redirect=true";
     }
 
@@ -180,8 +201,13 @@ public class Registro implements Serializable {
         }
 
         /* Verifica que el correo sea de @ciencias.unam.mx. */
-        if (!correoElectronico.endsWith("@ciencias.unam.mx")) {
+        if (!correoElectronico.endsWith(DOMINIO_CORREO)) {
             throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_CIENCIAS));
+        }
+
+        /* Verifica que el correo tenga una parte local (antes de @). */
+        if (correoElectronico.equals(DOMINIO_CORREO)) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_VALIDO));
         }
 
         /* Verifica que el correo electrónico no se haya usado. */
@@ -227,34 +253,34 @@ public class Registro implements Serializable {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
     }
 
-    public void enviarCorreoDeActivacion(Usuario usuario) {
+    private void enviarCorreoDeActivacion(Usuario usuario)
+            throws MessagingException {
         Properties propiedadesSesionEmail = new Properties();
         propiedadesSesionEmail.setProperty("mail.smtp.port", "2000");
         propiedadesSesionEmail.setProperty("mail.smtp.host", "localhost");
         Session sesionEmail = Session.getInstance(propiedadesSesionEmail);
 
-        try {
-            MimeMessage mensaje = new MimeMessage(sesionEmail);
-            mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
-            mensaje.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(usuario.getCorreoElectronico(), usuario.getNombre()));
-            mensaje.setSubject("SCPFC - Confirma tu cuenta");
+        MimeMessage mensaje = new MimeMessage(sesionEmail);
+        mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
+        mensaje.addRecipients(Message.RecipientType.TO,
+                String.format("%s <%s>", usuario.getNombre(), usuario.getCorreoElectronico()));
+        mensaje.setSubject("SCPFC - Confirma tu cuenta");
 
-            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-            HttpServletRequest request = (HttpServletRequest) context.getRequest();
-            String url = request.getRequestURL().toString();
-            String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        String url = request.getRequestURL().toString();
+        String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
 
-            String textoMensaje
-                    = "Para confirmar tu cuenta ve a "
-                    + baseUrl
-                    + "/activar-cuenta.xhtml"
-                    + "?id=" + usuario.getId()
-                    + "&codigo=" + usuario.getCodigoDeActivacion();
-            mensaje.setText(textoMensaje);
+        String textoMensaje
+                = "Para confirmar tu cuenta ve a "
+                + baseUrl
+                + "/activar-cuenta.xhtml"
+                + "?id=" + usuario.getId()
+                + "&codigo=" + usuario.getCodigoDeActivacion();
+        mensaje.setText(textoMensaje);
 
-            Transport.send(mensaje);
-        } catch (MessagingException | java.io.UnsupportedEncodingException me) {
+        Transport.send(mensaje);
+    }
 
         }
 
