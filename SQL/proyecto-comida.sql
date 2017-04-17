@@ -18,12 +18,12 @@ create table Usuario (
 );
 
 create table Puesto (
-	 id serial primary key,
-	 nombre varchar(100) not null,
-	 tipoComida varchar(200) not null,
-	referencias varChar(100) NOT NULL,
- 	 latitud float not null,
- 	 longitud float not null
+   id serial primary key,
+   nombre varchar(100) not null,
+   tipoComida varchar(200) not null,
+  referencias varChar(100) NOT NULL,
+   latitud float not null,
+   longitud float not null
 );
 
 create table Comentario (

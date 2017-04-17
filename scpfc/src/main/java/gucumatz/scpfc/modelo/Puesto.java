@@ -7,6 +7,7 @@ package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,7 +63,7 @@ public class Puesto implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Calificacion> calificacionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
-    private Collection<Fotospuesto> fotospuestoCollection;
+    private List<Fotospuesto> fotospuestoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Comentario> comentarioCollection;
 
@@ -140,12 +141,12 @@ public class Puesto implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Fotospuesto> getFotospuestoCollection() {
-        return fotospuestoCollection;
+    public List<Fotospuesto> getFotospuestoList() {
+        return fotospuestoList;
     }
 
-    public void setFotospuestoCollection(Collection<Fotospuesto> fotospuestoCollection) {
-        this.fotospuestoCollection = fotospuestoCollection;
+    public void setFotospuestoCollection(List<Fotospuesto> fotospuestoList) {
+        this.fotospuestoList = fotospuestoList;
     }
 
     @XmlTransient

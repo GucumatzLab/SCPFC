@@ -13,12 +13,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
  *
- * @author lchacon
+ * @author Moctezuma19
  */
 public class PuestoJpaController implements Serializable {
 
@@ -134,4 +135,19 @@ public class PuestoJpaController implements Serializable {
             em.close();
         }
     }
+     public Puesto findByNombre(String nombre) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Puesto> query = em.createNamedQuery("Puesto.findByNombre", Puesto.class);
+            query.setParameter("nombre", nombre);
+            List<Puesto> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results.get(0);
+        } finally {
+            em.close();
+        }
+}
+    
 }

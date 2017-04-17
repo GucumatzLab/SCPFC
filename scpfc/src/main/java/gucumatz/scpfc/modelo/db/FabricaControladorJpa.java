@@ -35,4 +35,7 @@ public class FabricaControladorJpa {
     public PuestoJpaController obtenerControladorJpaPuesto() {
         return new PuestoJpaController(emf);
     }
+    public FotospuestoJpaController obtenerControladorJpaFotospuesto(){
+        return new FotospuestoJpaController(emf);
+    }
 }
