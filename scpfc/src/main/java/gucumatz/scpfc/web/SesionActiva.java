@@ -70,4 +70,11 @@ public class SesionActiva implements Serializable {
         return usuario != null && usuario.getEsAdministrador();
     }
 
+    /**
+     * Redirige a la página principal.
+     */
+    public String redirigeAPaginaPrincipal() {
+        return "index?faces-redirect=true";
+    }
+
 }

@@ -5,6 +5,11 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
+  <f:metadata>
+    <f:viewAction if="#{sesionActiva.haySesionActiva}"
+                  action="#{sesionActiva.redirigeAPaginaPrincipal}" />
+  </f:metadata>
+
   <ui:composition template="WEB-INF/plantilla.xhtml">
     <ui:define name="titulo">Crear Cuenta</ui:define>
 
