@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+  <ui:composition>
+    <h:form>
+      <b:navbarLinks pull="right">
+        <b:navLink icon-align="right"
+                   value="Ver mapa" outcome="Mapa"></b:navLink>
+
+        <b:navLink icon-align="right" rendered="#{not sesionActiva.haySesionActiva}"
+                   value="Crear cuenta" outcome="crear-cuenta"></b:navLink>
+
+        <b:navLink icon-align="right" rendered="#{not sesionActiva.haySesionActiva}"
+                   value="Iniciar sesión" outcome="iniciar-sesion"></b:navLink>
+
+        <b:navLink icon-align="right" rendered="#{sesionActiva.esAdministrador}"
+                   value="Administrar" outcome="Administrar"></b:navLink>
+
+        <b:navLink icon-align="right" rendered="#{sesionActiva.haySesionActiva}"
+                   value="#{sesionActiva.usuario.nombre} (#{sesionActiva.usuario.correoElectronico})">
+          <p:graphicImage
+            styleClass="imgCirculo" rendered="#{sesionActiva.haySesionActiva}"
+            value="#{sesionActiva.fotoUsuarioActual}"/>
+        </b:navLink>
+
+        <b:navCommandLink icon-align="right" rendered="#{sesionActiva.haySesionActiva}"
+                          value="Cerrar sesión" action="#{sesionActiva.cerrarSesion()}"></b:navCommandLink>
+      </b:navbarLinks>
+    </h:form>
+
+  </ui:composition>
+</html>
