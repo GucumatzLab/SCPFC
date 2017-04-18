@@ -6,6 +6,7 @@
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
@@ -56,10 +57,10 @@ public class Puesto implements Serializable {
     private String referencias;
     @Basic(optional = false)
     @Column(name = "latitud")
-    private float latitud;
+    private BigDecimal latitud;
     @Basic(optional = false)
     @Column(name = "longitud")
-    private float longitud;
+    private BigDecimal longitud;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Calificacion> calificacionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
@@ -74,7 +75,7 @@ public class Puesto implements Serializable {
         this.id = id;
     }
 
-    public Puesto(Long id, String nombre, String tipoComida, String referencias, float latitud, float longitud) {
+    public Puesto(Long id, String nombre, String tipoComida, String referencias, BigDecimal latitud, BigDecimal longitud) {
         this.id = id;
         this.nombre = nombre;
         this.tipoComida = tipoComida;
@@ -115,19 +116,19 @@ public class Puesto implements Serializable {
         this.referencias = referencias;
     }
 
-    public float getLatitud() {
+    public BigDecimal getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(float latitud) {
+    public void setLatitud(BigDecimal latitud) {
         this.latitud = latitud;
     }
 
-    public float getLongitud() {
+    public BigDecimal getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(float longitud) {
+    public void setLongitud(BigDecimal longitud) {
         this.longitud = longitud;
     }
 
