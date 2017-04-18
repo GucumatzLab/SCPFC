@@ -8,6 +8,7 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.Properties;
 import javax.faces.application.FacesMessage;
@@ -38,10 +39,19 @@ public class Registro implements Serializable {
             = "Ya existe una cuenta con este correo";
     private static final String MENSAJE_CORREO_NO_CIENCIAS
             = "Debes proporcionar un correo @ciencias.unam.mx";
+    private static final String MENSAJE_CORREO_NO_VALIDO
+            = "Esta no es una dirección de correo válida.";
     private static final String MENSAJE_CONTRASENA_CORTA
             = "La contraseña debe tener al menos 4 caracteres";
     private static final String MENSAJE_CONFIRMACION_INCORRECTA
             = "La confirmación de contraseña no coincide";
+    private static final String MENSAJE_FOTO_GRANDE
+            = "La fotografía no puede ser más grande que 4MB";
+    private static final String MENSAJE_FOTO_TIPO_INVALIDO
+            = "Sólo se aceptan fotografías en formato JPG o PNG";
+
+    /* Único dominio aceptado en los correos electrónicos. */
+    private static final String DOMINIO_CORREO = "@ciencias.unam.mx";
 
     /**
      * Controlador JPA para acceder a la BD.
@@ -67,6 +77,11 @@ public class Registro implements Serializable {
      * Fotografía del usuario.
      */
     private UploadedFile foto;
+
+    /**
+     * Extensión de la fotografía del usuario.
+     */
+    private String extensionFoto;
 
     public Registro() {
         jpaUsuario = new FabricaControladorJpa().obtenerControladorJpaUsuario();
@@ -105,6 +120,8 @@ public class Registro implements Serializable {
     }
 
     public String registrar() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
         Usuario u = new Usuario();
         u.setNombre(nombreDeUsuario);
         u.setCorreoElectronico(correoElectronico);
@@ -115,35 +132,40 @@ public class Registro implements Serializable {
 
         jpaUsuario.create(u);
 
-        if (foto != null) {
+        try {
+            enviarCorreoDeActivacion(u);
+
+            FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Se ha enviado un correo de confirmación a la dirección " + correoElectronico,
+                            null);
+            facesContext.addMessage(null, facesMessage);
+        } catch (MessagingException me) {
+            FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
+                            null);
+            facesContext.addMessage(null, facesMessage);
+
+            /* Si no se pudo enviar el correo, eliminamos al usuario. */
             try {
-                String nombreDeArchivo = foto.getFileName();
-                String extension = null;
-                if (nombreDeArchivo.endsWith(".jpg") || nombreDeArchivo.endsWith(".jpeg")) {
-                    extension = ".jpg";
-                } else if (nombreDeArchivo.endsWith(".png")) {
-                    extension = ".png";
-                }
+                jpaUsuario.destroy(u.getId());
+            } catch (NonexistentEntityException nee) {
+            }
+            return null;
+        }
 
-                if (extension != null) {
-                    nombreDeArchivo = "usuario/" + u.getId() + extension;
-                    ManejadorDeImagenes mdi = new ManejadorDeImagenes();
-                    mdi.escribirImagen(foto, nombreDeArchivo);
-                }
-
-                u.setRutaImagen(nombreDeArchivo);
-                jpaUsuario.edit(u);
+        if (extensionFoto != null) {
+            try {
+                guardarFoto(u);
             } catch (Exception e) {
-                FacesContext facesContext = FacesContext.getCurrentInstance();
                 FacesMessage facesMessage
                         = new FacesMessage(FacesMessage.SEVERITY_WARN,
                                 "Ocurrió un error al guardar tu foto.", null);
                 facesContext.addMessage(null, facesMessage);
-                e.printStackTrace();
             }
         }
 
-        enviarCorreoDeActivacion(u);
         return "index?faces-redirect=true";
     }
 
@@ -180,8 +202,13 @@ public class Registro implements Serializable {
         }
 
         /* Verifica que el correo sea de @ciencias.unam.mx. */
-        if (!correoElectronico.endsWith("@ciencias.unam.mx")) {
+        if (!correoElectronico.endsWith(DOMINIO_CORREO)) {
             throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_CIENCIAS));
+        }
+
+        /* Verifica que el correo tenga una parte local (antes de @). */
+        if (correoElectronico.equals(DOMINIO_CORREO)) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_VALIDO));
         }
 
         /* Verifica que el correo electrónico no se haya usado. */
@@ -195,7 +222,8 @@ public class Registro implements Serializable {
      * Verifica que la contraseña sea del tamaño adecuado y que la confirmación
      * sea correcta.
      */
-    public void validarContrasena(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+    public void validarContrasena(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
         String contrasena = (String) value;
 
         /* Obtiene al componente con la confirmación y la extrae. */
@@ -220,6 +248,37 @@ public class Registro implements Serializable {
     }
 
     /**
+     * Verifica que la foto subida sea del tipo y tamaño adecuado. Establece el
+     * valor de extensionFoto.
+     */
+    public void validarFoto(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
+        UploadedFile foto = (UploadedFile) value;
+        extensionFoto = null;
+
+        /* Si no hay foto, la aceptamos. */
+        if (foto == null || foto.getSize() == 0) {
+            return;
+        }
+
+        /* Verificamos que el tamaño sea adecuado. */
+        long tamanoFoto = foto.getSize();
+        if (tamanoFoto > 4 * 1024 * 1024) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_GRANDE));
+        }
+
+        /* Verificamos que el tipo sea adecuado. */
+        String nombreDeArchivo = foto.getFileName();
+        if (nombreDeArchivo.endsWith(".jpg") || nombreDeArchivo.endsWith(".jpeg")) {
+            extensionFoto = ".jpg";
+        } else if (nombreDeArchivo.endsWith(".png")) {
+            extensionFoto = ".png";
+        } else {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_TIPO_INVALIDO));
+        }
+    }
+
+    /**
      * Crea un nuevo mensaje de error. El mensaje no contiene detalles y tiene
      * severidad de error.
      */
@@ -227,43 +286,43 @@ public class Registro implements Serializable {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
     }
 
-    public void enviarCorreoDeActivacion(Usuario usuario) {
+    private void enviarCorreoDeActivacion(Usuario usuario)
+            throws MessagingException {
         Properties propiedadesSesionEmail = new Properties();
         propiedadesSesionEmail.setProperty("mail.smtp.port", "2000");
         propiedadesSesionEmail.setProperty("mail.smtp.host", "localhost");
         Session sesionEmail = Session.getInstance(propiedadesSesionEmail);
 
-        try {
-            MimeMessage mensaje = new MimeMessage(sesionEmail);
-            mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
-            mensaje.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(usuario.getCorreoElectronico(), usuario.getNombre()));
-            mensaje.setSubject("SCPFC - Confirma tu cuenta");
+        MimeMessage mensaje = new MimeMessage(sesionEmail);
+        mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
+        mensaje.addRecipients(Message.RecipientType.TO,
+                String.format("%s <%s>", usuario.getNombre(), usuario.getCorreoElectronico()));
+        mensaje.setSubject("SCPFC - Confirma tu cuenta");
 
-            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-            HttpServletRequest request = (HttpServletRequest) context.getRequest();
-            String url = request.getRequestURL().toString();
-            String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        String url = request.getRequestURL().toString();
+        String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
 
-            String textoMensaje
-                    = "Para confirmar tu cuenta ve a "
-                    + baseUrl
-                    + "/activar-cuenta.xhtml"
-                    + "?id=" + usuario.getId()
-                    + "&codigo=" + usuario.getCodigoDeActivacion();
-            mensaje.setText(textoMensaje);
+        String textoMensaje
+                = "Para confirmar tu cuenta ve a "
+                + baseUrl
+                + "/activar-cuenta.xhtml"
+                + "?id=" + usuario.getId()
+                + "&codigo=" + usuario.getCodigoDeActivacion();
+        mensaje.setText(textoMensaje);
 
-            Transport.send(mensaje);
-        } catch (MessagingException | java.io.UnsupportedEncodingException me) {
+        Transport.send(mensaje);
+    }
 
-        }
+    private void guardarFoto(Usuario usuario)
+            throws Exception {
+        String nombreDeArchivo = "usuario/" + usuario.getId() + extensionFoto;
+        ManejadorDeImagenes mdi = new ManejadorDeImagenes();
+        mdi.escribirImagen(foto, nombreDeArchivo);
 
-        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Se ha enviado un correo de confirmación a "
-                + usuario.getCorreoElectronico(),
-                null);
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
+        usuario.setRutaImagen(nombreDeArchivo);
+        jpaUsuario.edit(usuario);
     }
 
 }
