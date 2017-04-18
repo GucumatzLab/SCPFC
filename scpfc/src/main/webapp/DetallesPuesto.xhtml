@@ -5,12 +5,16 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
   <ui:composition template="WEB-INF/plantilla.xhtml">
     <ui:define name="titulo">SCPFC | <h:outputText value="#{visorPuesto.puesto.nombre}"/></ui:define>
 
     <ui:define name="contenido">
-      #{visorPuesto.obtenerPuesto(param['id'])}
+        <f:metadata>
+            <f:viewParam id="id" name="id" value="#{visorPuesto.id}" required="true"/>
+            <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
+        </f:metadata>
       <style>
         #gmap {
           height: 400px;
@@ -48,31 +52,11 @@
             <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
             <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
             <div>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
+              <p:rating value="#{visorPuesto.getPromedioCalificacion()}" style="width: 96px; margin: 0 auto;" readonly="true"/>
             </div>
           </div>
         </div>
       </div>
-      <div id="comentarios" style="width: 100%">
-        <ui:repeat value="#{visorPuesto.comentario}" var="c">
-          <div style="width: 100%">
-            <div class="cNombre">
-              <p>#{c.usuarioId.nombre}</p>
-            </div>
-            <div class="cFecha">
-              <p>#{c.fecha}</p>
-            </div>
-            <div class="cComentario">
-              <p>#{c.comentario}</p>
-            </div>
-          </div>
-        </ui:repeat>
-      </div>
-
       <h:form styleClass="form-signin" prependId="false">
         <b:row>
           <!-- Botón para el overlay de comentar -->
@@ -112,6 +96,21 @@
           </p:dialog>
         </b:row>
       </h:form>
+    <div id="comentarios" style="width: 100%">
+        <ui:repeat value="#{visorPuesto.comentario}" var="c">
+          <div style="width: 100%">
+            <div class="cNombre">
+              <p>#{c.usuarioId.nombre}</p>
+            </div>
+            <div class="cFecha">
+              <p>#{c.fecha}</p>
+            </div>
+            <div class="cComentario">
+              <p>#{c.comentario}</p>
+            </div>
+          </div>
+        </ui:repeat>
+    </div>
     </ui:define>
   </ui:composition>
 </html>
