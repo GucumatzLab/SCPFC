@@ -10,7 +10,7 @@
 
     <ui:define name="contenido">
       <b:form styleClass="form-signin" id="formulario" inline="true"
-              enytype="multipart/form-data">
+              enctype="multipart/form-data">
         <b:inputText id="nombreDeUsuario"
                      label="Nombre de usuario" placeholder="usuario"
                      value="#{registro.nombreDeUsuario}"
@@ -55,13 +55,9 @@
         <p:fileUpload id="foto"
                       value="#{registro.foto}"
                       required="false"
-                      allowTypes="/(\.|\/)(jpe?g|png)$/"
-                      fileLimit="1"
-                      sizeLimit="#{4 * 1024 * 1024}"
-                      invalidSizeMessage="La fotografía no puede ser más grande que 4MB"
-                      invalidFileMessage="Sólo se aceptan fotografías en formato JPG o PNG"
+                      mode="simple" skinSimple="true"
                       label="Subir foto"
-                      />
+                      validator="#{registro.validarFoto}"/>
         <b:message for="foto"/>
 
         <b:commandButton look="primary btn-block" value="Registrar"

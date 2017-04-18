@@ -45,6 +45,10 @@ public class Registro implements Serializable {
             = "La contraseña debe tener al menos 4 caracteres";
     private static final String MENSAJE_CONFIRMACION_INCORRECTA
             = "La confirmación de contraseña no coincide";
+    private static final String MENSAJE_FOTO_GRANDE
+            = "La fotografía no puede ser más grande que 4MB";
+    private static final String MENSAJE_FOTO_TIPO_INVALIDO
+            = "Sólo se aceptan fotografías en formato JPG o PNG";
 
     /* Único dominio aceptado en los correos electrónicos. */
     private static final String DOMINIO_CORREO = "@ciencias.unam.mx";
@@ -73,6 +77,11 @@ public class Registro implements Serializable {
      * Fotografía del usuario.
      */
     private UploadedFile foto;
+
+    /**
+     * Extensión de la fotografía del usuario.
+     */
+    private String extensionFoto;
 
     public Registro() {
         jpaUsuario = new FabricaControladorJpa().obtenerControladorJpaUsuario();
@@ -123,36 +132,14 @@ public class Registro implements Serializable {
 
         jpaUsuario.create(u);
 
-        if (foto != null) {
-            try {
-                String nombreDeArchivo = foto.getFileName();
-                String extension = null;
-                if (nombreDeArchivo.endsWith(".jpg") || nombreDeArchivo.endsWith(".jpeg")) {
-                    extension = ".jpg";
-                } else if (nombreDeArchivo.endsWith(".png")) {
-                    extension = ".png";
-                }
-
-                if (extension != null) {
-                    nombreDeArchivo = "usuario/" + u.getId() + extension;
-                    ManejadorDeImagenes mdi = new ManejadorDeImagenes();
-                    mdi.escribirImagen(foto, nombreDeArchivo);
-                }
-
-                u.setRutaImagen(nombreDeArchivo);
-                jpaUsuario.edit(u);
-            } catch (Exception e) {
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                FacesMessage facesMessage
-                        = new FacesMessage(FacesMessage.SEVERITY_WARN,
-                                "Ocurrió un error al guardar tu foto.", null);
-                facesContext.addMessage(null, facesMessage);
-                e.printStackTrace();
-            }
-        }
-
         try {
             enviarCorreoDeActivacion(u);
+
+            FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Se ha enviado un correo de confirmación a la dirección " + correoElectronico,
+                            null);
+            facesContext.addMessage(null, facesMessage);
         } catch (MessagingException me) {
             FacesMessage facesMessage
                     = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -162,16 +149,23 @@ public class Registro implements Serializable {
 
             /* Si no se pudo enviar el correo, eliminamos al usuario. */
             try {
-	            jpaUsuario.destroy(u.getId());
+                jpaUsuario.destroy(u.getId());
             } catch (NonexistentEntityException nee) {
             }
             return null;
         }
-        FacesMessage facesMessage
-                = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                        "Se ha enviado un correo de confirmación a la dirección " + correoElectronico,
-                        null);
-        facesContext.addMessage(null, facesMessage);
+
+        if (extensionFoto != null) {
+            try {
+                guardarFoto(u);
+            } catch (Exception e) {
+                FacesMessage facesMessage
+                        = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Ocurrió un error al guardar tu foto.", null);
+                facesContext.addMessage(null, facesMessage);
+            }
+        }
+
         return "index?faces-redirect=true";
     }
 
@@ -228,7 +222,8 @@ public class Registro implements Serializable {
      * Verifica que la contraseña sea del tamaño adecuado y que la confirmación
      * sea correcta.
      */
-    public void validarContrasena(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+    public void validarContrasena(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
         String contrasena = (String) value;
 
         /* Obtiene al componente con la confirmación y la extrae. */
@@ -249,6 +244,37 @@ public class Registro implements Serializable {
         /* Verifica que la confirmación coincida. */
         if (!confirmacion.equals(contrasena)) {
             throw new ValidatorException(crearMensajeDeError(MENSAJE_CONFIRMACION_INCORRECTA));
+        }
+    }
+
+    /**
+     * Verifica que la foto subida sea del tipo y tamaño adecuado. Establece el
+     * valor de extensionFoto.
+     */
+    public void validarFoto(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException {
+        UploadedFile foto = (UploadedFile) value;
+        extensionFoto = null;
+
+        /* Si no hay foto, la aceptamos. */
+        if (foto == null || foto.getSize() == 0) {
+            return;
+        }
+
+        /* Verificamos que el tamaño sea adecuado. */
+        long tamanoFoto = foto.getSize();
+        if (tamanoFoto > 4 * 1024 * 1024) {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_GRANDE));
+        }
+
+        /* Verificamos que el tipo sea adecuado. */
+        String nombreDeArchivo = foto.getFileName();
+        if (nombreDeArchivo.endsWith(".jpg") || nombreDeArchivo.endsWith(".jpeg")) {
+            extensionFoto = ".jpg";
+        } else if (nombreDeArchivo.endsWith(".png")) {
+            extensionFoto = ".png";
+        } else {
+            throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_TIPO_INVALIDO));
         }
     }
 
@@ -289,14 +315,14 @@ public class Registro implements Serializable {
         Transport.send(mensaje);
     }
 
-        }
+    private void guardarFoto(Usuario usuario)
+            throws Exception {
+        String nombreDeArchivo = "usuario/" + usuario.getId() + extensionFoto;
+        ManejadorDeImagenes mdi = new ManejadorDeImagenes();
+        mdi.escribirImagen(foto, nombreDeArchivo);
 
-        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Se ha enviado un correo de confirmación a "
-                + usuario.getCorreoElectronico(),
-                null);
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
+        usuario.setRutaImagen(nombreDeArchivo);
+        jpaUsuario.edit(usuario);
     }
 
 }
