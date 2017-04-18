@@ -1,49 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Eliminar Puesto</title>
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-    </h:head>
-    <h:body>
-        <b:container>
-            <center>
-                <h1>Elimina puesto</h1>
-                <p:dataTable value="#{eliminadorPuesto.puestos}" var="puesto">
-                    <p:column headerText="ID"><h:outputText value="#{puesto.id}"/></p:column>
-                    <p:column headerText="Nombre"><h:outputText value="#{puesto.nombre}"/></p:column>
-                </p:dataTable>
-                <table>
-                    <h:form id ="myForm">
-                        <tr>
-                            <td>
-                                <h:outputText value="Introduce el Id del Puesto a Eliminar"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h:inputText id ="del" value="#{eliminadorPuesto.id}" required="true"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p:commandButton value="Eliminar" action="#{eliminadorPuesto.elimina}"/>
-                            </td>
-                        </tr>
-                    </h:form>
-                </table>
-                <table>
-                    <tr>
-                        <td>
-                            <p:messages id="messages" autoUpdate="true" closable="true" />
-                        </td>
-                    </tr>
-                </table>
-            </center>
-        </b:container>
-    </h:body>
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">Eliminar Puesto</ui:define>
+
+    <ui:define name="contenido">
+      <h1>Elimina puesto</h1>
+      <p:dataTable value="#{eliminadorPuesto.puestos}" var="puesto">
+        <p:column headerText="ID"><h:outputText value="#{puesto.id}"/></p:column>
+        <p:column headerText="Nombre"><h:outputText value="#{puesto.nombre}"/></p:column>
+      </p:dataTable>
+      <table>
+        <h:form id ="myForm">
+          <tr>
+            <td>
+              <h:outputText value="Introduce el Id del Puesto a Eliminar"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h:inputText id ="del" value="#{eliminadorPuesto.id}" required="true"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p:commandButton value="Eliminar" action="#{eliminadorPuesto.elimina}"/>
+            </td>
+          </tr>
+        </h:form>
+      </table>
+      <table>
+        <tr>
+          <td>
+            <p:messages id="messages" autoUpdate="true" closable="true" />
+          </td>
+        </tr>
+      </table>
+    </ui:define>
+  </ui:composition>
 </html>
