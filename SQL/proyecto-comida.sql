@@ -22,8 +22,8 @@ create table puesto (
    nombre varchar(100) not null,
    tipoComida varchar(200) not null,
   referencias varChar(100) NOT NULL,
-   latitud decimal(10,7) not null,
-   longitud decimal(10,7) not null
+   latitud double not null,
+   longitud double not null
 );
 
 create table comentario (

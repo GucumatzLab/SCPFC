@@ -57,10 +57,10 @@ public class Puesto implements Serializable {
     private String referencias;
     @Basic(optional = false)
     @Column(name = "latitud")
-    private BigDecimal latitud;
+    private double latitud;
     @Basic(optional = false)
     @Column(name = "longitud")
-    private BigDecimal longitud;
+    private double longitud;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Calificacion> calificacionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
@@ -75,7 +75,7 @@ public class Puesto implements Serializable {
         this.id = id;
     }
 
-    public Puesto(Long id, String nombre, String tipoComida, String referencias, BigDecimal latitud, BigDecimal longitud) {
+    public Puesto(Long id, String nombre, String tipoComida, String referencias, double latitud, double longitud) {
         this.id = id;
         this.nombre = nombre;
         this.tipoComida = tipoComida;
@@ -116,19 +116,19 @@ public class Puesto implements Serializable {
         this.referencias = referencias;
     }
 
-    public BigDecimal getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(BigDecimal latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public BigDecimal getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(BigDecimal longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
@@ -183,5 +183,5 @@ public class Puesto implements Serializable {
     public String toString() {
         return "gucumatz.scpfc.modelo.Puesto[ id=" + id + " ]";
     }
-    
+
 }
