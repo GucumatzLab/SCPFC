@@ -1,85 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
-    #{visorPuesto.obtenerPuesto(param['id'])}
-    <h:head>
-        <title>SCPFC | <h:outputText value="#{visorPuesto.puesto.nombre}"/></title>
-        <style>
-            #gmap {
-                height: 400px;
-                width: 50%;
-                float: left;
-            }
-            #info {
-                width: 50%;
-                float: left;
-            }
-            #fotos {
-                width: 100%;
-            }
-        </style>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2A2vIybClb6npOfNcdDt_zA6J7HEiFYk" type="text/javascript"></script>
-    </h:head>
-    <h:body>
-            <div>            
-                <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
-                                  type="HYBRID" model="#{mapa.advancedModel}"
-                                  onPointClick="handlePoinDEtClick(event);"
-                                  widgetVar="map">
-                            <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
-                            <p:gmapInfoWindow id="infoWindow">
-                              <p:outputPanel style="text-align: center; display: block; margin: auto">
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">SCPFC | <h:outputText value="#{visorPuesto.puesto.nombre}"/></ui:define>
 
-                                <h:outputText value="#{mapa.marker.title}" />
-                                <br/>
-                                <h:outputText value="#{mapa.marker.data}"/>
+    <ui:define name="contenido">
+      #{visorPuesto.obtenerPuesto(param['id'])}
+      <style>
+        #gmap {
+          height: 400px;
+          width: 50%;
+          float: left;
+        }
+      </style>
+      <div>            
+        <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
+                type="HYBRID" model="#{mapa.advancedModel}"
+                onPointClick="handlePoinDEtClick(event);"
+                widgetVar="map">
+          <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
+          <p:gmapInfoWindow id="infoWindow">
+            <p:outputPanel style="text-align: center; display: block; margin: auto">
 
-                              </p:outputPanel>
-                            </p:gmapInfoWindow>
-                </p:gmap>
-              <div id="info">
-                <div id="fotos">
-                    <b:carousel id="cfotos" style="width:100%; height: 150px">
-                        <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
-                            <b:carouselItem>
-                                <img src="#{fppk.url}" style="height:150px"/>
-                            </b:carouselItem>
-                        </c:forEach>
-                    </b:carousel>
-                </div>
-                <div>
-                  <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
-                  <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
-                  <div>
-                    <img style="width: 5%" src="./images/star.png"></img>
-                    <img style="width: 5%" src="./images/star.png"></img>
-                    <img style="width: 5%" src="./images/star.png"></img>
-                    <img style="width: 5%" src="./images/star.png"></img>
-                    <img style="width: 5%" src="./images/star.png"></img>
-                  </div>
-                </div>
-              </div>
+              <h:outputText value="#{mapa.marker.title}" />
+              <br/>
+              <h:outputText value="#{mapa.marker.data}"/>
+
+            </p:outputPanel>
+          </p:gmapInfoWindow>
+        </p:gmap>
+        <div id="info">
+          <div id="fotos">
+            <b:carousel id="cfotos" style="width:100%; height: 150px">
+              <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
+                <b:carouselItem>
+                  <img src="#{fppk.url}" style="height:150px"/>
+                </b:carouselItem>
+              </c:forEach>
+            </b:carousel>
+          </div>
+          <div>
+            <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
+            <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
+            <div>
+              <img style="width: 5%" src="./images/star.png"></img>
+              <img style="width: 5%" src="./images/star.png"></img>
+              <img style="width: 5%" src="./images/star.png"></img>
+              <img style="width: 5%" src="./images/star.png"></img>
+              <img style="width: 5%" src="./images/star.png"></img>
             </div>
-        <div id="comentarios" style="width: 100%">
-                <ui:repeat value="#{visorPuesto.comentario}" var="c">
-                    <div style="width: 100%">
-                        <div class="cNombre">
-                            <p>#{c.usuarioId.nombre}</p>
-                        </div>
-                        <div class="cFecha">
-                            <p>#{c.fecha}</p>
-                        </div>
-                        <div class="cComentario">
-                            <p>#{c.comentario}</p>
-                        </div>
-                    </div>
-                </ui:repeat>
+          </div>
+        </div>
+      </div>
+      <div id="comentarios" style="width: 100%">
+        <ui:repeat value="#{visorPuesto.comentario}" var="c">
+          <div style="width: 100%">
+            <div class="cNombre">
+              <p>#{c.usuarioId.nombre}</p>
             </div>
-    </h:body>
+            <div class="cFecha">
+              <p>#{c.fecha}</p>
+            </div>
+            <div class="cComentario">
+              <p>#{c.comentario}</p>
+            </div>
+          </div>
+        </ui:repeat>
+      </div>
+    </ui:define>
+  </ui:composition>
 </html>

@@ -9,3 +9,12 @@
   height: 40px;
   border-radius: 50%;
 }
+
+#info {
+  width: 50%;
+  float: left;
+}
+
+#fotos {
+  width: 100%;
+}
