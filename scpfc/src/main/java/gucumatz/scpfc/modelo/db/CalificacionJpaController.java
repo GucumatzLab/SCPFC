@@ -154,28 +154,13 @@ public class CalificacionJpaController implements Serializable {
         }
     }
     
-    public Calificacion findByPuesto(Puesto p) {
+    public Calificacion findByUsuarioPuesto(Usuario u, Puesto p) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByPuestoId", Calificacion.class);
-            query.setParameter("puestoId", p);
-            List<Calificacion> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
-            return results.get(0);
-        } finally {
-            em.close();
-        }
-    }
-    
-    public Calificacion findByUsuario(Usuario u) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByUsuarioId", Calificacion.class);
+                = em.createNamedQuery("Calificacion.findByUsuarioPuesto", Calificacion.class);
             query.setParameter("usuarioId", u);
+            query.setParameter("puestoId", p);
             List<Calificacion> results = query.getResultList();
             if (results.isEmpty()) {
                 return null;

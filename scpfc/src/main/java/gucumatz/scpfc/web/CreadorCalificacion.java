@@ -114,7 +114,7 @@ public class CreadorCalificacion {
         }
         
         // Validar que el usuario no califique varias veces
-        if (jpaCalificacion.findByPuesto(p) != null && jpaCalificacion.findByUsuario(u) != null) {
+        if (jpaCalificacion.findByUsuarioPuesto(u, p) != null) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: No se puede calificar más de una vez.", null);
             faceContext.addMessage(null, message);
             

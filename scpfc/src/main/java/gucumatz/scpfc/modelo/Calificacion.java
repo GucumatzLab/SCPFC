@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Calificacion.findById", query = "SELECT c FROM Calificacion c WHERE c.id = :id")
     , @NamedQuery(name = "Calificacion.findByPuestoId", query = "SELECT c FROM Calificacion c WHERE c.puestoId = :puestoId")
     , @NamedQuery(name = "Calificacion.findByUsuarioId", query = "SELECT c FROM Calificacion c WHERE c.usuarioId = :usuarioId")
+    , @NamedQuery(name = "Calificacion.findByUsuarioPuesto", query = "SELECT c FROM Calificacion c WHERE c.usuarioId = :usuarioId AND c.puestoId = :puestoId")
     , @NamedQuery(name = "Calificacion.findByCalificacion", query = "SELECT c FROM Calificacion c WHERE c.calificacion = :calificacion")})
 public class Calificacion implements Serializable {
 
