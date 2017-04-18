@@ -18,10 +18,12 @@ import gucumatz.scpfc.modelo.db.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.LinkedList;
 
 /**
  *
- * @author Moctezuma19
+ * @author Pablo Gerardo Gonzalez Lopez
  */
 public class FotospuestoJpaController implements Serializable {
 
@@ -131,6 +133,26 @@ public class FotospuestoJpaController implements Serializable {
         }
     }
 
+    public List<FotospuestoPK> findFotospuestoById(Long id){
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Fotospuesto> query
+                    = em.createNamedQuery("Fotospuesto.findByIdPuesto", Fotospuesto.class);
+            query.setParameter("idPuesto", id);
+            List<Fotospuesto> results = query.getResultList();
+            List<FotospuestoPK> resultsP = new LinkedList<>();
+            for(Fotospuesto fp : results){
+                resultsP.add(fp.getFotospuestoPK());
+            }
+            if (results.isEmpty()) {
+                return null;
+            }
+            return resultsP;
+        } finally {
+            em.close();
+        }
+    }
+    
     public List<Fotospuesto> findFotospuestoEntities() {
         return findFotospuestoEntities(true, -1, -1);
     }

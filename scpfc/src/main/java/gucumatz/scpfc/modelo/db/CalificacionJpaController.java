@@ -6,6 +6,7 @@
 package gucumatz.scpfc.modelo.db;
 
 import gucumatz.scpfc.modelo.Calificacion;
+import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
@@ -179,6 +180,22 @@ public class CalificacionJpaController implements Serializable {
                 return null;
             }
             return results.get(0);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<Calificacion> findAllByPuestoID(Puesto id) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Calificacion> query
+                = em.createNamedQuery("Calificacion.findByPuesto", Calificacion.class);
+            query.setParameter("puestoID", id);
+            List<Calificacion> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results;
         } finally {
             em.close();
         }
