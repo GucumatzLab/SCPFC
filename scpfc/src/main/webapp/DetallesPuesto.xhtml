@@ -4,7 +4,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     #{visorPuesto.obtenerPuesto(param['id'])}
     <h:head>
         <title>SCPFC | <h:outputText value="#{visorPuesto.puesto.nombre}"/></title>
@@ -30,9 +32,7 @@
                                   type="HYBRID" model="#{mapa.advancedModel}"
                                   onPointClick="handlePoinDEtClick(event);"
                                   widgetVar="map">
-                            #{mapa.addMarker(visorPuesto.puesto.latitud, visorPuesto.puesto.longitud, visorPuesto.puesto.nombre)}
                             <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
-
                             <p:gmapInfoWindow id="infoWindow">
                               <p:outputPanel style="text-align: center; display: block; margin: auto">
 
@@ -45,9 +45,13 @@
                 </p:gmap>
               <div id="info">
                 <div id="fotos">
-                  <img style="width: 32%" src="./images/img(1).jpg"></img>
-                  <img style="width: 32%" src="./images/img(2).jpg"></img>
-                  <img style="width: 32%" src="./images/img(3).jpg"></img>
+                    <b:carousel id="cfotos" style="width:100%; height: 150px">
+                        <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
+                            <b:carouselItem>
+                                <img src="#{fppk.url}" style="height:150px"/>
+                            </b:carouselItem>
+                        </c:forEach>
+                    </b:carousel>
                 </div>
                 <div>
                   <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
@@ -61,6 +65,21 @@
                   </div>
                 </div>
               </div>
+            </div>
+        <div id="comentarios" style="width: 100%">
+                <ui:repeat value="#{visorPuesto.comentario}" var="c">
+                    <div style="width: 100%">
+                        <div class="cNombre">
+                            <p>#{c.usuarioId.nombre}</p>
+                        </div>
+                        <div class="cFecha">
+                            <p>#{c.fecha}</p>
+                        </div>
+                        <div class="cComentario">
+                            <p>#{c.comentario}</p>
+                        </div>
+                    </div>
+                </ui:repeat>
             </div>
     </h:body>
 </html>
