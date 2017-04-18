@@ -141,7 +141,7 @@ public class ComentarioJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                = em.createNamedQuery("Comentario.findByID", Comentario.class);
+                = em.createNamedQuery("Comentario.findById", Comentario.class);
             query.setParameter("id", id);
             List<Comentario> results = query.getResultList();
             if (results.isEmpty()) {
@@ -157,8 +157,8 @@ public class ComentarioJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                = em.createNamedQuery("Comentario.findByUsuario", Comentario.class);
-            query.setParameter("usuarioID", id);
+                = em.createNamedQuery("Comentario.findByUsuarioId", Comentario.class);
+            query.setParameter("usuarioId", id);
             List<Comentario> results = query.getResultList();
             if (results.isEmpty()) {
                 return null;
