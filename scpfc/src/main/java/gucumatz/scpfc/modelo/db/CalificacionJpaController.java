@@ -6,6 +6,8 @@
 package gucumatz.scpfc.modelo.db;
 
 import gucumatz.scpfc.modelo.Calificacion;
+import gucumatz.scpfc.modelo.Puesto;
+import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
@@ -136,11 +138,11 @@ public class CalificacionJpaController implements Serializable {
         }
     }
 
-    public Calificacion findByID(Long id) {
+    public Calificacion findById(Long id) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByID", Calificacion.class);
+                = em.createNamedQuery("Calificacion.findById", Calificacion.class);
             query.setParameter("id", id);
             List<Calificacion> results = query.getResultList();
             if (results.isEmpty()) {
@@ -152,12 +154,12 @@ public class CalificacionJpaController implements Serializable {
         }
     }
     
-    public Calificacion findByUsuarioID(Long id) {
+    public Calificacion findByPuesto(Puesto p) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByUsuario", Calificacion.class);
-            query.setParameter("usuarioID", id);
+                = em.createNamedQuery("Calificacion.findByPuestoId", Calificacion.class);
+            query.setParameter("puestoId", p);
             List<Calificacion> results = query.getResultList();
             if (results.isEmpty()) {
                 return null;
@@ -168,12 +170,12 @@ public class CalificacionJpaController implements Serializable {
         }
     }
     
-    public Calificacion findByPuestoID(Long id) {
+    public Calificacion findByUsuario(Usuario u) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByPuesto", Calificacion.class);
-            query.setParameter("puestoID", id);
+                = em.createNamedQuery("Calificacion.findByUsuarioId", Calificacion.class);
+            query.setParameter("usuarioId", u);
             List<Calificacion> results = query.getResultList();
             if (results.isEmpty()) {
                 return null;

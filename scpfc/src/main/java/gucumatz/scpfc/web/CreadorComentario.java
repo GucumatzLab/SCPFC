@@ -45,9 +45,6 @@ public class CreadorComentario {
     public CreadorComentario() {
         faceContext = FacesContext.getCurrentInstance();
         httpServletRequest = (HttpServletRequest) faceContext.getExternalContext().getRequest();
-        
-        //TEMP
-        sesionActiva = new SesionActiva();
     }
 
     /**
@@ -88,14 +85,48 @@ public class CreadorComentario {
 
     /**
      * Método interno para comprobar la validez del comentario
-     * @return true si el comentairo es válido, false e.o.c.
+     * @return true si el comentario es válido, false e.o.c.
      */
-    private boolean comentarioValido() {
+    private boolean esValido() {
         
-        if(this.comentario.equals(""))
+        // Validar comentario
+        if(this.comentario.equals("")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: El comentario debe contener texto.", null);
+            faceContext.addMessage(null, message);
+            
             return false;
-        else if(this.comentario.length() > 1024)
+        } else if(this.comentario.length() > 1024) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Comentario demasiado largo.", null);
+            faceContext.addMessage(null, message);
+            
             return false;
+        }
+        
+        // Para validar al puesto y al usuario
+        FabricaControladorJpa fab = new FabricaControladorJpa();
+        
+        // Obtener el puesto relacionado al ID
+        PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
+        Puesto p = jpaPuesto.findPuesto(this.puestoId);
+        
+        // Validar puesto
+        if (p == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Puesto no registrado.", null);
+            faceContext.addMessage(null, message);
+            
+            return false;
+        }
+        
+        // Obtener usuario actual
+        Usuario u = sesionActiva.getUsuario();
+
+        // Validar al usuario
+        if (u == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debes iniciar sesión para calificar.", null);
+            faceContext.addMessage(null, message);
+            
+            return false;
+        }
         
         return true;
     }
@@ -106,44 +137,25 @@ public class CreadorComentario {
      * @return El nombre de la vista que va a responder.
      */
     public String agregarComentario() {
+        
+        // Revisar que sea válido el comentario
+        if (!esValido())
+            return null;
+        
         FabricaControladorJpa fab = new FabricaControladorJpa();
         ComentarioJpaController jpaComentario = fab.obtenerControladorJpaComentario();
+        
+        // Crear el comentario
+        Comentario c = new Comentario();
+        c.setComentario(this.comentario);
         
         // Obtener el puesto relacionado al ID
         PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = jpaPuesto.findPuesto(this.puestoId);
-        
-        // Validación del puesto
-        if (p == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Puesto no válido.", null);
-            faceContext.addMessage(null, message);
-            
-            return "calycom";
-        }
-        
-        // Crear el comentario
-        Comentario c = new Comentario();
-
-        // Validar el comentario, error si es necesario
-        if(!comentarioValido()) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Comentario no válido", null);
-            faceContext.addMessage(null, message);
-            
-            return "calycom";
-        }
-
-        c.setComentario(this.comentario);
         c.setPuestoId(p);
+        
+        // Obtener usuario actual
         Usuario u = sesionActiva.getUsuario();
-
-        // Manejo de errores, no hay usuario válido
-        if (u == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Solo los usuarios registrados pueden comentar.", null);
-            faceContext.addMessage(null, message);
-            
-            return "calycom";
-        }
-
         c.setUsuarioId(u);
 
         // Finalmente, la fecha
@@ -154,7 +166,7 @@ public class CreadorComentario {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
         faceContext.addMessage(null, message);
         
-        return "calycom";
+        return null;
     }
     
     public SesionActiva getSesionActiva() {
