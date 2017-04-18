@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
@@ -29,6 +28,17 @@
           <tr>
             <td><h:outputText value="Referencias (opcional): "/></td>
             <td><p:inputText value="#{agregadorPuesto.puesto.referencias}"/></td>
+          </tr>
+          <tr>
+            <td>        
+              <p:fileUpload value="#{agregadorPuesto.foto1}" skinSimple="true" label="Foto 1" mode="simple"/>
+            </td>
+            <td>
+              <p:fileUpload value="#{agregadorPuesto.foto2}" skinSimple="true" label="Foto 2" mode="simple"/>
+            </td>
+            <td>
+              <p:fileUpload value="#{agregadorPuesto.foto3}" skinSimple="true" label="Foto 3" mode="simple"/>
+            </td>
           </tr>
           <tr>
             <td>
@@ -64,9 +74,21 @@
       </h:form>
 
       <script type="text/javascript">
-        function handlePointClick2(event) {
-          document.getElementById("myForm:lat").value = event.latLng.lat();
-          document.getElementById("myForm:lng").value = event.latLng.lng();
+        var currentMarker = null;
+
+        function handlePointClick(event) {
+          if (currentMarker === null) {
+            document.getElementById("myForm:lat").value = event.latLng.lat();
+            document.getElementById("myForm:lng").value = event.latLng.lng();
+
+            currentMarker = new google.maps.Marker({
+              position: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+            });
+
+            PF('map').addOverlay(currentMarker);
+
+            PF('dlg').show();
+          }
         }
       </script>
     </ui:define>
