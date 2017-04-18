@@ -6,7 +6,9 @@
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,8 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Puesto.findByLatitud", query = "SELECT p FROM Puesto p WHERE p.latitud = :latitud")
     , @NamedQuery(name = "Puesto.findByLongitud", query = "SELECT p FROM Puesto p WHERE p.longitud = :longitud")})
 public class Puesto implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
+    private List<Fotospuesto> fotospuestoList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -143,6 +150,15 @@ public class Puesto implements Serializable {
     @Override
     public String toString() {
         return "gucumatz.scpfc.modelo.Puesto[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public List<Fotospuesto> getFotospuestoList() {
+        return fotospuestoList;
+    }
+
+    public void setFotospuestoList(List<Fotospuesto> fotospuestoList) {
+        this.fotospuestoList = fotospuestoList;
     }
     
 }

@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,8 +5,6 @@
  */
 package gucumatz.scpfc.modelo.db;
 
-import gucumatz.scpfc.modelo.db.PuestoJpaController;
-import gucumatz.scpfc.modelo.db.FotosPuestoJpaController;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -15,7 +12,7 @@ import javax.persistence.Persistence;
  *
  * @author lchacon
  */
-public class FabricaControladorJpa implements java.io.Serializable{
+public class FabricaControladorJpa {
 
     private final EntityManagerFactory emf;
 
@@ -23,11 +20,22 @@ public class FabricaControladorJpa implements java.io.Serializable{
         this.emf = Persistence.createEntityManagerFactory("SCPFC-PU");
     }
 
+    public ComentarioJpaController obtenerControladorJpaComentario() {
+        return new ComentarioJpaController(emf);
+    }
+    
+    public CalificacionJpaController obtenerControladorJpaCalificacion() {
+        return new CalificacionJpaController(emf);
+    }
+    
+    public UsuarioJpaController obtenerControladorJpaUsuario() {
+        return new UsuarioJpaController(emf);
+    }
+    
     public PuestoJpaController obtenerControladorJpaPuesto() {
         return new PuestoJpaController(emf);
     }
-    
-    public FotosPuestoJpaController obtenerControladorJpaFotosPuesto() {
-        return new FotosPuestoJpaController(emf);
+    public FotospuestoJpaController obtenerControladorJpaFotospuesto(){
+        return new FotospuestoJpaController(emf);
     }
 }

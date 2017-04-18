@@ -3,8 +3,8 @@
   <persistence-unit name="SCPFC-PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>gucumatz.scpfc.modelo.Puesto</class>
-    <class>gucumatz.scpfc.modelo.FotosPuesto</class>
     <class>gucumatz.scpfc.modelo.Calificacion</class>
+    <class>gucumatz.scpfc.modelo.Fotospuesto</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gucumatz?zeroDateTimeBehavior=convertToNull"/>

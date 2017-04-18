@@ -6,6 +6,7 @@
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,13 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jaz
  */
 @Entity
-@Table(name = "calificacion")
+@Table(name = "comentario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Calificacion.findAll", query = "SELECT c FROM Calificacion c")
-    , @NamedQuery(name = "Calificacion.findById", query = "SELECT c FROM Calificacion c WHERE c.id = :id")
-    , @NamedQuery(name = "Calificacion.findByCalificacion", query = "SELECT c FROM Calificacion c WHERE c.calificacion = :calificacion")})
-public class Calificacion implements Serializable {
+    @NamedQuery(name = "Comentario.findAll", query = "SELECT c FROM Comentario c")
+    , @NamedQuery(name = "Comentario.findById", query = "SELECT c FROM Comentario c WHERE c.id = :id")
+    , @NamedQuery(name = "Comentario.findByComentario", query = "SELECT c FROM Comentario c WHERE c.comentario = :comentario")
+    , @NamedQuery(name = "Comentario.findByFecha", query = "SELECT c FROM Comentario c WHERE c.fecha = :fecha")})
+public class Comentario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,8 +43,12 @@ public class Calificacion implements Serializable {
     @Column(name = "id")
     private Long id;
     @Basic(optional = false)
-    @Column(name = "calificacion")
-    private float calificacion;
+    @Column(name = "comentario")
+    private String comentario;
+    @Basic(optional = false)
+    @Column(name = "fecha")
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
     @JoinColumn(name = "puesto_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Puesto puestoId;
@@ -48,16 +56,17 @@ public class Calificacion implements Serializable {
     @ManyToOne(optional = false)
     private Usuario usuarioId;
 
-    public Calificacion() {
+    public Comentario() {
     }
 
-    public Calificacion(Long id) {
+    public Comentario(Long id) {
         this.id = id;
     }
 
-    public Calificacion(Long id, float calificacion) {
+    public Comentario(Long id, String comentario, Date fecha) {
         this.id = id;
-        this.calificacion = calificacion;
+        this.comentario = comentario;
+        this.fecha = fecha;
     }
 
     public Long getId() {
@@ -68,12 +77,20 @@ public class Calificacion implements Serializable {
         this.id = id;
     }
 
-    public float getCalificacion() {
-        return calificacion;
+    public String getComentario() {
+        return comentario;
     }
 
-    public void setCalificacion(float calificacion) {
-        this.calificacion = calificacion;
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public Puesto getPuestoId() {
@@ -102,10 +119,10 @@ public class Calificacion implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Calificacion)) {
+        if (!(object instanceof Comentario)) {
             return false;
         }
-        Calificacion other = (Calificacion) object;
+        Comentario other = (Comentario) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -114,7 +131,7 @@ public class Calificacion implements Serializable {
 
     @Override
     public String toString() {
-        return "gucumatz.scpfc.modelo.Calificacion[ id=" + id + " ]";
+        return "gucumatz.scpfc.modelo.Comentario[ id=" + id + " ]";
     }
     
 }

@@ -26,6 +26,10 @@
                             <td><p:inputText value="#{agregadorPuesto.puesto.tipoComida}" required="true" id="TipoComida"/></td>
                         </tr>
                         <tr>
+                            <td><h:outputText value="Referencias (opcional): "/></td>
+                            <td><p:inputText value="#{agregadorPuesto.puesto.referencias}"/></td>
+                        </tr>
+                        <tr>
                             <td>
                                 <p:commandButton value="Localizar" type="button" onclick="PF('dlg1').show();"/>
                                 <p:dialog header="Localizando" widgetVar="dlg1" height="400" width="400">
@@ -66,6 +70,5 @@
             document.getElementById("myForm:lat").value = event.latLng.lat();
             document.getElementById("myForm:lng").value = event.latLng.lng();
         }
-
     </script>
 </html>

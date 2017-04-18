@@ -5,10 +5,8 @@ import gucumatz.scpfc.modelo.Puesto;
 import java.util.Locale;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-//import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-//import gucumatz.scpfc.web.Mapa;
 
 /**
  * Clase para controlar un objeto de la Clase Puesto
@@ -17,14 +15,12 @@ import javax.faces.context.FacesContext;
  * @version 0.1
  */
 @ManagedBean
-//@RequestScoped
 @ViewScoped
 public class AgregadorPuesto {
 
     private final PuestoJpaController jpaPuesto;
 
     private Puesto puesto = new Puesto();
-
 
     public AgregadorPuesto() {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
@@ -49,11 +45,19 @@ public class AgregadorPuesto {
      * Puesto a la base de datos
      */
     public void agrega() {
-        if (validaNombre(this.puesto.getNombre())) {
-            this.puesto.setReferencias("");
-            jpaPuesto.create(this.puesto);
-            redirecciona();
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
+        try {
+            if (validaNombre(this.puesto.getNombre())) {
+                if (this.puesto.getReferencias().length() == 0) {
+                    this.puesto.setReferencias("Ninguna Referencia");
+                }
+                jpaPuesto.create(this.puesto);
+                FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
+                FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                redirecciona();
+            }
+        } catch (Exception e) {
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR GRAVE\n" + e.getMessage(), null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
 
@@ -63,7 +67,7 @@ public class AgregadorPuesto {
         Puesto p = jpaPuesto.findByNombre(nombrePuesto);
         if (p != null) {
             System.out.println("Longitud " + this.puesto.getLongitud() + " Latitud " + this.puesto.getLatitud());
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El nombre ya existe o esta vacio", null);
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nEl nombre ya existe", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
@@ -72,7 +76,7 @@ public class AgregadorPuesto {
 
     public void redirecciona() {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("./Administrar2.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("./Administrar.xhtml");
         } catch (Exception e) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.toString(), null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);

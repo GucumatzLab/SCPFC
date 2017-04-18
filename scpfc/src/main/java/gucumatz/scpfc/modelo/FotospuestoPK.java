@@ -12,31 +12,31 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author pablog
+ * @author Moctezuma19
  */
 @Embeddable
-public class FotosPuestoPK implements Serializable {
+public class FotospuestoPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "idPuesto")
-    private int idPuesto;
+    private long idPuesto;
     @Basic(optional = false)
     @Column(name = "url")
     private String url;
 
-    public FotosPuestoPK() {
+    public FotospuestoPK() {
     }
 
-    public FotosPuestoPK(int idPuesto, String url) {
+    public FotospuestoPK(long idPuesto, String url) {
         this.idPuesto = idPuesto;
         this.url = url;
     }
 
-    public int getIdPuesto() {
+    public long getIdPuesto() {
         return idPuesto;
     }
 
-    public void setIdPuesto(int idPuesto) {
+    public void setIdPuesto(long idPuesto) {
         this.idPuesto = idPuesto;
     }
 
@@ -59,10 +59,10 @@ public class FotosPuestoPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof FotosPuestoPK)) {
+        if (!(object instanceof FotospuestoPK)) {
             return false;
         }
-        FotosPuestoPK other = (FotosPuestoPK) object;
+        FotospuestoPK other = (FotospuestoPK) object;
         if (this.idPuesto != other.idPuesto) {
             return false;
         }
@@ -74,7 +74,7 @@ public class FotosPuestoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "gucumatz.scpfc.modelo.FotosPuestoPK[ idPuesto=" + idPuesto + ", url=" + url + " ]";
+        return "gucumatz.scpfc.modelo.FotospuestoPK[ idPuesto=" + idPuesto + ", url=" + url + " ]";
     }
     
 }

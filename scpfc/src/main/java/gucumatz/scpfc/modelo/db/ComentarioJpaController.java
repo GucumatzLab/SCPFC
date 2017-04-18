@@ -5,7 +5,7 @@
  */
 package gucumatz.scpfc.modelo.db;
 
-import gucumatz.scpfc.modelo.Puesto;
+import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
@@ -19,11 +19,11 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Moctezuma19
+ * @author lchacon
  */
-public class PuestoJpaController implements Serializable {
+public class ComentarioJpaController implements Serializable {
 
-    public PuestoJpaController(EntityManagerFactory emf) {
+    public ComentarioJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,12 +32,12 @@ public class PuestoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Puesto puesto) {
+    public void create(Comentario comentario) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(puesto);
+            em.persist(comentario);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -46,19 +46,19 @@ public class PuestoJpaController implements Serializable {
         }
     }
 
-    public void edit(Puesto puesto) throws NonexistentEntityException, Exception {
+    public void edit(Comentario comentario) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            puesto = em.merge(puesto);
+            comentario = em.merge(comentario);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = puesto.getId();
-                if (findPuesto(id) == null) {
-                    throw new NonexistentEntityException("The puesto with id " + id + " no longer exists.");
+                Long id = comentario.getId();
+                if (findComentario(id) == null) {
+                    throw new NonexistentEntityException("The comentario with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -74,14 +74,14 @@ public class PuestoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Puesto puesto;
+            Comentario comentario;
             try {
-                puesto = em.getReference(Puesto.class, id);
-                puesto.getId();
+                comentario = em.getReference(Comentario.class, id);
+                comentario.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The puesto with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The comentario with id " + id + " no longer exists.", enfe);
             }
-            em.remove(puesto);
+            em.remove(comentario);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -90,19 +90,19 @@ public class PuestoJpaController implements Serializable {
         }
     }
 
-    public List<Puesto> findPuestoEntities() {
-        return findPuestoEntities(true, -1, -1);
+    public List<Comentario> findComentarioEntities() {
+        return findComentarioEntities(true, -1, -1);
     }
 
-    public List<Puesto> findPuestoEntities(int maxResults, int firstResult) {
-        return findPuestoEntities(false, maxResults, firstResult);
+    public List<Comentario> findComentarioEntities(int maxResults, int firstResult) {
+        return findComentarioEntities(false, maxResults, firstResult);
     }
 
-    private List<Puesto> findPuestoEntities(boolean all, int maxResults, int firstResult) {
+    private List<Comentario> findComentarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Puesto.class));
+            cq.select(cq.from(Comentario.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -114,20 +114,20 @@ public class PuestoJpaController implements Serializable {
         }
     }
 
-    public Puesto findPuesto(Long id) {
+    public Comentario findComentario(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Puesto.class, id);
+            return em.find(Comentario.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getPuestoCount() {
+    public int getComentarioCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Puesto> rt = cq.from(Puesto.class);
+            Root<Comentario> rt = cq.from(Comentario.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -135,12 +135,14 @@ public class PuestoJpaController implements Serializable {
             em.close();
         }
     }
-     public Puesto findByNombre(String nombre) {
+
+    public Comentario findByID(Long id) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Puesto> query = em.createNamedQuery("Puesto.findByNombre", Puesto.class);
-            query.setParameter("nombre", nombre);
-            List<Puesto> results = query.getResultList();
+            TypedQuery<Comentario> query
+                = em.createNamedQuery("Comentario.findByID", Comentario.class);
+            query.setParameter("id", id);
+            List<Comentario> results = query.getResultList();
             if (results.isEmpty()) {
                 return null;
             }
@@ -148,6 +150,37 @@ public class PuestoJpaController implements Serializable {
         } finally {
             em.close();
         }
-}
+    }
     
+    public Comentario findByUsuarioID(Long id) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Comentario> query
+                = em.createNamedQuery("Comentario.findByUsuario", Comentario.class);
+            query.setParameter("usuarioID", id);
+            List<Comentario> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results.get(0);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Comentario findByPuestoID(Long id) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Comentario> query
+                = em.createNamedQuery("Comentario.findByPuesto", Comentario.class);
+            query.setParameter("puestoID", id);
+            List<Comentario> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results.get(0);
+        } finally {
+            em.close();
+        }
+    }
 }
