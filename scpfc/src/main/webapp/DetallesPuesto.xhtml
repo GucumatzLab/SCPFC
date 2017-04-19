@@ -43,7 +43,9 @@
             <b:carousel id="cfotos" style="width:100%; height: 150px">
               <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
                 <b:carouselItem>
-                  <img src="#{fppk.url}" style="height:150px"/>
+                  <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 150px">
+                    <f:param name="ruta" value="#{fppk.url}"/>
+                  </p:graphicImage>
                 </b:carouselItem>
               </c:forEach>
             </b:carousel>
