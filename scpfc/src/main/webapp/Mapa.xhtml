@@ -9,6 +9,7 @@
 
     <ui:define name="contenido">
       <h1>Bienvenido :)</h1>
+      <h2>Sistema de Calificación de Puestos de la Facultad de Ciencias</h2>
       <style>
         #gmap {
           width: 100%;
@@ -23,11 +24,9 @@
           <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
           <p:gmapInfoWindow id="infoWindow">
             <p:outputPanel style="text-align: center; display: block; margin: auto">
-
               <h:outputText value="#{mapa.marker.title}" />
               <br/>
-              <h:outputText value="#{mapa.marker.data}"/>
-
+              <h:button value="Ver Detalles" outcome="DetallesPuesto.xhtml?id=#{mapa.marker.data.id}" />
             </p:outputPanel>
           </p:gmapInfoWindow>
         </p:gmap>

@@ -15,10 +15,6 @@
             <f:viewParam id="id" name="id" value="#{visorPuesto.id}" required="true"/>
             <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
         </f:metadata>
-        <f:metadata>
-            <f:viewParam id="id" name="id" value="#{visorPuesto.id}" required="true"/>
-            <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
-        </f:metadata>
       <style>
         #gmap {
           height: 400px;
@@ -35,8 +31,8 @@
             <p:outputPanel style="text-align: center; display: block; margin: auto">
               <h:outputText value="#{mapa.marker.title}" />
               <br/>
-              <h:outputText value="#{mapa.marker.data}"/>
-            </p:outputPanel>
+              <h:button value="Ver Detalles" outcome="DetallesPuesto.xhtml?id=#{mapa.marker.data.id}" />
+           </p:outputPanel>
           </p:gmapInfoWindow>    
         </p:gmap>
         <h:inputHidden id="pLat" value="#{visorPuesto.puesto.latitud}" />

@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
+import java.io.IOException;
 
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
@@ -19,6 +20,8 @@ import org.primefaces.model.map.Marker;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  * Clase para controlar el Mapa
@@ -44,7 +47,7 @@ public class Mapa implements Serializable{
             Double latitud = p.getLatitud();
             Double longitud = p.getLongitud();
             String nombre = p.getNombre();
-            advancedModel.addOverlay(new Marker(new LatLng(latitud, longitud), nombre));
+            advancedModel.addOverlay(new Marker(new LatLng(latitud, longitud), nombre, p));
         }
     }
 
@@ -54,11 +57,10 @@ public class Mapa implements Serializable{
 
     public void onMarkerSelect(OverlaySelectEvent event) {
         marker = (Marker) event.getOverlay();
-        System.out.println(marker.getTitle());
     }
 
     public Marker getMarker() {
         return marker;
     }
-
+    
 }
