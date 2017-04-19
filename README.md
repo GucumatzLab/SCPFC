@@ -53,7 +53,4 @@ contraseña `1234` y debe ser ejecutado desde la carpeta SQL.
 ## Ejecutando la aplicación
 
 Desde el directorio `scpfc` hacer `mvn clean install tomcat7:run`. La
-aplicación se puede ver desde `localhost:8080/scpfc`. De momento no
-hay una página principal, así que se necesita ir directamente a la
-página que se desea ver, por ejemplo
-`localhost:8080/scpfc/ver-mapa.jsp`
+aplicación se puede ver desde `localhost:8080/scpfc`.
