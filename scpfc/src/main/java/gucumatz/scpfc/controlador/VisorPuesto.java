@@ -6,11 +6,10 @@ import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.FotospuestoPK;
 import java.util.Locale;
-import javax.faces.application.FacesMessage;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ import java.util.List;
 @ManagedBean
 //@RequestScoped
 @ViewScoped
-public class VisorPuesto {
+public class VisorPuesto implements Serializable{
 
     private final PuestoJpaController jpaPuesto;
     private final FotospuestoJpaController jpaFotospuesto;
