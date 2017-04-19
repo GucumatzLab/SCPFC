@@ -15,6 +15,10 @@
             <f:viewParam id="id" name="id" value="#{visorPuesto.id}" required="true"/>
             <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
         </f:metadata>
+        <f:metadata>
+            <f:viewParam id="id" name="id" value="#{visorPuesto.id}" required="true"/>
+            <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
+        </f:metadata>
       <style>
         #gmap {
           height: 400px;
@@ -25,19 +29,19 @@
       <div>            
         <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
                 type="HYBRID" model="#{mapa.advancedModel}"
-                onPointClick="handlePoinDEtClick(event);"
                 widgetVar="map">
           <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
           <p:gmapInfoWindow id="infoWindow">
             <p:outputPanel style="text-align: center; display: block; margin: auto">
-
               <h:outputText value="#{mapa.marker.title}" />
               <br/>
               <h:outputText value="#{mapa.marker.data}"/>
-
             </p:outputPanel>
-          </p:gmapInfoWindow>
+          </p:gmapInfoWindow>    
         </p:gmap>
+        <h:inputHidden id="pLat" value="#{visorPuesto.puesto.latitud}" />
+        <h:inputHidden id="pLng" value="#{visorPuesto.puesto.longitud}" />
+        <h:inputHidden id="pNom" value="#{visorPuesto.puesto.nombre}" />
         <div id="info">
           <div id="fotos">
             <b:carousel id="cfotos" style="width:100%; height: 150px">
@@ -111,6 +115,21 @@
           </div>
         </ui:repeat>
     </div>
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            pLat = document.getElementById('pLat').value;
+            pLng = document.getElementById('pLng').value;
+            pNom = document.getElementById('pNom').value;
+            
+            starMarker = new google.maps.Marker({
+                position:new google.maps.LatLng(pLat, pLng),
+                icon: 'http://maps.google.com/mapfiles/kml/paddle/red-stars.png',
+                animation: google.maps.Animation.DROP
+            });
+            
+            PF('map').addOverlay(starMarker);
+        });
+    </script>
     </ui:define>
   </ui:composition>
 </html>
