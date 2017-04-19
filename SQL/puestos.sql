@@ -1,3 +1,5 @@
+use gucumatz;
+
 insert into puesto (nombre, tipoComida, referencias, latitud, longitud)
 values  ("Ensaladas & Baguettes - 1", "Rápida", "Estacionamiento", 19.3234387, -99.1806781),
         ("Flautas & Chilaquiles - 2", "Rápida", "Estacionamiento", 19.3234099, -99.1807849),
