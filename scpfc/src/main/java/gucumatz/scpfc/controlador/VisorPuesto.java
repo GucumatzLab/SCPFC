@@ -5,6 +5,7 @@ import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.FotospuestoPK;
+import java.io.IOException;
 import java.util.Locale;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
@@ -51,6 +52,13 @@ public class VisorPuesto implements Serializable{
     
     public void obtenerPuesto(){
         this.puesto = jpaPuesto.findPuesto(this.id);
+        if (this.puesto == null) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("Mapa.xhtml");
+            } catch (IOException e) {
+
+            }
+        }
         this.fotospuesto = jpaFotospuesto.findFotospuestoById(this.id);
         this.calificacion = jpaCalificacion.findAllByPuestoID(this.puesto);
         this.comentario = jpaComentario.findAllByPuestoID(this.puesto);
