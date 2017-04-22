@@ -5,12 +5,16 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
   <ui:composition template="WEB-INF/plantilla.xhtml">
     <ui:define name="titulo">SCPFC | <h:outputText value="#{visorPuesto.puesto.nombre}"/></ui:define>
 
     <ui:define name="contenido">
-      #{visorPuesto.obtenerPuesto(param['id'])}
+        <f:metadata>
+            <f:viewParam id="id" name="id" value="#{visorPuesto.id}" required="true"/>
+            <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
+        </f:metadata>
       <style>
         #gmap {
           height: 400px;
@@ -21,25 +25,27 @@
       <div>            
         <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
                 type="HYBRID" model="#{mapa.advancedModel}"
-                onPointClick="handlePoinDEtClick(event);"
                 widgetVar="map">
           <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
           <p:gmapInfoWindow id="infoWindow">
             <p:outputPanel style="text-align: center; display: block; margin: auto">
-
               <h:outputText value="#{mapa.marker.title}" />
               <br/>
-              <h:outputText value="#{mapa.marker.data}"/>
-
-            </p:outputPanel>
-          </p:gmapInfoWindow>
+              <h:button value="Ver Detalles" outcome="DetallesPuesto.xhtml?id=#{mapa.marker.data.id}" />
+           </p:outputPanel>
+          </p:gmapInfoWindow>    
         </p:gmap>
+        <h:inputHidden id="pLat" value="#{visorPuesto.puesto.latitud}" />
+        <h:inputHidden id="pLng" value="#{visorPuesto.puesto.longitud}" />
+        <h:inputHidden id="pNom" value="#{visorPuesto.puesto.nombre}" />
         <div id="info">
           <div id="fotos">
             <b:carousel id="cfotos" style="width:100%; height: 150px">
               <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
                 <b:carouselItem>
-                  <img src="#{fppk.url}" style="height:150px"/>
+                  <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 150px">
+                    <f:param name="ruta" value="#{fppk.url}"/>
+                  </p:graphicImage>
                 </b:carouselItem>
               </c:forEach>
             </b:carousel>
@@ -48,31 +54,11 @@
             <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
             <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
             <div>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
-              <img style="width: 5%" src="./images/star.png"></img>
+              <p:rating value="#{visorPuesto.getPromedioCalificacion()}" style="width: 96px; margin: 0 auto;" readonly="true"/>
             </div>
           </div>
         </div>
       </div>
-      <div id="comentarios" style="width: 100%">
-        <ui:repeat value="#{visorPuesto.comentario}" var="c">
-          <div style="width: 100%">
-            <div class="cNombre">
-              <p>#{c.usuarioId.nombre}</p>
-            </div>
-            <div class="cFecha">
-              <p>#{c.fecha}</p>
-            </div>
-            <div class="cComentario">
-              <p>#{c.comentario}</p>
-            </div>
-          </div>
-        </ui:repeat>
-      </div>
-
       <h:form styleClass="form-signin" prependId="false">
         <b:row>
           <!-- Botón para el overlay de comentar -->
@@ -112,6 +98,36 @@
           </p:dialog>
         </b:row>
       </h:form>
+    <div id="comentarios" style="width: 100%">
+        <ui:repeat value="#{visorPuesto.comentario}" var="c">
+          <div style="width: 100%">
+            <div class="cNombre">
+              <p>#{c.usuarioId.nombre}</p>
+            </div>
+            <div class="cFecha">
+              <p>#{c.fecha}</p>
+            </div>
+            <div class="cComentario">
+              <p>#{c.comentario}</p>
+            </div>
+          </div>
+        </ui:repeat>
+    </div>
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            pLat = document.getElementById('pLat').value;
+            pLng = document.getElementById('pLng').value;
+            pNom = document.getElementById('pNom').value;
+            
+            starMarker = new google.maps.Marker({
+                position:new google.maps.LatLng(pLat, pLng),
+                icon: 'http://maps.google.com/mapfiles/kml/paddle/red-stars.png',
+                animation: google.maps.Animation.DROP
+            });
+            
+            PF('map').addOverlay(starMarker);
+        });
+    </script>
     </ui:define>
   </ui:composition>
 </html>

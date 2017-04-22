@@ -55,6 +55,11 @@ public class ManejadorDeImagenes {
         }
     }
 
+    public StreamedContent getImagenDeArchivo() throws IOException {
+        String rutaImagen = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ruta");
+        return obtenerImagenDeArchivo(rutaImagen);
+    }
+
     /**
      * Regresa un recurso de la aplicación como imagen.
      */

@@ -5,6 +5,8 @@
  */
 package gucumatz.scpfc.modelo.db;
 
+import java.io.Serializable;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -12,7 +14,7 @@ import javax.persistence.Persistence;
  *
  * @author lchacon
  */
-public class FabricaControladorJpa {
+public class FabricaControladorJpa implements Serializable {
 
     private final EntityManagerFactory emf;
 

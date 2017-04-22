@@ -5,12 +5,12 @@ import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.FotospuestoPK;
+import java.io.IOException;
 import java.util.Locale;
-import javax.faces.application.FacesMessage;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,12 +22,13 @@ import java.util.List;
 @ManagedBean
 //@RequestScoped
 @ViewScoped
-public class VisorPuesto {
+public class VisorPuesto implements Serializable{
 
     private final PuestoJpaController jpaPuesto;
     private final FotospuestoJpaController jpaFotospuesto;
     private final CalificacionJpaController jpaCalificacion;
     private final ComentarioJpaController jpaComentario;
+    private Long id;
     private Puesto puesto;
     private List<FotospuestoPK> fotospuesto;
     private List<Calificacion> calificacion;
@@ -41,9 +42,24 @@ public class VisorPuesto {
         this.jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
     }
 
-    public void obtenerPuesto(Long id){
-        this.puesto = jpaPuesto.findPuesto(id);
-        this.fotospuesto = jpaFotospuesto.findFotospuestoById(id);
+    public void setId(Long l){
+        this.id = l;
+    }
+    
+    public Long getId(){
+        return this.id;
+    }
+    
+    public void obtenerPuesto(){
+        this.puesto = jpaPuesto.findPuesto(this.id);
+        if (this.puesto == null) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("Mapa.xhtml");
+            } catch (IOException e) {
+
+            }
+        }
+        this.fotospuesto = jpaFotospuesto.findFotospuestoById(this.id);
         this.calificacion = jpaCalificacion.findAllByPuestoID(this.puesto);
         this.comentario = jpaComentario.findAllByPuestoID(this.puesto);
     }
@@ -58,10 +74,12 @@ public class VisorPuesto {
     
     public int getPromedioCalificacion(){
         float promedio = 0;
-        for(Calificacion c : this.calificacion) {
-            promedio = promedio + c.getCalificacion();
+        if(this.calificacion != null) {
+            for(Calificacion c : this.calificacion) {
+                promedio = promedio + c.getCalificacion();
+            }
+            promedio = promedio / this.calificacion.size();
         }
-        promedio = promedio / this.calificacion.size();
         return Math.round(promedio);
     }
     
