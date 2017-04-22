@@ -160,6 +160,7 @@ public class Registro implements Serializable {
             }
         }
 
+        facesContext.getExternalContext().getFlash().setKeepMessages(true);
         return "index?faces-redirect=true";
     }
 
