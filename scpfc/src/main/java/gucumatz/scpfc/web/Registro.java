@@ -10,6 +10,8 @@ import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.Random;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -120,7 +122,7 @@ public class Registro implements Serializable {
         u.setContrasena(contrasena);
         u.setConfirmada(false);
         u.setEsAdministrador(false);
-        u.setCodigoDeActivacion("asdf");
+        u.setCodigoDeActivacion(obtenerCadenaAleatoria());
 
         jpaUsuario.create(u);
 
@@ -292,6 +294,14 @@ public class Registro implements Serializable {
 
         usuario.setRutaImagen(nombreDeArchivo);
         jpaUsuario.edit(usuario);
+    }
+
+    /**
+     * Genera una cadena aleatoria para usarse como código de activación.
+     */
+    private String obtenerCadenaAleatoria() {
+        Random rnd = new Random();
+        return new BigInteger(150, rnd).toString(32);
     }
 
 }
