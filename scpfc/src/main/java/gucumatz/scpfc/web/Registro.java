@@ -10,22 +10,14 @@ import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.Serializable;
-import java.util.Properties;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 import org.primefaces.model.UploadedFile;
 
 @ManagedBean
@@ -288,31 +280,8 @@ public class Registro implements Serializable {
 
     private void enviarCorreoDeActivacion(Usuario usuario)
             throws MessagingException {
-        Properties propiedadesSesionEmail = new Properties();
-        propiedadesSesionEmail.setProperty("mail.smtp.port", "2000");
-        propiedadesSesionEmail.setProperty("mail.smtp.host", "localhost");
-        Session sesionEmail = Session.getInstance(propiedadesSesionEmail);
-
-        MimeMessage mensaje = new MimeMessage(sesionEmail);
-        mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
-        mensaje.addRecipients(Message.RecipientType.TO,
-                String.format("%s <%s>", usuario.getNombre(), usuario.getCorreoElectronico()));
-        mensaje.setSubject("SCPFC - Confirma tu cuenta");
-
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        String url = request.getRequestURL().toString();
-        String baseUrl = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath();
-
-        String textoMensaje
-                = "Para confirmar tu cuenta ve a "
-                + baseUrl
-                + "/activar-cuenta.xhtml"
-                + "?id=" + usuario.getId()
-                + "&codigo=" + usuario.getCodigoDeActivacion();
-        mensaje.setText(textoMensaje);
-
-        Transport.send(mensaje);
+        CorreoDeActivacion correo = new CorreoDeActivacion(usuario);
+        correo.enviar();
     }
 
     private void guardarFoto(Usuario usuario)
