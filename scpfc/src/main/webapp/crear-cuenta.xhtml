@@ -18,6 +18,8 @@
     <ui:define name="contenido">
       <b:form styleClass="form-signin" id="formulario" inline="true"
               enctype="multipart/form-data">
+        <f:event type="postValidate" listener="#{registro.mostrarErrorDeValidacion}"/>
+
         <b:inputText id="nombreDeUsuario"
                      label="Nombre de usuario" placeholder="usuario"
                      value="#{registro.nombreDeUsuario}"

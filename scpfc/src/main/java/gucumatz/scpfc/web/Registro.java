@@ -18,6 +18,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.validator.ValidatorException;
 import javax.mail.MessagingException;
 import org.primefaces.model.UploadedFile;
@@ -270,6 +271,15 @@ public class Registro implements Serializable {
             extensionFoto = ".png";
         } else {
             throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_TIPO_INVALIDO));
+        }
+    }
+
+    public void mostrarErrorDeValidacion(ComponentSystemEvent e) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext.isValidationFailed()) {
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Los datos que proporcionaste no son válidos", null);
+            facesContext.addMessage(null, facesMessage);
         }
     }
 
