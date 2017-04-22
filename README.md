@@ -5,10 +5,6 @@
 Debe existir una base de datos llamada `gucumatz`. Si no existe se
 puede crear con `create database gucumatz;`.
 
-Para crear las tablas de la base de datos se utiliza el script
-`SQL/proyecto-comida.sql`. Se puede correr desde `mysql` con el
-comando `source <ruta del proyecto>/SQL/proyecto-comida.sql;`.
-
 La configuración de la conexión de la aplicación a la base de datos
 está en `scpfc/src/main/resources/META-INF/persistence.xml`. La
 configuración actual requiere lo siguiente:
@@ -31,10 +27,30 @@ configuración actual requiere lo siguiente:
 La alternativa a lo anterior es modificar `persistence.xml` para la
 configuración existente de MySQL.
 
+## Base de datos
+
+Para crear las tablas de la base de datos se utiliza el script
+`SQL/proyecto-comida.sql`.
+
+Se pueden crear usuarios de prueba con el script `SQL/usuarios.sql`.
+
+La información de los puestos de la facultad se puede crear con el
+script `SQL/puestos.sql`. Es necesario que no se haya insertado ningún
+puesto en la tabla `puesto` antes de usar este script. Las fotografías
+de los puestos se encuentran en el directorio `SQL/imagenes` y se
+deben mover o copiar manualmente a la ubicación donde las busca la
+aplicación. En este momento, esta es `/tmp/scpfc/`.
+
+Todos los scripts se pueden ejecutar desde la línea de comandos de
+`mysql` con el comando `source /ruta/al/archivo/script.sql` o desde una
+terminal con `mysql < /ruta/al/archivo/script.sql` incluyendo los argumentos de
+autenticación necesarios
+
+La creación y población de las tablas se puede hacer con el script de
+Bash `SQL/creacion.sh`. Este script utiliza al usuario `gucumatz` con
+contraseña `1234` y debe ser ejecutado desde la carpeta SQL.
+
 ## Ejecutando la aplicación
 
 Desde el directorio `scpfc` hacer `mvn clean install tomcat7:run`. La
-aplicación se puede ver desde `localhost:8080/scpfc`. De momento no
-hay una página principal, así que se necesita ir directamente a la
-página que se desea ver, por ejemplo
-`localhost:8080/scpfc/ver-mapa.jsp`
+aplicación se puede ver desde `localhost:8080/scpfc`.

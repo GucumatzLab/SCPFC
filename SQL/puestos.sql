@@ -1,3 +1,5 @@
+use gucumatz;
+
 insert into puesto (nombre, tipoComida, referencias, latitud, longitud)
 values  ("Ensaladas & Baguettes - 1", "Rápida", "Estacionamiento", 19.3234387, -99.1806781),
         ("Flautas & Chilaquiles - 2", "Rápida", "Estacionamiento", 19.3234099, -99.1807849),
@@ -19,3 +21,29 @@ values  ("Ensaladas & Baguettes - 1", "Rápida", "Estacionamiento", 19.3234387, 
         ("050", "Snacks", "Atrás de la cafetería", 19.324330, -99.179117),
         ("Frosty", "Helados / Nieves", "Atrás de la cafetería", 19.324332, -99.179210),
         ("Cafetería", "Por peso", "Dentro de la cafetería", 19.3245047, -99.1793115);
+
+insert into fotospuesto (idPuesto, url)
+values (1, "puesto/1-ensaladas-y-baguettes.jpg"),
+       (2, "puesto/2-flautas-y-chilaquiles.jpg"),
+       (3, "puesto/3-pizzas-y-mas.jpg"),
+       (4, "puesto/4-quesadillas-y-tacos.jpg"),
+       (5, "puesto/5-chapatas-y-enchiladas.jpg"),
+       (6, "puesto/6-frutas-y-ensaladas.jpg"),
+       (7, "puesto/7-burritos-y-chilaquiles.jpg"),
+       (8, "puesto/8-dulces-y-refrescos.jpg"),
+       (9, "puesto/9-taquitos-de-guisado.jpg"),
+       (10, "puesto/10-diez-2.jpg"),
+       (10, "puesto/10-diez.jpg"),
+       (11, "puesto/11-once-2.jpg"),
+       (11, "puesto/11-once.jpg"),
+       (12, "puesto/12.jpg"),
+       (13, "puesto/13-chilaquiles.jpg"),
+       (14, "puesto/14-sushi.jpg"),
+       (15, "puesto/15.jpg"),
+       (16, "puesto/16-la-tia-aly.jpg"),
+       (17, "puesto/17-harrys.jpg"),
+       (18, "puesto/18-050.jpg"),
+       (19, "puesto/19-frosty.jpg"),
+       (20, "puesto/20-cafeteria-1.jpg"),
+       (20, "puesto/20-cafeteria-2.jpg"),
+       (20, "puesto/20-cafeteria-3.jpg");
