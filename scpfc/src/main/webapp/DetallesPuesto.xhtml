@@ -102,6 +102,10 @@
         <ui:repeat value="#{visorPuesto.comentario}" var="c">
           <div style="width: 100%">
             <div class="cNombre">
+              <p:graphicImage styleClass="imgCirculo"
+                              value="#{manejadorDeImagenes.fotoDeUsuario}">
+                <f:param name="rutaImagen" value="#{c.usuarioId.rutaImagen}"/>
+              </p:graphicImage>
               <p>#{c.usuarioId.nombre}</p>
             </div>
             <div class="cFecha">
