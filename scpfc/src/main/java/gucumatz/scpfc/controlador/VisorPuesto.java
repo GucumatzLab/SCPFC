@@ -86,4 +86,8 @@ public class VisorPuesto implements Serializable{
     public List<Comentario> getComentario(){
         return this.comentario;
     }
+
+    public List<Calificacion> getCalificaciones(){
+        return this.calificacion;
+    }
 }

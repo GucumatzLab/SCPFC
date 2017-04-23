@@ -116,14 +116,12 @@ public class CreadorCalificacion {
 
     /**
      * Método encargado de crear la calificación.
-     *
-     * @return El nombre de la vista que va a responder.
      */
-    public String agregarCalificacion() {
+    public void agregarCalificacion() {
 
         // Revisar que no haya errores
         if (!esValida())
-            return null;
+            return;
 
         // Crear la calificación
         FabricaControladorJpa fab = new FabricaControladorJpa();
@@ -135,6 +133,7 @@ public class CreadorCalificacion {
         PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
         c.setPuestoId(p);
+        visorPuesto.getCalificaciones().add(c);
 
         // Obtener usuario actual
         Usuario u = sesionActiva.getUsuario();
@@ -145,7 +144,7 @@ public class CreadorCalificacion {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación registrada.", null);
         faceContext.addMessage(null, message);
 
-        return null;
+        return;
     }
 
     public SesionActiva getSesionActiva() {

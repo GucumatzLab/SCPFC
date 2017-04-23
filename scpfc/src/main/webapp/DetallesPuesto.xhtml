@@ -54,7 +54,7 @@
             <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
             <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
             <div>
-              <p:rating value="#{visorPuesto.getPromedioCalificacion()}" style="width: 96px; margin: 0 auto;" readonly="true"/>
+              <p:rating id="calificacion" value="#{visorPuesto.getPromedioCalificacion()}" style="width: 96px; margin: 0 auto;" readonly="true"/>
             </div>
           </div>
         </div>
@@ -74,7 +74,9 @@
             <b:row>
               <br/>
               <br/>
-              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}"/>
+              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}">
+                <p:ajax process="@form" update=":mensajes :comentarios"/>
+              </b:commandButton>
             </b:row>
           </p:dialog>
           <!-- Botón para el overlay de calificar -->
@@ -93,12 +95,14 @@
             <b:row>
               <br/>
               <br/>
-              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}"/>
+              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}">
+                <p:ajax process="@form" update=":mensajes :calificacion"/>
+              </b:commandButton>
             </b:row>
           </p:dialog>
         </b:row>
       </h:form>
-    <div id="comentarios" style="width: 100%">
+    <h:panelGroup id="comentarios" layout="block" style="width: 100%">
         <ui:repeat value="#{visorPuesto.comentario}" var="c">
           <div style="width: 100%">
             <div class="cNombre">
@@ -116,7 +120,7 @@
             </div>
           </div>
         </ui:repeat>
-    </div>
+    </h:panelGroup>
     <script type="text/javascript">
         $( document ).ready(function() {
             pLat = document.getElementById('pLat').value;

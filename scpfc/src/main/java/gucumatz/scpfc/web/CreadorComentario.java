@@ -123,14 +123,11 @@ public class CreadorComentario {
 
     /**
      * Método encargado de crear el comentario.
-     *
-     * @return El nombre de la vista que va a responder.
      */
-    public String agregarComentario() {
-
+    public void agregarComentario() {
         // Revisar que sea válido el comentario
         if (!esValido())
-            return null;
+            return;
 
         FabricaControladorJpa fab = new FabricaControladorJpa();
         ComentarioJpaController jpaComentario = fab.obtenerControladorJpaComentario();
@@ -143,6 +140,7 @@ public class CreadorComentario {
         PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
         c.setPuestoId(p);
+        visorPuesto.getComentario().add(c);
 
         // Obtener usuario actual
         Usuario u = sesionActiva.getUsuario();
@@ -156,7 +154,7 @@ public class CreadorComentario {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
         faceContext.addMessage(null, message);
 
-        return null;
+        return;
     }
 
     public SesionActiva getSesionActiva() {
