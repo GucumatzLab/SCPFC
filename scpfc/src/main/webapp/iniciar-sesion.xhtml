@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
@@ -14,6 +15,15 @@
     <ui:define name="titulo">Iniciar Sesión</ui:define>
 
     <ui:define name="contenido">
+      <h:form id="reenviarCorreo">
+        <b:commandButton rendered="#{inicioDeSesion.sinConfirmar}"
+                         value="Presiona aquí para reenviar el correo de confirmación."
+                         action="#{inicioDeSesion.reenviarCorreoDeConfirmacion()}"
+                         update="msgReenviarCorreo"
+                         />
+      <b:message for="reenviarCorreo" id="msgReenviarCorreo"/>
+      </h:form>
+
       <b:form styleClass="form-signin" id="formulario" inline="true">
         <b:inputText id="cuenta" binding="#{cuenta}"
                      label="Nombre de usuario o correo electrónico" placeholder="usuario"
@@ -21,7 +31,7 @@
                      required="true"
                      requiredMessage="El campo no puede estar vacío."
                      validator="#{inicioDeSesion.validarCuenta}">
-          <p:ajax event="blur" update="msgCuenta"/>
+          <p:ajax event="blur" update="msgCuenta :reenviarCorreo"/>
         </b:inputText>
         <b:message for="cuenta" id="msgCuenta"/>
 

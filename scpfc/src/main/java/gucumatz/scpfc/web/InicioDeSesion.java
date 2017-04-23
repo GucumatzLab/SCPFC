@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -61,6 +62,11 @@ public class InicioDeSesion implements Serializable {
      */
     private String paginaAnterior;
 
+    /**
+     * Bandera que indica si el usuario no ha sido confirmado.
+     */
+    private boolean sinConfirmar;
+
     public InicioDeSesion() {
         jpaUsuario = new FabricaControladorJpa().obtenerControladorJpaUsuario();
     }
@@ -83,6 +89,11 @@ public class InicioDeSesion implements Serializable {
      */
     public String iniciarSesion() {
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
+        /* No hace nada si no está confirmada. */
+        if (!usuario.getConfirmada()) {
+            return null;
+        }
+
         sesionActiva.setUsuario(usuario);
         return paginaAnterior;
     }
@@ -111,11 +122,16 @@ public class InicioDeSesion implements Serializable {
         this.sesionActiva = sesionActiva;
     }
 
+    public boolean getSinConfirmar() {
+        return sinConfirmar;
+    }
+
     /**
      * Verifica que la cuenta de usuario exista y esté confirmada.
      */
     public void validarCuenta(FacesContext context, UIComponent component, Object value)
             throws ValidatorException {
+        sinConfirmar = false;
         String cuenta = (String) value;
 
         /* Si está vacío, el atributo required lo rechazará. */
@@ -131,7 +147,12 @@ public class InicioDeSesion implements Serializable {
 
         /* Verifica que la cuenta esté confirmada. */
         if (!usuario.getConfirmada()) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CUENTA_NO_CONFIRMADA));
+            /* No arrojamos una excepción para que este valor sea
+             * marcado como válido y podamos usarlo al reenviar el
+             * correo de confirmación. */
+            sinConfirmar = true;
+            context.addMessage(component.getClientId(),
+                    crearMensajeDeError(MENSAJE_CUENTA_NO_CONFIRMADA));
         }
     }
 
@@ -170,6 +191,37 @@ public class InicioDeSesion implements Serializable {
      */
     private FacesMessage crearMensajeDeError(String mensaje) {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
+    }
+
+    /**
+     * Reenvía el correo de confirmación a la cuenta indicada.
+     */
+    public void reenviarCorreoDeConfirmacion() {
+        Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
+
+        if (usuario == null || usuario.getConfirmada()) {
+            return;
+        }
+
+        try {
+            CorreoDeActivacion correo = new CorreoDeActivacion(usuario);
+            correo.enviar();
+
+            FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Se ha reenviado el correo de confirmación a tu dirección de correo",
+                            null);
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.addMessage("reenviarCorreo", facesMessage);
+        } catch (MessagingException me) {
+            FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
+                            null);
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.addMessage("reenviarCorreo", facesMessage);
+        }
+
     }
 
 }
