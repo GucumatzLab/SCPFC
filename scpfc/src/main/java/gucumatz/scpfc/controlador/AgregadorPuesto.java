@@ -4,6 +4,7 @@ import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.*;
 import java.util.Locale;
+import java.util.LinkedList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -124,20 +125,30 @@ public class AgregadorPuesto implements java.io.Serializable {
                     return;
                 }
 
+                this.puesto.setFotospuestoList(new LinkedList<Fotospuesto>());
                 jpaPuesto.create(this.puesto);
 
-                System.out.println(this.foto1);
-                System.out.println(this.foto2);
-                System.out.println(this.foto3);
-                if (!guardaImagen(this.foto1, 1)) {
+                if (foto1 != null
+                        && foto1.getSize() > 0
+                        && !guardaImagen(this.foto1, 1)) {
+                    jpaPuesto.destroy(this.puesto.getId());
                     return;
                 }
-                if (!guardaImagen(this.foto2, 2)) {
+                if (foto2 != null
+                        && foto2.getSize() > 0
+                        && !guardaImagen(this.foto2, 2)) {
+                    jpaPuesto.destroy(this.puesto.getId());
                     return;
                 }
-                if (!guardaImagen(this.foto3, 3)) {
+                if (foto3 != null
+                        && foto3.getSize() > 0
+                        && !guardaImagen(this.foto3, 3)) {
+                    jpaPuesto.destroy(this.puesto.getId());
                     return;
                 }
+
+                jpaPuesto.edit(this.puesto);
+
                 FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
                 FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -187,8 +198,6 @@ public class AgregadorPuesto implements java.io.Serializable {
      */
     public boolean guardaImagen(UploadedFile up, int id) {
         try {
-            Puesto p = jpaPuesto.findByNombre(this.puesto.getNombre());
-
             if (up != null) {
                 String extensionFoto = null;
                 String nombreDeArchivo2 = up.getFileName();
@@ -206,13 +215,13 @@ public class AgregadorPuesto implements java.io.Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                     return false;
                 }
-                String nombreDeArchivo = "puesto/" + p.getId() + "1" + extensionFoto;
+                String nombreDeArchivo = "puesto/" + puesto.getId() + "-" + id + extensionFoto;
                 ManejadorDeImagenes mdi = new ManejadorDeImagenes();
                 mdi.escribirImagen(up, nombreDeArchivo);
                 Fotospuesto f = new Fotospuesto();
                 f.setUrl(nombreDeArchivo);
-                f.setPuestoId(p);
-                p.getFotospuestoList().add(f);
+                f.setPuestoId(puesto);
+                puesto.getFotospuestoList().add(f);
                 return true;
             }
         } catch (Exception e) {

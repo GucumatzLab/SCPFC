@@ -146,7 +146,7 @@ public class Puesto implements Serializable {
         return fotospuestoList;
     }
 
-    public void setFotospuestoCollection(List<Fotospuesto> fotospuestoList) {
+    public void setFotospuestoList(List<Fotospuesto> fotospuestoList) {
         this.fotospuestoList = fotospuestoList;
     }
 
