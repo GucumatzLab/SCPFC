@@ -1,12 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
   <ui:composition>
     <h:form>
+      <input type="hidden" name="id" value="${param['id']}"/>
+
       <b:navbarLinks pull="right">
         <b:navLink icon-align="right"
                    value="Ver mapa" outcome="Mapa"></b:navLink>
@@ -14,8 +17,11 @@
         <b:navLink icon-align="right" rendered="#{not sesionActiva.haySesionActiva}"
                    value="Crear cuenta" outcome="crear-cuenta"></b:navLink>
 
-        <b:navLink icon-align="right" rendered="#{not sesionActiva.haySesionActiva}"
-                   value="Iniciar sesión" outcome="iniciar-sesion"></b:navLink>
+        <b:navCommandLink icon-align="right" rendered="#{not sesionActiva.haySesionActiva}"
+                          value="Iniciar sesión" action="#{sesionActiva.irAIniciarSesion()}">
+          <f:setPropertyActionListener target="#{sesionActiva.paginaAnterior}" value="#{view.viewId}"/>
+          <f:setPropertyActionListener target="#{sesionActiva.paginaAnteriorId}" value="#{param['id']}"/>
+        </b:navCommandLink>
 
         <b:navLink icon-align="right" rendered="#{sesionActiva.esAdministrador}"
                    value="Administrar" outcome="Administrar"></b:navLink>
@@ -28,7 +34,10 @@
         </b:navLink>
 
         <b:navCommandLink icon-align="right" rendered="#{sesionActiva.haySesionActiva}"
-                          value="Cerrar sesión" action="#{sesionActiva.cerrarSesion()}"></b:navCommandLink>
+                          value="Cerrar sesión" action="#{sesionActiva.cerrarSesion()}">
+          <f:setPropertyActionListener target="#{sesionActiva.paginaAnterior}" value="#{view.viewId}"/>
+          <f:setPropertyActionListener target="#{sesionActiva.paginaAnteriorId}" value="#{param['id']}"/>
+        </b:navCommandLink>
       </b:navbarLinks>
     </h:form>
 

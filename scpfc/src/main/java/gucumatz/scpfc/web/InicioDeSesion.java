@@ -9,6 +9,7 @@ import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -55,8 +56,23 @@ public class InicioDeSesion implements Serializable {
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
 
+    /**
+     * La página a la que hay que ir luego de iniciar sesión.
+     */
+    private String paginaAnterior;
+
     public InicioDeSesion() {
         jpaUsuario = new FabricaControladorJpa().obtenerControladorJpaUsuario();
+    }
+
+    /**
+     * Obtiene la página anterior desde sesionActiva. Obtenerlo aquí
+     * hace que sesionActiva lo olvide en cuanto se entra a la página
+     * de iniciar sesión.
+     */
+    @PostConstruct
+    private void init() {
+        paginaAnterior = sesionActiva.obtenerPaginaAnterior();
     }
 
     /**
@@ -68,7 +84,7 @@ public class InicioDeSesion implements Serializable {
     public String iniciarSesion() {
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
         sesionActiva.setUsuario(usuario);
-        return "index?faces-redirect=true";
+        return paginaAnterior;
     }
 
     public String getCuenta() {
