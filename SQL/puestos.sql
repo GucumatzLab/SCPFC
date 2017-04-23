@@ -22,7 +22,7 @@ values  ("Ensaladas & Baguettes - 1", "Rápida", "Velaria, Estacionamiento de es
         ("Frosty", "Helados / Nieves", "Atrás de la cafetería", 19.324332, -99.179210),
         ("Cafetería", "Por peso", "Dentro de la cafetería", 19.3245047, -99.1793115);
 
-insert into fotospuesto (idPuesto, url)
+insert into fotospuesto (puesto_id, url)
 values (1, "puesto/1-ensaladas-y-baguettes.jpg"),
        (2, "puesto/2-flautas-y-chilaquiles.jpg"),
        (3, "puesto/3-pizzas-y-mas.jpg"),
