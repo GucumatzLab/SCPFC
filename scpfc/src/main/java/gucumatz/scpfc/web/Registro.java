@@ -9,6 +9,7 @@ import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
@@ -135,13 +136,13 @@ public class Registro implements Serializable {
                             "Se ha enviado un correo de confirmación a la dirección " + correoElectronico,
                             null);
             facesContext.addMessage(null, facesMessage);
-        } catch (MessagingException me) {
+        } catch (MessagingException | IOException e) {
             FacesMessage facesMessage
                     = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
                             null);
             facesContext.addMessage(null, facesMessage);
-
+            e.printStackTrace();
             /* Si no se pudo enviar el correo, eliminamos al usuario. */
             try {
                 jpaUsuario.destroy(u.getId());
@@ -292,7 +293,7 @@ public class Registro implements Serializable {
     }
 
     private void enviarCorreoDeActivacion(Usuario usuario)
-            throws MessagingException {
+            throws IOException, MessagingException {
         CorreoDeActivacion correo = new CorreoDeActivacion(usuario);
         correo.enviar();
     }

@@ -8,6 +8,7 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -213,7 +214,7 @@ public class InicioDeSesion implements Serializable {
                             null);
             FacesContext facesContext = FacesContext.getCurrentInstance();
             facesContext.addMessage("reenviarCorreo", facesMessage);
-        } catch (MessagingException me) {
+        } catch (MessagingException | IOException e) {
             FacesMessage facesMessage
                     = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",

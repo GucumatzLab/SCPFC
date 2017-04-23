@@ -1,9 +1,13 @@
 package gucumatz.scpfc.web;
 
 import gucumatz.scpfc.modelo.Usuario;
+import java.io.InputStream;
+import java.io.IOException;
 import java.util.Properties;
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -23,14 +27,54 @@ public class CorreoDeActivacion {
      */
     private Usuario usuario;
 
-    public CorreoDeActivacion(Usuario usuario) {
+    /**
+     * La sesión de correo usada para el correo de activación.
+     */
+    private Session sesionEmail;
+
+    /**
+     * La dirección que se usa para enviar el correo.
+     */
+    private String nombre;
+    private String direccion;
+
+    public CorreoDeActivacion(Usuario usuario) throws IOException {
         if (usuario == null
                 || usuario.getConfirmada()
                 || usuario.getCodigoDeActivacion() == null) {
             throw new IllegalArgumentException();
         }
 
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+
+        /* La cuenta que se usa para autenticarse en el servidor de correo. */
+        final String usuarioCorreo;
+        final String contrasena;
+
+        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/autenticacion-correo.properties")) {
+            Properties prop = new Properties();
+            prop.load(is);
+
+            usuarioCorreo = prop.getProperty("usuario");
+            contrasena = prop.getProperty("contrasena");
+            nombre = prop.getProperty("nombre");
+            direccion = prop.getProperty("correo");
+        }
+
         this.usuario = usuario;
+
+        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/correo.properties")) {
+            Properties prop = new Properties();
+            prop.load(is);
+            sesionEmail = Session.getInstance(prop,
+                new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(usuarioCorreo, contrasena);
+                    }
+                });
+        }
     }
 
     /**
@@ -38,15 +82,15 @@ public class CorreoDeActivacion {
      */
     public void enviar()
             throws MessagingException {
-        Session sesionEmail = obtenerSesionDeCorreo();
-
         MimeMessage mensaje = new MimeMessage(sesionEmail);
 
-        mensaje.setFrom(new InternetAddress("scpfc@scpfc.com"));
-        mensaje.addRecipients(Message.RecipientType.TO,
-                String.format("%s <%s>",
-                        usuario.getNombre(),
-                        usuario.getCorreoElectronico()));
+        String remitente = String.format("%s <%s>", nombre, direccion);
+        String recipiente = String.format("%s <%s>",
+                usuario.getNombre(),
+                usuario.getCorreoElectronico());
+
+        mensaje.setFrom(remitente);
+        mensaje.addRecipients(Message.RecipientType.TO, recipiente);
         mensaje.setSubject("SCPFC - Confirma tu cuenta");
 
         String urlBase = obtenerDireccionBase();
@@ -62,17 +106,6 @@ public class CorreoDeActivacion {
     }
 
     /**
-     * Crea la sesión de correo usada para el correo de activación.
-     */
-    private Session obtenerSesionDeCorreo() {
-        Properties propiedadesSesionEmail = new Properties();
-        propiedadesSesionEmail.setProperty("mail.smtp.port", "2000");
-        propiedadesSesionEmail.setProperty("mail.smtp.host", "localhost");
-
-        return Session.getInstance(propiedadesSesionEmail);
-    }
-
-    /**
      * Calcula la dirección base de la aplicación. Se usa para poder enviar una
      * URL completa.
      */
@@ -84,13 +117,13 @@ public class CorreoDeActivacion {
         String urlSolicitud = solicitud.getRequestURL().toString();
 
         /* Obtiene el dominio donde está la aplicación. Por ejemplo,
-		 * http://localhost:8080/. Esto no incluye el contexto, por
-		 * ejemplo scpfc/ */
+         * http://localhost:8080/. Esto no incluye el contexto, por
+         * ejemplo scpfc/ */
         int longitudDominio = urlSolicitud.length() - solicitud.getRequestURI().length();
         String dominio = urlSolicitud.substring(0, longitudDominio);
 
         /* Obtiene la dirección base de la aplicación pegándole el
-		 * contexto al dominio. */
+         * contexto al dominio. */
         String baseAplicacion = dominio + solicitud.getContextPath();
 
         return baseAplicacion;

@@ -13,8 +13,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.NoneScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import org.primefaces.model.DefaultStreamedContent;
@@ -35,9 +37,18 @@ public class ManejadorDeImagenes {
     /**
      * Directorio donde se guardan las imágenes.
      */
-    private final String directorio = "/tmp/scpfc/imagenes/";
+    private String directorio;
 
     public ManejadorDeImagenes() throws IOException {
+        directorio = null;
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/imagenes.properties")) {
+            Properties prop = new Properties();
+            prop.load(is);
+            directorio = prop.getProperty("raiz-imagenes");
+        }
         Files.createDirectories(Paths.get(directorio));
     }
 
