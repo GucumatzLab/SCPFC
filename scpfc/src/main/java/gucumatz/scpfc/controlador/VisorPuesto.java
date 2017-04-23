@@ -4,10 +4,10 @@ import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.FotospuestoPK;
+import gucumatz.scpfc.modelo.Fotospuesto;
 import java.io.IOException;
-import java.util.Locale;
 import java.io.Serializable;
+import java.util.Locale;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -30,7 +30,7 @@ public class VisorPuesto implements Serializable{
     private final ComentarioJpaController jpaComentario;
     private Long id;
     private Puesto puesto;
-    private List<FotospuestoPK> fotospuesto;
+    private List<Fotospuesto> fotospuesto;
     private List<Calificacion> calificacion;
     private List<Comentario> comentario;
 
@@ -49,7 +49,7 @@ public class VisorPuesto implements Serializable{
     public Long getId(){
         return this.id;
     }
-    
+
     public void obtenerPuesto(){
         this.puesto = jpaPuesto.findPuesto(this.id);
         if (this.puesto == null) {
@@ -59,7 +59,7 @@ public class VisorPuesto implements Serializable{
 
             }
         }
-        this.fotospuesto = jpaFotospuesto.findFotospuestoById(this.id);
+        this.fotospuesto = jpaFotospuesto.findFotospuestoByPuestoId(puesto);
         this.calificacion = jpaCalificacion.findAllByPuestoID(this.puesto);
         this.comentario = jpaComentario.findAllByPuestoID(this.puesto);
     }
@@ -68,7 +68,7 @@ public class VisorPuesto implements Serializable{
         return this.puesto;
     }
     
-    public List<FotospuestoPK> getFotospuesto(){
+    public List<Fotospuesto> getFotospuesto(){
         return this.fotospuesto;
     }
     

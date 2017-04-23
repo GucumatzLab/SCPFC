@@ -4,6 +4,7 @@ import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.*;
 import java.util.Locale;
+import java.util.LinkedList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -19,6 +20,7 @@ import gucumatz.scpfc.web.ManejadorDeImagenes;
  */
 @ManagedBean
 @ViewScoped
+
 public class AgregadorPuesto implements java.io.Serializable {
 
     private final PuestoJpaController jpaPuesto;
@@ -27,11 +29,19 @@ public class AgregadorPuesto implements java.io.Serializable {
     private UploadedFile foto3;
     private Puesto puesto = new Puesto();
 
+    /**
+     * Constructor de la clase AgregadorPuesto
+     */
     public AgregadorPuesto() {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
         jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
     }
 
+    /**
+     * Método para obtener el puesto de la clase.
+     *
+     * @return puesto.
+     */
     public Puesto getPuesto() {
         return puesto;
     }
@@ -39,32 +49,62 @@ public class AgregadorPuesto implements java.io.Serializable {
     /**
      * Metodo para cambiar el valor de Puesto
      *
-     * @param puesto con el que se reemplazará
+     * @param puesto - puesto con el que se reemplazara
      */
     public void setPuesto(Puesto puesto) {
         this.puesto = puesto;
     }
 
+    /**
+     * Metodo para obtener la foto 1.
+     *
+     * @return foto 1.
+     */
     public UploadedFile getFoto1() {
         return this.foto1;
     }
 
+    /**
+     * Metodo para cambiar la foto 1.
+     *
+     * @param nuevo - nueva foto.
+     */
     public void setFoto1(UploadedFile nuevo) {
         this.foto1 = nuevo;
     }
 
+    /**
+     * Metodo para obtener la foto 2.
+     *
+     * @return foto 2.
+     */
     public UploadedFile getFoto2() {
         return this.foto2;
     }
 
+    /**
+     * Metodo para cambiar la foto 2.
+     *
+     * @param nuevo - nueva foto.
+     */
     public void setFoto2(UploadedFile nuevo) {
         this.foto2 = nuevo;
     }
 
+    /**
+     * Metodo para obtener la foto 3.
+     *
+     * @return foto 3.
+     */
     public UploadedFile getFoto3() {
         return this.foto3;
     }
 
+    /**
+     * Metodo para cambiar la foto 3.
+     *
+     * @param nuevo - nueva foto.
+     */
     public void setFoto3(UploadedFile nuevo) {
         this.foto3 = nuevo;
     }
@@ -80,14 +120,35 @@ public class AgregadorPuesto implements java.io.Serializable {
                     this.puesto.setReferencias("Ninguna Referencia");
                 }
                 if (this.puesto.getLatitud() == 0 && this.puesto.getLongitud() == 0) {
-                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Selecciona la Localizacion", null);
+                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecciona la Localizacion", null);
                     FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                     return;
                 }
+
+                this.puesto.setFotospuestoList(new LinkedList<Fotospuesto>());
                 jpaPuesto.create(this.puesto);
-                if (!(guardaImagen(this.foto1) && guardaImagen(this.foto2) && guardaImagen(this.foto3))) {
+
+                if (foto1 != null
+                        && foto1.getSize() > 0
+                        && !guardaImagen(this.foto1, 1)) {
+                    jpaPuesto.destroy(this.puesto.getId());
                     return;
                 }
+                if (foto2 != null
+                        && foto2.getSize() > 0
+                        && !guardaImagen(this.foto2, 2)) {
+                    jpaPuesto.destroy(this.puesto.getId());
+                    return;
+                }
+                if (foto3 != null
+                        && foto3.getSize() > 0
+                        && !guardaImagen(this.foto3, 3)) {
+                    jpaPuesto.destroy(this.puesto.getId());
+                    return;
+                }
+
+                jpaPuesto.edit(this.puesto);
+
                 FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
                 FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -100,6 +161,12 @@ public class AgregadorPuesto implements java.io.Serializable {
 
     }
 
+    /**
+     * Metodo para validar un nombre de puesto.
+     *
+     * @param nombrePuesto - nombre del puesto a agregar.
+     * @return Devuelve true si el nombre esta disponible.
+     */
     public boolean validaNombre(String nombrePuesto) {
         Puesto p = jpaPuesto.findByNombre(nombrePuesto);
         if (p != null) {
@@ -110,24 +177,32 @@ public class AgregadorPuesto implements java.io.Serializable {
         return true;
     }
 
+    /**
+     * Metodo que redirecciona la página actual a Administrar.xhtml.
+     */
     public void redirecciona() {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("./Administrar.xhtml");
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.toString(), null);
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR 01" + e.toString(), null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
     }
 
-    public boolean guardaImagen(UploadedFile up) {
+    /**
+     * Metodo que guarda una imagen en la memoria del equipo y la base de datos.
+     *
+     * @param up - archivo a guardar.
+     * @param id - numero de archivo.
+     * @return Devuelve true si no hubo problemas al guardar los datos.
+     */
+    public boolean guardaImagen(UploadedFile up, int id) {
         try {
-            Puesto p = jpaPuesto.findByNombre(this.puesto.getNombre());
-
             if (up != null) {
                 String extensionFoto = null;
                 String nombreDeArchivo2 = up.getFileName();
                 if (up.getSize() > (4 * 1024 * 1024)) {
-                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tamaño invalido : Foto 1", null);
+                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tamaño invalido : Foto " + id + ", puedes cambiar la foto más tarde", null);
                     FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                     return false;
                 }
@@ -136,19 +211,21 @@ public class AgregadorPuesto implements java.io.Serializable {
                 } else if (nombreDeArchivo2.endsWith(".png")) {
                     extensionFoto = ".png";
                 } else {
-                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato invalido : Foto 1", null);
+                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato invalido : Foto 1, puedes cambiar la foto más tarde", null);
                     FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                     return false;
                 }
-                String nombreDeArchivo = "puesto/" + p.getId() + "1" + extensionFoto;
+                String nombreDeArchivo = "puesto/" + puesto.getId() + "-" + id + extensionFoto;
                 ManejadorDeImagenes mdi = new ManejadorDeImagenes();
                 mdi.escribirImagen(up, nombreDeArchivo);
-                Fotospuesto f = new Fotospuesto(new FotospuestoPK(p.getId(), nombreDeArchivo));
-                new FabricaControladorJpa().obtenerControladorJpaFotospuesto().create(f);
+                Fotospuesto f = new Fotospuesto();
+                f.setUrl(nombreDeArchivo);
+                f.setPuestoId(puesto);
+                puesto.getFotospuestoList().add(f);
                 return true;
             }
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null);
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR Al tratar de subir la foto " + e.getMessage(), null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
         return false;

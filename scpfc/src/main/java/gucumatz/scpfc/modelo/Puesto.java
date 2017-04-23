@@ -63,7 +63,7 @@ public class Puesto implements Serializable {
     private double longitud;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Calificacion> calificacionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private List<Fotospuesto> fotospuestoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Comentario> comentarioCollection;
@@ -146,7 +146,7 @@ public class Puesto implements Serializable {
         return fotospuestoList;
     }
 
-    public void setFotospuestoCollection(List<Fotospuesto> fotospuestoList) {
+    public void setFotospuestoList(List<Fotospuesto> fotospuestoList) {
         this.fotospuestoList = fotospuestoList;
     }
 

@@ -46,8 +46,8 @@ create table calificacion (
 );
 
 CREATE TABLE fotospuesto (
-  idPuesto bigint unsigned,
-  url varChar(100) NOT NULL,
-  PRIMARY KEY (idPuesto, url),
-  foreign key (idPuesto) references puesto(id)
+  id serial primary key,
+  puesto_id bigint unsigned not null,
+  url varChar(100) not null,
+  foreign key (puesto_id) references puesto(id)
 );

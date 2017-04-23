@@ -6,8 +6,12 @@
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -17,55 +21,71 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Jaz
+ * @author lchacon
  */
 @Entity
 @Table(name = "fotospuesto")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Fotospuesto.findAll", query = "SELECT f FROM Fotospuesto f")
-    , @NamedQuery(name = "Fotospuesto.findByIdPuesto", query = "SELECT f FROM Fotospuesto f WHERE f.fotospuestoPK.idPuesto = :idPuesto")
-    , @NamedQuery(name = "Fotospuesto.findByUrl", query = "SELECT f FROM Fotospuesto f WHERE f.fotospuestoPK.url = :url")})
+    , @NamedQuery(name = "Fotospuesto.findById", query = "SELECT f FROM Fotospuesto f WHERE f.id = :id")
+    , @NamedQuery(name = "Fotospuesto.findByPuestoId", query = "SELECT f FROM Fotospuesto f WHERE f.puestoId = :puestoId")
+    , @NamedQuery(name = "Fotospuesto.findByUrl", query = "SELECT f FROM Fotospuesto f WHERE f.url = :url")})
 public class Fotospuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected FotospuestoPK fotospuestoPK;
-    @JoinColumn(name = "idPuesto", referencedColumnName = "id", insertable = false, updatable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Long id;
+    @Basic(optional = false)
+    @Column(name = "url")
+    private String url;
+    @JoinColumn(name = "puesto_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Puesto puesto;
+    private Puesto puestoId;
 
     public Fotospuesto() {
     }
 
-    public Fotospuesto(FotospuestoPK fotospuestoPK) {
-        this.fotospuestoPK = fotospuestoPK;
+    public Fotospuesto(Long id) {
+        this.id = id;
     }
 
-    public Fotospuesto(long idPuesto, String url) {
-        this.fotospuestoPK = new FotospuestoPK(idPuesto, url);
+    public Fotospuesto(Long id, String url) {
+        this.id = id;
+        this.url = url;
     }
 
-    public FotospuestoPK getFotospuestoPK() {
-        return fotospuestoPK;
+    public Long getId() {
+        return id;
     }
 
-    public void setFotospuestoPK(FotospuestoPK fotospuestoPK) {
-        this.fotospuestoPK = fotospuestoPK;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Puesto getPuesto() {
-        return puesto;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPuesto(Puesto puesto) {
-        this.puesto = puesto;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Puesto getPuestoId() {
+        return puestoId;
+    }
+
+    public void setPuestoId(Puesto puestoId) {
+        this.puestoId = puestoId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (fotospuestoPK != null ? fotospuestoPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -76,7 +96,7 @@ public class Fotospuesto implements Serializable {
             return false;
         }
         Fotospuesto other = (Fotospuesto) object;
-        if ((this.fotospuestoPK == null && other.fotospuestoPK != null) || (this.fotospuestoPK != null && !this.fotospuestoPK.equals(other.fotospuestoPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -84,7 +104,7 @@ public class Fotospuesto implements Serializable {
 
     @Override
     public String toString() {
-        return "gucumatz.scpfc.modelo.Fotospuesto[ fotospuestoPK=" + fotospuestoPK + " ]";
+        return "gucumatz.scpfc.modelo.Fotospuesto[ id=" + id + " ]";
     }
     
 }
