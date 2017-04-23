@@ -54,7 +54,7 @@ public class VisorPuesto implements Serializable{
         this.puesto = jpaPuesto.findPuesto(this.id);
         if (this.puesto == null) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("Mapa.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
             } catch (IOException e) {
 
             }
