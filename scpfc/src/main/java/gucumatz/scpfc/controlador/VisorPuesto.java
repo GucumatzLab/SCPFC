@@ -4,13 +4,11 @@ import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.FotospuestoPK;
+import gucumatz.scpfc.modelo.Fotospuesto;
 import java.util.Locale;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,7 +27,7 @@ public class VisorPuesto {
     private final CalificacionJpaController jpaCalificacion;
     private final ComentarioJpaController jpaComentario;
     private Puesto puesto;
-    private List<FotospuestoPK> fotospuesto;
+    private List<Fotospuesto> fotospuesto;
     private List<Calificacion> calificacion;
     private List<Comentario> comentario;
 
@@ -43,7 +41,7 @@ public class VisorPuesto {
 
     public void obtenerPuesto(Long id){
         this.puesto = jpaPuesto.findPuesto(id);
-        this.fotospuesto = jpaFotospuesto.findFotospuestoById(id);
+        this.fotospuesto = jpaFotospuesto.findFotospuestoByPuestoId(puesto);
         this.calificacion = jpaCalificacion.findAllByPuestoID(this.puesto);
         this.comentario = jpaComentario.findAllByPuestoID(this.puesto);
     }
@@ -52,7 +50,7 @@ public class VisorPuesto {
         return this.puesto;
     }
     
-    public List<FotospuestoPK> getFotospuesto(){
+    public List<Fotospuesto> getFotospuesto(){
         return this.fotospuesto;
     }
     

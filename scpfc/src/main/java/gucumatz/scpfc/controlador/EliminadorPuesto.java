@@ -127,8 +127,8 @@ public class EliminadorPuesto implements Serializable {
             }
 
             for (Fotospuesto f : ft) {
-                if (f.getPuesto().equals(p)) {
-                    jpaFoto.destroy(f.getFotospuestoPK());
+                if (f.getPuestoId().equals(p)) {
+                    jpaFoto.destroy(f.getId());
                 }
             }
             jpaPuesto.destroy(p.getId());

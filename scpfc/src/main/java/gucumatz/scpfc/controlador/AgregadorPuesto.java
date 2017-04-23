@@ -209,8 +209,10 @@ public class AgregadorPuesto implements java.io.Serializable {
                 String nombreDeArchivo = "puesto/" + p.getId() + "1" + extensionFoto;
                 ManejadorDeImagenes mdi = new ManejadorDeImagenes();
                 mdi.escribirImagen(up, nombreDeArchivo);
-                Fotospuesto f = new Fotospuesto(new FotospuestoPK(p.getId(), nombreDeArchivo));
-                new FabricaControladorJpa().obtenerControladorJpaFotospuesto().create(f);
+                Fotospuesto f = new Fotospuesto();
+                f.setUrl(nombreDeArchivo);
+                f.setPuestoId(p);
+                p.getFotospuestoList().add(f);
                 return true;
             }
         } catch (Exception e) {
