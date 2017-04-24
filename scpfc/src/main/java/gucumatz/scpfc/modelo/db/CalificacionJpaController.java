@@ -178,9 +178,6 @@ public class CalificacionJpaController implements Serializable {
                 = em.createNamedQuery("Calificacion.findByPuestoId", Calificacion.class);
             query.setParameter("puestoId", id);
             List<Calificacion> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
             return results;
         } finally {
             em.close();

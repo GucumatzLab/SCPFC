@@ -192,9 +192,6 @@ public class ComentarioJpaController implements Serializable {
                 = em.createNamedQuery("Comentario.findByPuesto", Comentario.class);
             query.setParameter("puestoID", id);
             List<Comentario> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
             return results;
         } finally {
             em.close();
