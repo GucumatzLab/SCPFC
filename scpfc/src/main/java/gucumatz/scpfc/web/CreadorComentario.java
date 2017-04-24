@@ -65,10 +65,20 @@ public class CreadorComentario {
         this.comentario = comentario;
     }
 
+    /**
+     * Obtiene el objeto relacionado a la vista del puesto.
+     * 
+     * @return el <code>VisorPuesto</code> ligado.
+     */
     public VisorPuesto getVisorPuesto() {
         return visorPuesto;
     }
 
+    /**
+     * Actualiza el objeto relacionado a la vista del puesto.
+     * 
+     * @param visorPuesto el nuevo <code>VisorPuesto</code>.
+     */
     public void setVisorPuesto(VisorPuesto visorPuesto) {
         this.visorPuesto = visorPuesto;
     }
@@ -157,10 +167,20 @@ public class CreadorComentario {
         return;
     }
 
+    /**
+     * Regresa la sesión activa actual.
+     * 
+     * @return El <code>SesionActiva</code> actual. 
+     */
     public SesionActiva getSesionActiva() {
         return sesionActiva;
     }
 
+    /**
+     * Actualiza la sesión activa actual.
+     * 
+     * @param sesionActiva El nuevo objeto <code>SesionActiva</code> actual.
+     */
     public void setSesionActiva(SesionActiva sesionActiva) {
         this.sesionActiva = sesionActiva;
     }
