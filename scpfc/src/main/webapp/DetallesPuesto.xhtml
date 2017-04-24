@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      <h:form styleClass="form-signin" prependId="false">
+      <h:form styleClass="form-signin" prependId="false" rendered="#{sesionActiva.haySesionActiva}">
         <b:row>
           <!-- Botón para el overlay de comentar -->
           <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
