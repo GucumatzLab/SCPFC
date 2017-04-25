@@ -62,7 +62,7 @@ public class CreadorComentario {
      * @param comentario El nuevo valor del comentario.
      */
     public void setComentario(String comentario) {
-        this.comentario = comentario;
+        this.comentario = comentario.trim();
     }
 
     /**
@@ -88,7 +88,7 @@ public class CreadorComentario {
      * @return true si el comentario es válido, false e.o.c.
      */
     private boolean esValido() {
-
+        
         // Validar comentario
         if(this.comentario.equals("")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: El comentario debe contener texto.", null);

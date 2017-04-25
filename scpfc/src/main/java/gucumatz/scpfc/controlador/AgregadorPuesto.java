@@ -114,8 +114,13 @@ public class AgregadorPuesto implements java.io.Serializable {
      * Puesto a la base de datos
      */
     public void agrega() {
+        // Hacer el trim
+        this.puesto.setNombre(this.puesto.getNombre().trim());
+        this.puesto.setTipoComida(this.puesto.getTipoComida().trim());
+        
+        // Validar
         try {
-            if (validaNombre(this.puesto.getNombre())) {
+            if (validaNombre(this.puesto.getNombre(), this.puesto.getTipoComida())) {
                 if (this.puesto.getReferencias().length() == 0) {
                     this.puesto.setReferencias("Ninguna Referencia");
                 }
@@ -165,15 +170,29 @@ public class AgregadorPuesto implements java.io.Serializable {
      * Metodo para validar un nombre de puesto.
      *
      * @param nombrePuesto - nombre del puesto a agregar.
+     * @param tipoComida - tipo de comida que se vende en el puesto.
      * @return Devuelve true si el nombre esta disponible.
      */
-    public boolean validaNombre(String nombrePuesto) {
+    public boolean validaNombre(String nombrePuesto, String tipoComida) {
         Puesto p = jpaPuesto.findByNombre(nombrePuesto);
         if (p != null) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nEl nombre ya existe", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
+        
+        if (nombrePuesto.equals("")) {
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un nombre vacío.", null);
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+            return false;
+        }
+        
+        if (tipoComida.equals("")) {
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un tipo de comida vacío.", null);
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+            return false;
+        }
+        
         return true;
     }
 
