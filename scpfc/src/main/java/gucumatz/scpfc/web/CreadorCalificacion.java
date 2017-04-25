@@ -12,6 +12,7 @@ import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.CalificacionJpaController;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.PuestoJpaController;
+import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -113,14 +114,6 @@ public class CreadorCalificacion {
             return false;
         }
 
-        // Validar que el usuario no califique varias veces
-        if (jpaCalificacion.findByUsuarioPuesto(u, p) != null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: No se puede calificar más de una vez.", null);
-            faceContext.addMessage(null, message);
-
-            return false;
-        }
-
         return true;
     }
 
@@ -136,23 +129,49 @@ public class CreadorCalificacion {
         // Crear la calificación
         FabricaControladorJpa fab = new FabricaControladorJpa();
         CalificacionJpaController jpaCalificacion = fab.obtenerControladorJpaCalificacion();
-        Calificacion c = new Calificacion();
-        c.setCalificacion(this.calificacion);
 
         // Obtener el puesto relacionado al ID
-        PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
-        c.setPuestoId(p);
-        visorPuesto.getCalificaciones().add(c);
 
         // Obtener usuario actual
         Usuario u = sesionActiva.getUsuario();
-        c.setUsuarioId(u);
 
-        jpaCalificacion.create(c);
+        // Revisar si debemos crear o editar
+        // Caso 1: Editar
+        Calificacion prev = jpaCalificacion.findByUsuarioPuesto(u, p);
+        
+        if (prev != null) {
+            try {
+                visorPuesto.getCalificaciones().remove(prev);
+                        
+                prev.setCalificacion(this.calificacion);
+                jpaCalificacion.edit(prev);
+                
+                visorPuesto.getCalificaciones().add(prev);
+                
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación actualizada.", null);
+                faceContext.addMessage(null, message);
+            } catch (Exception e) {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: La calificación ya no existe.", null);
+                faceContext.addMessage(null, message);
 
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación registrada.", null);
-        faceContext.addMessage(null, message);
+                return;
+            }
+            
+        // Caso 2: Crear
+        } else {
+            Calificacion c = new Calificacion();
+            c.setPuestoId(p);
+            c.setUsuarioId(u);
+            c.setCalificacion(this.calificacion);
+            
+            jpaCalificacion.create(c);
+
+            visorPuesto.getCalificaciones().add(c);
+
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación registrada.", null);
+            faceContext.addMessage(null, message);
+        }
 
         return;
     }
