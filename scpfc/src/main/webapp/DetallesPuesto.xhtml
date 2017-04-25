@@ -74,7 +74,7 @@
             <b:row>
               <br/>
               <br/>
-              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}">
+              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}" onclick="PF('comOverlay').hide();">
                 <p:ajax process="@form" update=":mensajes :comentarios"/>
               </b:commandButton>
             </b:row>
@@ -95,7 +95,7 @@
             <b:row>
               <br/>
               <br/>
-              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}">
+              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}" onclick="PF('calOverlay').hide();">
                 <p:ajax process="@form" update=":mensajes :calificacion"/>
               </b:commandButton>
             </b:row>
