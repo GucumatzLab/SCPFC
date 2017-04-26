@@ -16,6 +16,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
 /**
@@ -44,6 +45,24 @@ public class CreadorCalificacion {
      */
     public CreadorCalificacion() {
         faceContext = FacesContext.getCurrentInstance();
+    }
+    
+    @PostConstruct
+    public void initCal() {
+        
+        // Ver si hay usuario
+        Usuario u = sesionActiva.getUsuario();
+        
+        if (u == null)
+            return;
+        
+        // Obtener puesto, ver si hay calificación previa
+        Puesto p = visorPuesto.getPuesto();
+        CalificacionJpaController jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
+        Calificacion prev = jpaCalificacion.findByUsuarioPuesto(u, p);
+        
+        if (prev != null)
+            this.calificacion = prev.getCalificacion();
     }
 
     /**
