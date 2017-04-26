@@ -6,39 +6,38 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
-    <f:metadata>
-        <f:viewAction if="#{not sesionActiva.esAdministrador}"
-                      action="#{sesionActiva.redirigeAPaginaPrincipal}" />
-    </f:metadata>
+  <f:metadata>
+    <f:viewAction if="#{not sesionActiva.esAdministrador}"
+                  action="#{sesionActiva.redirigeAPaginaPrincipal}" />
+  </f:metadata>
 
-    <ui:composition template="WEB-INF/plantilla.xhtml">
-        <ui:define name="titulo">Eliminar Puesto</ui:define>
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">Eliminar Puesto</ui:define>
 
-        <ui:define name="contenido">
-            <center>
-                <h1>Elimina puesto</h1>
-                <h:form>
-                    <table>
-                        <tr>
-                            <td>
-                                <p:selectOneMenu value = "#{eliminadorPuesto.seleccionado}">
-                                    <f:selectItems value="#{eliminadorPuesto.puestos2}" />
-                                </p:selectOneMenu>
-                            </td>
-                            <td style ="padding-left:10px">
-                                <b:commandButton class="btn btn-primary" size="lg" value="Eliminar" action="#{eliminadorPuesto.elimina()}"/>
-                            </td>
-                        </tr>
-                    </table>
-                </h:form>
-                <table>
-                    <tr>
-                        <td>
-                            <p:messages id="messages" autoUpdate="true" closable="true" />
-                        </td>
-                    </tr>
-                </table>
-            </center>
-        </ui:define>
-    </ui:composition>
+    <ui:define name="contenido">
+      <center>
+        <b:column span="6" offset="3">
+          <h1>Elimina puesto</h1>
+
+          <b:row>
+            <h:form>
+              <b:column span="8">
+                <p:selectOneMenu value = "#{eliminadorPuesto.seleccionado}" style="width: 100%">
+                  <f:selectItems value="#{eliminadorPuesto.puestos2}" />
+                </p:selectOneMenu>
+              </b:column>
+
+              <b:column span="4">
+                <b:commandButton class="btn btn-primary" size="lg" value="Eliminar" action="#{eliminadorPuesto.elimina()}" span="12"/>
+              </b:column>
+            </h:form>
+          </b:row>
+
+          <b:row span="6" offset="3">
+            <p:messages id="messages" autoUpdate="true" closable="true" />
+          </b:row>
+        </b:column>
+      </center>
+    </ui:define>
+  </ui:composition>
 </html>
