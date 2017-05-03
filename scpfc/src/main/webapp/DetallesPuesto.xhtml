@@ -17,110 +17,143 @@
         </f:metadata>
       <style>
         #gmap {
-          height: 400px;
-          width: 50%;
+          height: 500px;
+          width: 100%;
           float: left;
         }
       </style>
-      <div>            
-        <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
-                type="HYBRID" model="#{mapa.advancedModel}"
-                widgetVar="map">
-          <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
-          <p:gmapInfoWindow id="infoWindow">
-            <p:outputPanel style="text-align: center; display: block; margin: auto">
-              <h:outputText value="#{mapa.marker.title}" />
-              <br/>
-              <h:button value="Ver Detalles" outcome="DetallesPuesto.xhtml?id=#{mapa.marker.data.id}" />
-           </p:outputPanel>
-          </p:gmapInfoWindow>    
-        </p:gmap>
+
+      <b:row>
+        <b:column span="6">
+          <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
+                  type="HYBRID" model="#{mapa.advancedModel}"
+                  widgetVar="map">
+            <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
+            <p:gmapInfoWindow id="infoWindow">
+              <p:outputPanel style="text-align: center; display: block; margin: auto">
+                <h:outputText value="#{mapa.marker.title}" />
+                <br/>
+                <h:button value="Ver Detalles" outcome="DetallesPuesto.xhtml?id=#{mapa.marker.data.id}" />
+              </p:outputPanel>
+            </p:gmapInfoWindow>    
+          </p:gmap>
+        </b:column>
+
         <h:inputHidden id="pLat" value="#{visorPuesto.puesto.latitud}" />
         <h:inputHidden id="pLng" value="#{visorPuesto.puesto.longitud}" />
         <h:inputHidden id="pNom" value="#{visorPuesto.puesto.nombre}" />
-        <div id="info">
-          <div id="fotos">
-            <b:carousel id="cfotos" style="width:100%; height: 150px">
-              <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
-                <b:carouselItem>
-                  <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 150px">
-                    <f:param name="ruta" value="#{fppk.url}"/>
-                  </p:graphicImage>
-                </b:carouselItem>
-              </c:forEach>
-            </b:carousel>
-          </div>
-          <div>
-            <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
-            <h2><h:outputText value="#{visorPuesto.puesto.referencias}"/></h2>
-            <div>
-              <p:rating id="calificacion" value="#{visorPuesto.getPromedioCalificacion()}" style="width: 96px; margin: 0 auto;" readonly="true"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <h:form styleClass="form-signin" prependId="false" rendered="#{sesionActiva.haySesionActiva}">
-        <b:row>
-          <!-- Botón para el overlay de comentar -->
-          <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
-          <p:dialog header="Comentar" widgetVar="comOverlay" height="250" width="400">
-            <b:row>
-              <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
-                <br/>
-                <br/>
-                <b:inputTextarea placeholder="Comenta aquí..." value="#{comBean.comentario}"/>
-              </b:column>
-            </b:row>
-            <b:row>
-              <br/>
-              <br/>
-              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}" onclick="PF('comOverlay').hide();">
-                <p:ajax process="@form" update=":mensajes :comentarios"/>
-              </b:commandButton>
-            </b:row>
-          </p:dialog>
-          <!-- Botón para el overlay de calificar -->
-          <p:commandButton value="Calificar" type="button" onclick="PF('calOverlay').show();"/>
-          <p:dialog header="Calificar" widgetVar="calOverlay" height="200" width="400">
-            <b:row>
-              <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
-                <div align="center" draggable="false">
-                  <h:outputText value="Calificación"/>
-                </div>
-                <br/>
-                <br/>
-                <p:rating value="#{calBean.calificacion}" style="width: 96px; margin: 0 auto;"/>
-              </b:column>
-            </b:row>
-            <b:row>
-              <br/>
-              <br/>
-              <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}" onclick="PF('calOverlay').hide();">
-                <p:ajax process="@form" update=":mensajes :calificacion"/>
-              </b:commandButton>
-            </b:row>
-          </p:dialog>
-        </b:row>
-      </h:form>
-    <h:panelGroup id="comentarios" layout="block" style="width: 100%">
-        <ui:repeat value="#{visorPuesto.comentario}" var="c">
-          <div style="width: 100%">
-            <div class="cNombre">
-              <p:graphicImage styleClass="imgCirculo"
-                              value="#{manejadorDeImagenes.fotoDeUsuario}">
-                <f:param name="rutaImagen" value="#{c.usuarioId.rutaImagen}"/>
-              </p:graphicImage>
-              <p>#{c.usuarioId.nombre}</p>
-            </div>
-            <div class="cFecha">
-              <p>#{c.fecha}</p>
-            </div>
-            <div class="cComentario">
-              <p>#{c.comentario}</p>
-            </div>
-          </div>
-        </ui:repeat>
-    </h:panelGroup>
+
+        <b:column span="6">
+          <b:row rendered="#{not empty visorPuesto.fotospuesto}">
+            <center>
+              <b:carousel id="cfotos">
+                <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
+                  <b:carouselItem>
+                    <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 300px">
+                      <f:param name="ruta" value="#{fppk.url}"/>
+                    </p:graphicImage>
+                  </b:carouselItem>
+                </c:forEach>
+              </b:carousel>
+            </center>
+          </b:row>
+          <b:row>
+            <center>
+              <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
+            </center>
+            <p><b>Ubicación: </b> <h:outputText value="#{visorPuesto.puesto.referencias}"/></p>
+            <p><b>Tipo de comida: </b> <h:outputText value="#{visorPuesto.puesto.tipoComida}"/></p>
+          </b:row>
+
+          <b:row>
+            <p:rating id="calificacion" value="#{visorPuesto.getPromedioCalificacion()}" style="width: 96px; margin: 0 auto;" readonly="true"/>
+          </b:row>
+
+          <h:form styleClass="form-signin" prependId="false" rendered="#{sesionActiva.haySesionActiva}">
+            <center>
+              <b:row>
+                <!-- Botón para el overlay de comentar -->
+                <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
+                <p:dialog header="Comentar" widgetVar="comOverlay" height="250" width="400">
+                  <b:row>
+                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                      <br/>
+                      <br/>
+                      <b:inputTextarea placeholder="Comenta aquí..." value="#{comBean.comentario}"/>
+                    </b:column>
+                  </b:row>
+                  <b:row>
+                    <br/>
+                    <br/>
+                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{comBean.agregarComentario()}" onclick="PF('comOverlay').hide();">
+                      <p:ajax process="@form" update=":mensajes :comentarios"/>
+                    </b:commandButton>
+                  </b:row>
+                </p:dialog>
+
+                <!-- Botón para el overlay de calificar -->
+                <p:commandButton value="Calificar" type="button" onclick="PF('calOverlay').show();"/>
+                <p:dialog header="Calificar" widgetVar="calOverlay" height="200" width="400">
+                  <b:row>
+                    <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
+                      <div align="center" draggable="false">
+                        <h:outputText value="Calificación"/>
+                      </div>
+                      <br/>
+                      <br/>
+                      <p:rating value="#{calBean.calificacion}" style="width: 96px; margin: 0 auto;"/>
+                    </b:column>
+                  </b:row>
+                  <b:row>
+                    <br/>
+                    <br/>
+                    <b:commandButton look="primary btn-block" value="Agregar" size="lg" action="#{calBean.agregarCalificacion()}" onclick="PF('calOverlay').hide();">
+                      <p:ajax process="@form" update=":mensajes :calificacion"/>
+                    </b:commandButton>
+                  </b:row>
+                </p:dialog>
+              </b:row>
+            </center>
+          </h:form>
+
+        </b:column>
+      </b:row>
+
+      <b:row id="comentarios">
+        <column span="8" offset="2">
+          <h2>Comentarios</h2>
+
+          <b:row rendered="#{empty visorPuesto.comentario}">
+            <p>No hay comentarios sobre este puesto.</p>
+          </b:row>
+
+          <ui:repeat value="#{visorPuesto.comentario}" var="c">
+            <b:panel collapsible="true">
+              <b:row>
+                <b:column span="3">
+                  <center>
+                    <b:row>
+                      <p:graphicImage styleClass="imgCirculo"
+                                      value="#{manejadorDeImagenes.fotoDeUsuario}">
+                        <f:param name="rutaImagen" value="#{c.usuarioId.rutaImagen}"/>
+                      </p:graphicImage>
+                    </b:row>
+                    <b:row>
+                      #{c.usuarioId.nombre}
+                    </b:row>
+                    <b:row>
+                      #{c.fecha}
+                    </b:row>
+                  </center>
+                </b:column>
+
+                <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
+              </b:row>
+            </b:panel>
+          </ui:repeat>
+        </column>
+      </b:row>
+
     <script type="text/javascript">
         $( document ).ready(function() {
             pLat = document.getElementById('pLat').value;

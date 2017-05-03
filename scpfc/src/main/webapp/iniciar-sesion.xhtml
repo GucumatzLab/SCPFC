@@ -15,41 +15,44 @@
     <ui:define name="titulo">Iniciar Sesión</ui:define>
 
     <ui:define name="contenido">
-      <h:form id="reenviarCorreo">
-        <b:commandButton rendered="#{inicioDeSesion.sinConfirmar}"
-                         value="Presiona aquí para reenviar el correo de confirmación."
-                         action="#{inicioDeSesion.reenviarCorreoDeConfirmacion()}"
-                         update="msgReenviarCorreo"
-                         />
-      <b:message for="reenviarCorreo" id="msgReenviarCorreo"/>
-      </h:form>
+      <b:column span="4" offset="4">
+        <h:form id="reenviarCorreo">
+          <b:commandButton rendered="#{inicioDeSesion.sinConfirmar}"
+                           value="Presiona aquí para reenviar el correo de confirmación."
+                           action="#{inicioDeSesion.reenviarCorreoDeConfirmacion()}"
+                           update="msgReenviarCorreo"
+                           span="12"
+                           />
+          <b:message for="reenviarCorreo" id="msgReenviarCorreo"/>
+        </h:form>
 
-      <b:form styleClass="form-signin" id="formulario" inline="true">
-        <b:inputText id="cuenta" binding="#{cuenta}"
-                     label="Nombre de usuario o correo electrónico" placeholder="usuario"
-                     value="#{inicioDeSesion.cuenta}"
-                     required="true"
-                     requiredMessage="El campo no puede estar vacío."
-                     validator="#{inicioDeSesion.validarCuenta}">
-          <p:ajax event="blur" update="msgCuenta :reenviarCorreo"/>
-        </b:inputText>
-        <b:message for="cuenta" id="msgCuenta"/>
-
-        <b:inputSecret id="contrasena"
-                       label="Contraseña" placeholder="********"
-                       value="#{inicioDeSesion.contrasena}"
+        <h:form id="formulario">
+          <b:inputText id="cuenta" binding="#{cuenta}"
+                       label="Nombre de usuario o correo electrónico" placeholder="usuario"
+                       value="#{inicioDeSesion.cuenta}"
                        required="true"
                        requiredMessage="El campo no puede estar vacío."
-                       validator="#{inicioDeSesion.validarContrasena}">
-          <f:attribute name="cuenta" value="#{cuenta}"/>
-          <p:ajax event="blur" update="msgContrasena"/>
-        </b:inputSecret>
-        <b:message for="contrasena" id="msgContrasena"/>
+                       validator="#{inicioDeSesion.validarCuenta}">
+            <p:ajax event="blur" update="msgCuenta :reenviarCorreo"/>
+          </b:inputText>
+          <b:message for="cuenta" id="msgCuenta"/>
 
-        <b:commandButton look="primary btn-block" value="Iniciar sesión"
-                         icon="log-in" size="lg"
-                         action="#{inicioDeSesion.iniciarSesion()}"/>
-      </b:form>
+          <b:inputSecret id="contrasena"
+                         label="Contraseña" placeholder="********"
+                         value="#{inicioDeSesion.contrasena}"
+                         required="true"
+                         requiredMessage="El campo no puede estar vacío."
+                         validator="#{inicioDeSesion.validarContrasena}">
+            <f:attribute name="cuenta" value="#{cuenta}"/>
+            <p:ajax event="blur" update="msgContrasena"/>
+          </b:inputSecret>
+          <b:message for="contrasena" id="msgContrasena"/>
+
+          <b:commandButton look="primary btn-block" value="Iniciar sesión"
+                           icon="log-in" size="lg"
+                           action="#{inicioDeSesion.iniciarSesion()}"/>
+        </h:form>
+      </b:column>
     </ui:define>
   </ui:composition>
 </html>

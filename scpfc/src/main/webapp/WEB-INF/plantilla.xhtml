@@ -17,15 +17,17 @@
       </b:navBar>
     </div>
 
-    <b:container fluid="true">
+    <b:container>
       <b:row>
         <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
-          <center>
-            <div id="content">
-              <b:messages id="mensajes" globalOnly="true"/>
+          <div id="content">
+            <b:row>
+              <b:messages id="mensajes" globalOnly="true" span="8" offset="2"/>
+            </b:row>
+            <b:row>
               <ui:insert name="contenido">CONTENIDO</ui:insert>
-            </div>
-          </center>
+            </b:row>
+          </div>
         </b:column>
       </b:row>
     </b:container>
