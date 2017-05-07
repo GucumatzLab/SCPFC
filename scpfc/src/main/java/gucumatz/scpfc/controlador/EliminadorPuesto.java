@@ -27,7 +27,7 @@ public class EliminadorPuesto implements Serializable {
     private PuestoJpaController jpaPuesto;
     private ComentarioJpaController jpaComentario;
     private CalificacionJpaController jpaCalificacion;
-    private FotospuestoJpaController jpaFoto;
+    private FotoPuestoJpaController jpaFoto;
     private List<Puesto> puestos;
     private List<SelectItem> puestos2;
     private String seleccionado;
@@ -111,7 +111,7 @@ public class EliminadorPuesto implements Serializable {
             }
             LinkedList<Comentario> com = new LinkedList<Comentario>(jpaComentario.findComentarioEntities());
             LinkedList<Calificacion> cal = new LinkedList<Calificacion>(jpaCalificacion.findCalificacionEntities());
-            LinkedList<Fotospuesto> ft = new LinkedList<Fotospuesto>(jpaFoto.findFotospuestoEntities());
+            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(jpaFoto.findFotospuestoEntities());
             //Puesto p = jpaPuesto.findPuesto(Long.parseLong(this.id));
 
             for (Comentario c : com) {
@@ -126,7 +126,7 @@ public class EliminadorPuesto implements Serializable {
                 }
             }
 
-            for (Fotospuesto f : ft) {
+            for (FotoPuesto f : ft) {
                 if (f.getPuestoId().equals(p)) {
                     jpaFoto.destroy(f.getId());
                 }

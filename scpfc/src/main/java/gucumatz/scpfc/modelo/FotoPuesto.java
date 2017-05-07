@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Fotospuesto.findById", query = "SELECT f FROM Fotospuesto f WHERE f.id = :id")
     , @NamedQuery(name = "Fotospuesto.findByPuestoId", query = "SELECT f FROM Fotospuesto f WHERE f.puestoId = :puestoId")
     , @NamedQuery(name = "Fotospuesto.findByUrl", query = "SELECT f FROM Fotospuesto f WHERE f.url = :url")})
-public class Fotospuesto implements Serializable {
+public class FotoPuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,14 +46,14 @@ public class Fotospuesto implements Serializable {
     @ManyToOne(optional = false)
     private Puesto puestoId;
 
-    public Fotospuesto() {
+    public FotoPuesto() {
     }
 
-    public Fotospuesto(Long id) {
+    public FotoPuesto(Long id) {
         this.id = id;
     }
 
-    public Fotospuesto(Long id, String url) {
+    public FotoPuesto(Long id, String url) {
         this.id = id;
         this.url = url;
     }
@@ -92,10 +92,10 @@ public class Fotospuesto implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Fotospuesto)) {
+        if (!(object instanceof FotoPuesto)) {
             return false;
         }
-        Fotospuesto other = (Fotospuesto) object;
+        FotoPuesto other = (FotoPuesto) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

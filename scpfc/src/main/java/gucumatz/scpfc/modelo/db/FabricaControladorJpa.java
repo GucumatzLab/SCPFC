@@ -37,7 +37,7 @@ public class FabricaControladorJpa implements Serializable {
     public PuestoJpaController obtenerControladorJpaPuesto() {
         return new PuestoJpaController(emf);
     }
-    public FotospuestoJpaController obtenerControladorJpaFotospuesto(){
-        return new FotospuestoJpaController(emf);
+    public FotoPuestoJpaController obtenerControladorJpaFotospuesto(){
+        return new FotoPuestoJpaController(emf);
     }
 }

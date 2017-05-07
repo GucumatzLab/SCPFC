@@ -5,7 +5,7 @@
  */
 package gucumatz.scpfc.modelo.db;
 
-import gucumatz.scpfc.modelo.Fotospuesto;
+import gucumatz.scpfc.modelo.FotoPuesto;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -22,9 +22,9 @@ import javax.persistence.TypedQuery;
  *
  * @author lchacon
  */
-public class FotospuestoJpaController implements Serializable {
+public class FotoPuestoJpaController implements Serializable {
 
-    public FotospuestoJpaController(EntityManagerFactory emf) {
+    public FotoPuestoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -33,7 +33,7 @@ public class FotospuestoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Fotospuesto fotospuesto) {
+    public void create(FotoPuesto fotospuesto) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -56,12 +56,12 @@ public class FotospuestoJpaController implements Serializable {
         }
     }
 
-    public void edit(Fotospuesto fotospuesto) throws NonexistentEntityException, Exception {
+    public void edit(FotoPuesto fotospuesto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Fotospuesto persistentFotospuesto = em.find(Fotospuesto.class, fotospuesto.getId());
+            FotoPuesto persistentFotospuesto = em.find(FotoPuesto.class, fotospuesto.getId());
             Puesto puestoIdOld = persistentFotospuesto.getPuestoId();
             Puesto puestoIdNew = fotospuesto.getPuestoId();
             if (puestoIdNew != null) {
@@ -99,9 +99,9 @@ public class FotospuestoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Fotospuesto fotospuesto;
+            FotoPuesto fotospuesto;
             try {
-                fotospuesto = em.getReference(Fotospuesto.class, id);
+                fotospuesto = em.getReference(FotoPuesto.class, id);
                 fotospuesto.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The fotospuesto with id " + id + " no longer exists.", enfe);
@@ -120,13 +120,13 @@ public class FotospuestoJpaController implements Serializable {
         }
     }
 
-    public List<Fotospuesto> findFotospuestoByPuestoId(Puesto puestoId){
+    public List<FotoPuesto> findFotospuestoByPuestoId(Puesto puestoId){
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Fotospuesto> query
-                    = em.createNamedQuery("Fotospuesto.findByPuestoId", Fotospuesto.class);
+            TypedQuery<FotoPuesto> query
+                    = em.createNamedQuery("Fotospuesto.findByPuestoId", FotoPuesto.class);
             query.setParameter("puestoId", puestoId);
-            List<Fotospuesto> results = query.getResultList();
+            List<FotoPuesto> results = query.getResultList();
             if (results.isEmpty()) {
                 return null;
             }
@@ -136,19 +136,19 @@ public class FotospuestoJpaController implements Serializable {
         }
     }
     
-    public List<Fotospuesto> findFotospuestoEntities() {
+    public List<FotoPuesto> findFotospuestoEntities() {
         return findFotospuestoEntities(true, -1, -1);
     }
 
-    public List<Fotospuesto> findFotospuestoEntities(int maxResults, int firstResult) {
+    public List<FotoPuesto> findFotospuestoEntities(int maxResults, int firstResult) {
         return findFotospuestoEntities(false, maxResults, firstResult);
     }
 
-    private List<Fotospuesto> findFotospuestoEntities(boolean all, int maxResults, int firstResult) {
+    private List<FotoPuesto> findFotospuestoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Fotospuesto.class));
+            cq.select(cq.from(FotoPuesto.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -160,10 +160,10 @@ public class FotospuestoJpaController implements Serializable {
         }
     }
 
-    public Fotospuesto findFotospuesto(Long id) {
+    public FotoPuesto findFotospuesto(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Fotospuesto.class, id);
+            return em.find(FotoPuesto.class, id);
         } finally {
             em.close();
         }
@@ -173,7 +173,7 @@ public class FotospuestoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Fotospuesto> rt = cq.from(Fotospuesto.class);
+            Root<FotoPuesto> rt = cq.from(FotoPuesto.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

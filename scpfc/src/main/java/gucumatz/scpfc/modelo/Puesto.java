@@ -64,7 +64,7 @@ public class Puesto implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Calificacion> calificacionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
-    private List<Fotospuesto> fotospuestoList;
+    private List<FotoPuesto> fotospuestoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
     private Collection<Comentario> comentarioCollection;
 
@@ -142,11 +142,11 @@ public class Puesto implements Serializable {
     }
 
     @XmlTransient
-    public List<Fotospuesto> getFotospuestoList() {
+    public List<FotoPuesto> getFotospuestoList() {
         return fotospuestoList;
     }
 
-    public void setFotospuestoList(List<Fotospuesto> fotospuestoList) {
+    public void setFotospuestoList(List<FotoPuesto> fotospuestoList) {
         this.fotospuestoList = fotospuestoList;
     }
 

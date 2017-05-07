@@ -4,7 +4,7 @@ import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.Fotospuesto;
+import gucumatz.scpfc.modelo.FotoPuesto;
 import java.io.Serializable;
 import java.util.Locale;
 import javax.faces.bean.ManagedBean;
@@ -24,7 +24,7 @@ import java.util.List;
 public class VisorPuesto implements Serializable{
 
     private final PuestoJpaController jpaPuesto;
-    private final FotospuestoJpaController jpaFotospuesto;
+    private final FotoPuestoJpaController jpaFotospuesto;
     private final CalificacionJpaController jpaCalificacion;
     private final ComentarioJpaController jpaComentario;
     /* ID del puesto actual. */
@@ -32,7 +32,7 @@ public class VisorPuesto implements Serializable{
     /* Objeto del puesto actual. */
     private Puesto puesto;
     /* Lista de fotos del puesto actual. */
-    private List<Fotospuesto> fotospuesto;
+    private List<FotoPuesto> fotospuesto;
     /* Lista de calificaciones del puesto actual. */
     private List<Calificacion> calificacion;
     /* Lista de comentarios del puesto actual. */
@@ -97,7 +97,7 @@ public class VisorPuesto implements Serializable{
      *<code>getFotosPuesto</code> Método que regresa la lista de fotos del puesto actual.
      *@return tipo <code>List<Fotospuesto></code>: Lista de fotos del puesto actual.
      */
-    public List<Fotospuesto> getFotospuesto(){
+    public List<FotoPuesto> getFotospuesto(){
         return this.fotospuesto;
     }
 

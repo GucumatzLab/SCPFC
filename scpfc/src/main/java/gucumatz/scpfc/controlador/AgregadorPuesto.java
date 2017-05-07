@@ -130,7 +130,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                     return;
                 }
 
-                this.puesto.setFotospuestoList(new LinkedList<Fotospuesto>());
+                this.puesto.setFotospuestoList(new LinkedList<FotoPuesto>());
                 jpaPuesto.create(this.puesto);
 
                 if (foto1 != null
@@ -237,7 +237,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                 String nombreDeArchivo = "puesto/" + puesto.getId() + "-" + id + extensionFoto;
                 ManejadorDeImagenes mdi = new ManejadorDeImagenes();
                 mdi.escribirImagen(up, nombreDeArchivo);
-                Fotospuesto f = new Fotospuesto();
+                FotoPuesto f = new FotoPuesto();
                 f.setUrl(nombreDeArchivo);
                 f.setPuestoId(puesto);
                 puesto.getFotospuestoList().add(f);
