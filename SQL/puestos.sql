@@ -1,6 +1,6 @@
 use gucumatz;
 
-insert into puesto (nombre, tipoComida, referencias, latitud, longitud)
+insert into puesto (nombre, tipoComida, ubicacion, latitud, longitud)
 values  ("Ensaladas & Baguettes - 1", "Rápida", "Velaria, Estacionamiento de estudiantes [Planta Alta]", 19.3233305, -99.1807663),
         ("Flautas & Chilaquiles - 2", "Rápida", "Velaria, Estacionamiento de estudiantes [Planta Alta]", 19.3233501, -99.1807958),
         ("Pizzas & Más - 3", "Rápida", "Velaria, Estacionamiento de estudiantes [Planta Alta]", 19.3233836, -99.1808132),
@@ -22,7 +22,7 @@ values  ("Ensaladas & Baguettes - 1", "Rápida", "Velaria, Estacionamiento de es
         ("Frosty", "Helados / Nieves", "Atrás de la cafetería", 19.324332, -99.179210),
         ("Cafetería", "Por peso", "Dentro de la cafetería", 19.3245047, -99.1793115);
 
-insert into fotospuesto (puesto_id, url)
+insert into foto_puesto (puesto_id, url)
 values (1, "puesto/1-ensaladas-y-baguettes.jpg"),
        (2, "puesto/2-flautas-y-chilaquiles.jpg"),
        (3, "puesto/3-pizzas-y-mas.jpg"),
