@@ -74,9 +74,9 @@ public class Usuario implements Serializable {
     @Column(name = "rutaImagen", length = 100)
     private String rutaImagen;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Calificacion> calificacionList;
+    private List<Calificacion> calificaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private List<Comentario> comentarioList;
+    private List<Comentario> comentarios;
 
     public Usuario() {
     }
@@ -168,21 +168,21 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Calificacion> getCalificacionList() {
-        return calificacionList;
+    public List<Calificacion> getCalificaciones() {
+        return calificaciones;
     }
 
-    public void setCalificacionList(List<Calificacion> calificacionList) {
-        this.calificacionList = calificacionList;
+    public void setCalificaciones(List<Calificacion> calificaciones) {
+        this.calificaciones = calificaciones;
     }
 
     @XmlTransient
-    public List<Comentario> getComentarioList() {
-        return comentarioList;
+    public List<Comentario> getComentarios() {
+        return comentarios;
     }
 
-    public void setComentarioList(List<Comentario> comentarioList) {
-        this.comentarioList = comentarioList;
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
     @Override

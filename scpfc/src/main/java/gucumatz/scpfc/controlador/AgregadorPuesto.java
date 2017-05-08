@@ -130,7 +130,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                     return;
                 }
 
-                this.puesto.setFotoPuestoList(new LinkedList<FotoPuesto>());
+                this.puesto.setFotosPuesto(new LinkedList<FotoPuesto>());
                 jpaPuesto.create(this.puesto);
 
                 if (foto1 != null
@@ -240,7 +240,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                 FotoPuesto f = new FotoPuesto();
                 f.setUrl(nombreDeArchivo);
                 f.setPuesto(puesto);
-                puesto.getFotoPuestoList().add(f);
+                puesto.getFotosPuesto().add(f);
                 return true;
             }
         } catch (Exception e) {

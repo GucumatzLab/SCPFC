@@ -38,44 +38,44 @@ public class PuestoJpaController implements Serializable {
     }
 
     public void create(Puesto puesto) {
-        if (puesto.getCalificacionList() == null) {
-            puesto.setCalificacionList(new ArrayList<Calificacion>());
+        if (puesto.getCalificaciones() == null) {
+            puesto.setCalificaciones(new ArrayList<Calificacion>());
         }
-        if (puesto.getComentarioList() == null) {
-            puesto.setComentarioList(new ArrayList<Comentario>());
+        if (puesto.getComentarios() == null) {
+            puesto.setComentarios(new ArrayList<Comentario>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             List<Calificacion> attachedCalificacionList = new ArrayList<Calificacion>();
-            for (Calificacion calificacionListCalificacionToAttach : puesto.getCalificacionList()) {
+            for (Calificacion calificacionListCalificacionToAttach : puesto.getCalificaciones()) {
                 calificacionListCalificacionToAttach = em.getReference(calificacionListCalificacionToAttach.getClass(), calificacionListCalificacionToAttach.getId());
                 attachedCalificacionList.add(calificacionListCalificacionToAttach);
             }
-            puesto.setCalificacionList(attachedCalificacionList);
+            puesto.setCalificaciones(attachedCalificacionList);
             List<Comentario> attachedComentarioList = new ArrayList<Comentario>();
-            for (Comentario comentarioListComentarioToAttach : puesto.getComentarioList()) {
+            for (Comentario comentarioListComentarioToAttach : puesto.getComentarios()) {
                 comentarioListComentarioToAttach = em.getReference(comentarioListComentarioToAttach.getClass(), comentarioListComentarioToAttach.getId());
                 attachedComentarioList.add(comentarioListComentarioToAttach);
             }
-            puesto.setComentarioList(attachedComentarioList);
+            puesto.setComentarios(attachedComentarioList);
             em.persist(puesto);
-            for (Calificacion calificacionListCalificacion : puesto.getCalificacionList()) {
+            for (Calificacion calificacionListCalificacion : puesto.getCalificaciones()) {
                 Puesto oldPuestoIdOfCalificacionListCalificacion = calificacionListCalificacion.getPuesto();
                 calificacionListCalificacion.setPuesto(puesto);
                 calificacionListCalificacion = em.merge(calificacionListCalificacion);
                 if (oldPuestoIdOfCalificacionListCalificacion != null) {
-                    oldPuestoIdOfCalificacionListCalificacion.getCalificacionList().remove(calificacionListCalificacion);
+                    oldPuestoIdOfCalificacionListCalificacion.getCalificaciones().remove(calificacionListCalificacion);
                     oldPuestoIdOfCalificacionListCalificacion = em.merge(oldPuestoIdOfCalificacionListCalificacion);
                 }
             }
-            for (Comentario comentarioListComentario : puesto.getComentarioList()) {
+            for (Comentario comentarioListComentario : puesto.getComentarios()) {
                 Puesto oldPuestoIdOfComentarioListComentario = comentarioListComentario.getPuesto();
                 comentarioListComentario.setPuesto(puesto);
                 comentarioListComentario = em.merge(comentarioListComentario);
                 if (oldPuestoIdOfComentarioListComentario != null) {
-                    oldPuestoIdOfComentarioListComentario.getComentarioList().remove(comentarioListComentario);
+                    oldPuestoIdOfComentarioListComentario.getComentarios().remove(comentarioListComentario);
                     oldPuestoIdOfComentarioListComentario = em.merge(oldPuestoIdOfComentarioListComentario);
                 }
             }
@@ -93,10 +93,10 @@ public class PuestoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Puesto persistentPuesto = em.find(Puesto.class, puesto.getId());
-            List<Calificacion> calificacionListOld = persistentPuesto.getCalificacionList();
-            List<Calificacion> calificacionListNew = puesto.getCalificacionList();
-            List<Comentario> comentarioListOld = persistentPuesto.getComentarioList();
-            List<Comentario> comentarioListNew = puesto.getComentarioList();
+            List<Calificacion> calificacionListOld = persistentPuesto.getCalificaciones();
+            List<Calificacion> calificacionListNew = puesto.getCalificaciones();
+            List<Comentario> comentarioListOld = persistentPuesto.getComentarios();
+            List<Comentario> comentarioListNew = puesto.getComentarios();
             List<String> illegalOrphanMessages = null;
             for (Calificacion calificacionListOldCalificacion : calificacionListOld) {
                 if (!calificacionListNew.contains(calificacionListOldCalificacion)) {
@@ -123,14 +123,14 @@ public class PuestoJpaController implements Serializable {
                 attachedCalificacionListNew.add(calificacionListNewCalificacionToAttach);
             }
             calificacionListNew = attachedCalificacionListNew;
-            puesto.setCalificacionList(calificacionListNew);
+            puesto.setCalificaciones(calificacionListNew);
             List<Comentario> attachedComentarioListNew = new ArrayList<Comentario>();
             for (Comentario comentarioListNewComentarioToAttach : comentarioListNew) {
                 comentarioListNewComentarioToAttach = em.getReference(comentarioListNewComentarioToAttach.getClass(), comentarioListNewComentarioToAttach.getId());
                 attachedComentarioListNew.add(comentarioListNewComentarioToAttach);
             }
             comentarioListNew = attachedComentarioListNew;
-            puesto.setComentarioList(comentarioListNew);
+            puesto.setComentarios(comentarioListNew);
             puesto = em.merge(puesto);
             for (Calificacion calificacionListNewCalificacion : calificacionListNew) {
                 if (!calificacionListOld.contains(calificacionListNewCalificacion)) {
@@ -138,7 +138,7 @@ public class PuestoJpaController implements Serializable {
                     calificacionListNewCalificacion.setPuesto(puesto);
                     calificacionListNewCalificacion = em.merge(calificacionListNewCalificacion);
                     if (oldPuestoIdOfCalificacionListNewCalificacion != null && !oldPuestoIdOfCalificacionListNewCalificacion.equals(puesto)) {
-                        oldPuestoIdOfCalificacionListNewCalificacion.getCalificacionList().remove(calificacionListNewCalificacion);
+                        oldPuestoIdOfCalificacionListNewCalificacion.getCalificaciones().remove(calificacionListNewCalificacion);
                         oldPuestoIdOfCalificacionListNewCalificacion = em.merge(oldPuestoIdOfCalificacionListNewCalificacion);
                     }
                 }
@@ -149,7 +149,7 @@ public class PuestoJpaController implements Serializable {
                     comentarioListNewComentario.setPuesto(puesto);
                     comentarioListNewComentario = em.merge(comentarioListNewComentario);
                     if (oldPuestoIdOfComentarioListNewComentario != null && !oldPuestoIdOfComentarioListNewComentario.equals(puesto)) {
-                        oldPuestoIdOfComentarioListNewComentario.getComentarioList().remove(comentarioListNewComentario);
+                        oldPuestoIdOfComentarioListNewComentario.getComentarios().remove(comentarioListNewComentario);
                         oldPuestoIdOfComentarioListNewComentario = em.merge(oldPuestoIdOfComentarioListNewComentario);
                     }
                 }
@@ -184,14 +184,14 @@ public class PuestoJpaController implements Serializable {
                 throw new NonexistentEntityException("The puesto with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Calificacion> calificacionListOrphanCheck = puesto.getCalificacionList();
+            List<Calificacion> calificacionListOrphanCheck = puesto.getCalificaciones();
             for (Calificacion calificacionListOrphanCheckCalificacion : calificacionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Puesto (" + puesto + ") cannot be destroyed since the Calificacion " + calificacionListOrphanCheckCalificacion + " in its calificacionList field has a non-nullable puestoId field.");
             }
-            List<Comentario> comentarioListOrphanCheck = puesto.getComentarioList();
+            List<Comentario> comentarioListOrphanCheck = puesto.getComentarios();
             for (Comentario comentarioListOrphanCheckComentario : comentarioListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();

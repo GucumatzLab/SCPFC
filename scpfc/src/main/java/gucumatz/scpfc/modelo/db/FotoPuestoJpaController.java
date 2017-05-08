@@ -45,7 +45,7 @@ public class FotoPuestoJpaController implements Serializable {
             }
             em.persist(fotospuesto);
             if (puestoId != null) {
-                puestoId.getFotoPuestoList().add(fotospuesto);
+                puestoId.getFotosPuesto().add(fotospuesto);
                 puestoId = em.merge(puestoId);
             }
             em.getTransaction().commit();
@@ -70,11 +70,11 @@ public class FotoPuestoJpaController implements Serializable {
             }
             fotospuesto = em.merge(fotospuesto);
             if (puestoIdOld != null && !puestoIdOld.equals(puestoIdNew)) {
-                puestoIdOld.getFotoPuestoList().remove(fotospuesto);
+                puestoIdOld.getFotosPuesto().remove(fotospuesto);
                 puestoIdOld = em.merge(puestoIdOld);
             }
             if (puestoIdNew != null && !puestoIdNew.equals(puestoIdOld)) {
-                puestoIdNew.getFotoPuestoList().add(fotospuesto);
+                puestoIdNew.getFotosPuesto().add(fotospuesto);
                 puestoIdNew = em.merge(puestoIdNew);
             }
             em.getTransaction().commit();
@@ -108,7 +108,7 @@ public class FotoPuestoJpaController implements Serializable {
             }
             Puesto puestoId = fotospuesto.getPuesto();
             if (puestoId != null) {
-                puestoId.getFotoPuestoList().remove(fotospuesto);
+                puestoId.getFotosPuesto().remove(fotospuesto);
                 puestoId = em.merge(puestoId);
             }
             em.remove(fotospuesto);

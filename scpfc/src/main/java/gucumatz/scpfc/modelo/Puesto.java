@@ -64,11 +64,11 @@ public class Puesto implements Serializable {
     @Column(name = "longitud", nullable = false)
     private double longitud;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
-    private List<Calificacion> calificacionList;
+    private List<Calificacion> calificaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
-    private List<FotoPuesto> fotoPuestoList;
+    private List<FotoPuesto> fotosPuesto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
-    private List<Comentario> comentarioList;
+    private List<Comentario> comentarios;
 
     public Puesto() {
     }
@@ -142,30 +142,30 @@ public class Puesto implements Serializable {
     }
 
     @XmlTransient
-    public List<Calificacion> getCalificacionList() {
-        return calificacionList;
+    public List<Calificacion> getCalificaciones() {
+        return calificaciones;
     }
 
-    public void setCalificacionList(List<Calificacion> calificacionList) {
-        this.calificacionList = calificacionList;
-    }
-
-    @XmlTransient
-    public List<FotoPuesto> getFotoPuestoList() {
-        return fotoPuestoList;
-    }
-
-    public void setFotoPuestoList(List<FotoPuesto> fotoPuestoList) {
-        this.fotoPuestoList = fotoPuestoList;
+    public void setCalificaciones(List<Calificacion> calificaciones) {
+        this.calificaciones = calificaciones;
     }
 
     @XmlTransient
-    public List<Comentario> getComentarioList() {
-        return comentarioList;
+    public List<FotoPuesto> getFotosPuesto() {
+        return fotosPuesto;
     }
 
-    public void setComentarioList(List<Comentario> comentarioList) {
-        this.comentarioList = comentarioList;
+    public void setFotosPuesto(List<FotoPuesto> fotosPuesto) {
+        this.fotosPuesto = fotosPuesto;
+    }
+
+    @XmlTransient
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
     @Override
