@@ -29,12 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Calificacion.findAll", query = "SELECT c FROM Calificacion c")
-    , @NamedQuery(name = "Calificacion.findById", query = "SELECT c FROM Calificacion c WHERE c.id = :id")
-    , @NamedQuery(name = "Calificacion.findByPuestoId", query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto")
-    , @NamedQuery(name = "Calificacion.findByUsuarioId", query = "SELECT c FROM Calificacion c WHERE c.usuario = :usuario")
-    , @NamedQuery(name = "Calificacion.findByUsuarioPuesto", query = "SELECT c FROM Calificacion c WHERE c.usuario = :usuario AND c.puesto = :puesto")
-    , @NamedQuery(name = "Calificacion.findByCalificacion", query = "SELECT c FROM Calificacion c WHERE c.calificacion = :calificacion")})
+    @NamedQuery(name = "Calificacion.buscarPorPuesto",
+            query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto")
+    , @NamedQuery(name = "Calificacion.buscarPorUsuarioYPuesto",
+            query = "SELECT c FROM Calificacion c WHERE c.usuario = :usuario AND c.puesto = :puesto")
+    , @NamedQuery(name = "Calificacion.promedioDePuesto",
+            query = "SELECT AVG(c.calificacion) FROM Calificacion c WHERE c.puesto = :puesto")
+})
 public class Calificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;

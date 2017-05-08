@@ -32,11 +32,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Comentario.findAll", query = "SELECT c FROM Comentario c")
-    , @NamedQuery(name = "Comentario.findById", query = "SELECT c FROM Comentario c WHERE c.id = :id")
-    , @NamedQuery(name = "Comentario.findByComentario", query = "SELECT c FROM Comentario c WHERE c.comentario = :comentario")
-    , @NamedQuery(name = "Comentario.findByFecha", query = "SELECT c FROM Comentario c WHERE c.fecha = :fecha")
-    , @NamedQuery(name = "Comentario.findByPuesto", query = "SELECT c FROM Comentario c WHERE c.puesto = :puestoID")})
+    @NamedQuery(name = "Comentario.buscarPorPuesto",
+            query = "SELECT c FROM Comentario c WHERE c.puesto = :puesto")
+    , @NamedQuery(name = "Comentario.buscarPorUsuario",
+            query = "SELECT c FROM Comentario c WHERE c.usuario = :usuario")
+})
 public class Comentario implements Serializable {
 
     private static final long serialVersionUID = 1L;

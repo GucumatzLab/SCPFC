@@ -33,16 +33,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @UniqueConstraint(columnNames = {"nombre"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
-    , @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id")
-    , @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
-    , @NamedQuery(name = "Usuario.findByCorreoElectronico", query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correoElectronico")
-    , @NamedQuery(name = "Usuario.findByContrasena", query = "SELECT u FROM Usuario u WHERE u.contrasena = :contrasena")
-    , @NamedQuery(name = "Usuario.findByCodigoDeActivacion", query = "SELECT u FROM Usuario u WHERE u.codigoDeActivacion = :codigoDeActivacion")
-    , @NamedQuery(name = "Usuario.findByEsAdministrador", query = "SELECT u FROM Usuario u WHERE u.esAdministrador = :esAdministrador")
-    , @NamedQuery(name = "Usuario.findByConfirmada", query = "SELECT u FROM Usuario u WHERE u.confirmada = :confirmada")
-    , @NamedQuery(name = "Usuario.findByEliminada", query = "SELECT u FROM Usuario u WHERE u.eliminada = :eliminada")
-    , @NamedQuery(name = "Usuario.findByRutaImagen", query = "SELECT u FROM Usuario u WHERE u.rutaImagen = :rutaImagen")})
+    @NamedQuery(name = "Usuario.buscarPorNombre",
+            query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
+    , @NamedQuery(name = "Usuario.buscarPorCorreoElectronico",
+            query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correoElectronico")
+    , @NamedQuery(name = "Usuario.buscarPorCuenta",
+            query = "SELECT u FROM Usuario u WHERE u.nombre = :cuenta OR u.correoElectronico = :cuenta")
+})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;

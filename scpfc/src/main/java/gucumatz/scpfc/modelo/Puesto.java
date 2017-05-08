@@ -31,14 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Puesto.findAll", query = "SELECT p FROM Puesto p")
-    , @NamedQuery(name = "Puesto.findById", query = "SELECT p FROM Puesto p WHERE p.id = :id")
-    , @NamedQuery(name = "Puesto.findByNombre", query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre")
-    , @NamedQuery(name = "Puesto.findByTipoComida", query = "SELECT p FROM Puesto p WHERE p.tipoComida = :tipoComida")
-    , @NamedQuery(name = "Puesto.findByHorario", query = "SELECT p FROM Puesto p WHERE p.horario = :horario")
-    , @NamedQuery(name = "Puesto.findByUbicacion", query = "SELECT p FROM Puesto p WHERE p.ubicacion = :ubicacion")
-    , @NamedQuery(name = "Puesto.findByLatitud", query = "SELECT p FROM Puesto p WHERE p.latitud = :latitud")
-    , @NamedQuery(name = "Puesto.findByLongitud", query = "SELECT p FROM Puesto p WHERE p.longitud = :longitud")})
+    @NamedQuery(name = "Puesto.buscarPorNombre",
+            query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre")
+})
 public class Puesto implements Serializable {
 
     private static final long serialVersionUID = 1L;

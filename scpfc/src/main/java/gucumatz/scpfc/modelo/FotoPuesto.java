@@ -29,10 +29,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "FotoPuesto.findAll", query = "SELECT f FROM FotoPuesto f")
-    , @NamedQuery(name = "FotoPuesto.findById", query = "SELECT f FROM FotoPuesto f WHERE f.id = :id")
-    , @NamedQuery(name = "FotoPuesto.findByPuestoId", query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puestoId")
-    , @NamedQuery(name = "FotoPuesto.findByUrl", query = "SELECT f FROM FotoPuesto f WHERE f.url = :url")})
+    @NamedQuery(name = "FotoPuesto.buscarPorPuesto",
+            query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puesto")
+})
 public class FotoPuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
