@@ -149,12 +149,12 @@ public class CreadorComentario {
         // Obtener el puesto relacionado al ID
         PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
-        c.setPuestoId(p);
+        c.setPuesto(p);
         visorPuesto.getComentario().add(c);
 
         // Obtener usuario actual
         Usuario u = sesionActiva.getUsuario();
-        c.setUsuarioId(u);
+        c.setUsuario(u);
 
         // Finalmente, la fecha
         Date fecha = new Date();

@@ -20,42 +20,44 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Jaz
+ * @author lchacon
  */
 @Entity
-@Table(name = "comentario")
+@Table(name = "comentario", catalog = "gucumatz", schema = "", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Comentario.findAll", query = "SELECT c FROM Comentario c")
     , @NamedQuery(name = "Comentario.findById", query = "SELECT c FROM Comentario c WHERE c.id = :id")
     , @NamedQuery(name = "Comentario.findByComentario", query = "SELECT c FROM Comentario c WHERE c.comentario = :comentario")
     , @NamedQuery(name = "Comentario.findByFecha", query = "SELECT c FROM Comentario c WHERE c.fecha = :fecha")
-    , @NamedQuery(name = "Comentario.findByPuesto", query = "SELECT c FROM Comentario c WHERE c.puestoId = :puestoID")})
+    , @NamedQuery(name = "Comentario.findByPuesto", query = "SELECT c FROM Comentario c WHERE c.puesto = :puestoID")})
 public class Comentario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "comentario")
+    @Column(name = "comentario", nullable = false, length = 1024)
     private String comentario;
     @Basic(optional = false)
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id")
+    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Puesto puestoId;
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Puesto puesto;
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Usuario usuarioId;
+    private Usuario usuario;
 
     public Comentario() {
     }
@@ -94,20 +96,20 @@ public class Comentario implements Serializable {
         this.fecha = fecha;
     }
 
-    public Puesto getPuestoId() {
-        return puestoId;
+    public Puesto getPuesto() {
+        return puesto;
     }
 
-    public void setPuestoId(Puesto puestoId) {
-        this.puestoId = puestoId;
+    public void setPuesto(Puesto puesto) {
+        this.puesto = puesto;
     }
 
-    public Usuario getUsuarioId() {
-        return usuarioId;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioId(Usuario usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
@@ -134,5 +136,5 @@ public class Comentario implements Serializable {
     public String toString() {
         return "gucumatz.scpfc.modelo.Comentario[ id=" + id + " ]";
     }
-    
+
 }

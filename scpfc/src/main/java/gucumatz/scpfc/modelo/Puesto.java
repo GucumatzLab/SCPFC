@@ -6,8 +6,6 @@
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,22 +18,25 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jaz
+ * @author lchacon
  */
 @Entity
-@Table(name = "puesto")
+@Table(name = "puesto", catalog = "gucumatz", schema = "", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Puesto.findAll", query = "SELECT p FROM Puesto p")
     , @NamedQuery(name = "Puesto.findById", query = "SELECT p FROM Puesto p WHERE p.id = :id")
     , @NamedQuery(name = "Puesto.findByNombre", query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Puesto.findByTipoComida", query = "SELECT p FROM Puesto p WHERE p.tipoComida = :tipoComida")
-    , @NamedQuery(name = "Puesto.findByReferencias", query = "SELECT p FROM Puesto p WHERE p.referencias = :referencias")
+    , @NamedQuery(name = "Puesto.findByHorario", query = "SELECT p FROM Puesto p WHERE p.horario = :horario")
+    , @NamedQuery(name = "Puesto.findByUbicacion", query = "SELECT p FROM Puesto p WHERE p.ubicacion = :ubicacion")
     , @NamedQuery(name = "Puesto.findByLatitud", query = "SELECT p FROM Puesto p WHERE p.latitud = :latitud")
     , @NamedQuery(name = "Puesto.findByLongitud", query = "SELECT p FROM Puesto p WHERE p.longitud = :longitud")})
 public class Puesto implements Serializable {
@@ -44,29 +45,30 @@ public class Puesto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     @Basic(optional = false)
-    @Column(name = "tipoComida")
+    @Column(name = "tipoComida", nullable = false, length = 200)
     private String tipoComida;
+    @Column(name = "horario", length = 100)
+    private String horario;
+    @Column(name = "ubicacion", length = 100)
+    private String ubicacion;
     @Basic(optional = false)
-    @Column(name = "referencias")
-    private String referencias;
-    @Basic(optional = false)
-    @Column(name = "latitud")
+    @Column(name = "latitud", nullable = false)
     private double latitud;
     @Basic(optional = false)
-    @Column(name = "longitud")
+    @Column(name = "longitud", nullable = false)
     private double longitud;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
-    private Collection<Calificacion> calificacionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
-    private List<FotoPuesto> fotospuestoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puestoId")
-    private Collection<Comentario> comentarioCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
+    private List<Calificacion> calificacionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
+    private List<FotoPuesto> fotoPuestoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "puesto")
+    private List<Comentario> comentarioList;
 
     public Puesto() {
     }
@@ -75,11 +77,10 @@ public class Puesto implements Serializable {
         this.id = id;
     }
 
-    public Puesto(Long id, String nombre, String tipoComida, String referencias, double latitud, double longitud) {
+    public Puesto(Long id, String nombre, String tipoComida, double latitud, double longitud) {
         this.id = id;
         this.nombre = nombre;
         this.tipoComida = tipoComida;
-        this.referencias = referencias;
         this.latitud = latitud;
         this.longitud = longitud;
     }
@@ -108,12 +109,20 @@ public class Puesto implements Serializable {
         this.tipoComida = tipoComida;
     }
 
-    public String getReferencias() {
-        return referencias;
+    public String getHorario() {
+        return horario;
     }
 
-    public void setReferencias(String referencias) {
-        this.referencias = referencias;
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     public double getLatitud() {
@@ -133,30 +142,30 @@ public class Puesto implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Calificacion> getCalificacionCollection() {
-        return calificacionCollection;
+    public List<Calificacion> getCalificacionList() {
+        return calificacionList;
     }
 
-    public void setCalificacionCollection(Collection<Calificacion> calificacionCollection) {
-        this.calificacionCollection = calificacionCollection;
-    }
-
-    @XmlTransient
-    public List<FotoPuesto> getFotospuestoList() {
-        return fotospuestoList;
-    }
-
-    public void setFotospuestoList(List<FotoPuesto> fotospuestoList) {
-        this.fotospuestoList = fotospuestoList;
+    public void setCalificacionList(List<Calificacion> calificacionList) {
+        this.calificacionList = calificacionList;
     }
 
     @XmlTransient
-    public Collection<Comentario> getComentarioCollection() {
-        return comentarioCollection;
+    public List<FotoPuesto> getFotoPuestoList() {
+        return fotoPuestoList;
     }
 
-    public void setComentarioCollection(Collection<Comentario> comentarioCollection) {
-        this.comentarioCollection = comentarioCollection;
+    public void setFotoPuestoList(List<FotoPuesto> fotoPuestoList) {
+        this.fotoPuestoList = fotoPuestoList;
+    }
+
+    @XmlTransient
+    public List<Comentario> getComentarioList() {
+        return comentarioList;
+    }
+
+    public void setComentarioList(List<Comentario> comentarioList) {
+        this.comentarioList = comentarioList;
     }
 
     @Override

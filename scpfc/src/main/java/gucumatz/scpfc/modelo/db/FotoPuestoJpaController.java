@@ -38,14 +38,14 @@ public class FotoPuestoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Puesto puestoId = fotospuesto.getPuestoId();
+            Puesto puestoId = fotospuesto.getPuesto();
             if (puestoId != null) {
                 puestoId = em.getReference(puestoId.getClass(), puestoId.getId());
-                fotospuesto.setPuestoId(puestoId);
+                fotospuesto.setPuesto(puestoId);
             }
             em.persist(fotospuesto);
             if (puestoId != null) {
-                puestoId.getFotospuestoList().add(fotospuesto);
+                puestoId.getFotoPuestoList().add(fotospuesto);
                 puestoId = em.merge(puestoId);
             }
             em.getTransaction().commit();
@@ -61,20 +61,20 @@ public class FotoPuestoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            FotoPuesto persistentFotospuesto = em.find(FotoPuesto.class, fotospuesto.getId());
-            Puesto puestoIdOld = persistentFotospuesto.getPuestoId();
-            Puesto puestoIdNew = fotospuesto.getPuestoId();
+            FotoPuesto persistentFotoPuesto = em.find(FotoPuesto.class, fotospuesto.getId());
+            Puesto puestoIdOld = persistentFotoPuesto.getPuesto();
+            Puesto puestoIdNew = fotospuesto.getPuesto();
             if (puestoIdNew != null) {
                 puestoIdNew = em.getReference(puestoIdNew.getClass(), puestoIdNew.getId());
-                fotospuesto.setPuestoId(puestoIdNew);
+                fotospuesto.setPuesto(puestoIdNew);
             }
             fotospuesto = em.merge(fotospuesto);
             if (puestoIdOld != null && !puestoIdOld.equals(puestoIdNew)) {
-                puestoIdOld.getFotospuestoList().remove(fotospuesto);
+                puestoIdOld.getFotoPuestoList().remove(fotospuesto);
                 puestoIdOld = em.merge(puestoIdOld);
             }
             if (puestoIdNew != null && !puestoIdNew.equals(puestoIdOld)) {
-                puestoIdNew.getFotospuestoList().add(fotospuesto);
+                puestoIdNew.getFotoPuestoList().add(fotospuesto);
                 puestoIdNew = em.merge(puestoIdNew);
             }
             em.getTransaction().commit();
@@ -82,7 +82,7 @@ public class FotoPuestoJpaController implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = fotospuesto.getId();
-                if (findFotospuesto(id) == null) {
+                if (findFotoPuesto(id) == null) {
                     throw new NonexistentEntityException("The fotospuesto with id " + id + " no longer exists.");
                 }
             }
@@ -106,9 +106,9 @@ public class FotoPuestoJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The fotospuesto with id " + id + " no longer exists.", enfe);
             }
-            Puesto puestoId = fotospuesto.getPuestoId();
+            Puesto puestoId = fotospuesto.getPuesto();
             if (puestoId != null) {
-                puestoId.getFotospuestoList().remove(fotospuesto);
+                puestoId.getFotoPuestoList().remove(fotospuesto);
                 puestoId = em.merge(puestoId);
             }
             em.remove(fotospuesto);
@@ -120,11 +120,11 @@ public class FotoPuestoJpaController implements Serializable {
         }
     }
 
-    public List<FotoPuesto> findFotospuestoByPuestoId(Puesto puestoId){
+    public List<FotoPuesto> findFotoPuestoByPuestoId(Puesto puestoId){
         EntityManager em = getEntityManager();
         try {
             TypedQuery<FotoPuesto> query
-                    = em.createNamedQuery("Fotospuesto.findByPuestoId", FotoPuesto.class);
+                    = em.createNamedQuery("FotoPuesto.findByPuestoId", FotoPuesto.class);
             query.setParameter("puestoId", puestoId);
             List<FotoPuesto> results = query.getResultList();
             if (results.isEmpty()) {
@@ -136,15 +136,15 @@ public class FotoPuestoJpaController implements Serializable {
         }
     }
     
-    public List<FotoPuesto> findFotospuestoEntities() {
-        return findFotospuestoEntities(true, -1, -1);
+    public List<FotoPuesto> findFotoPuestoEntities() {
+        return findFotoPuestoEntities(true, -1, -1);
     }
 
-    public List<FotoPuesto> findFotospuestoEntities(int maxResults, int firstResult) {
-        return findFotospuestoEntities(false, maxResults, firstResult);
+    public List<FotoPuesto> findFotoPuestoEntities(int maxResults, int firstResult) {
+        return findFotoPuestoEntities(false, maxResults, firstResult);
     }
 
-    private List<FotoPuesto> findFotospuestoEntities(boolean all, int maxResults, int firstResult) {
+    private List<FotoPuesto> findFotoPuestoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -160,7 +160,7 @@ public class FotoPuestoJpaController implements Serializable {
         }
     }
 
-    public FotoPuesto findFotospuesto(Long id) {
+    public FotoPuesto findFotoPuesto(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(FotoPuesto.class, id);
@@ -169,7 +169,7 @@ public class FotoPuestoJpaController implements Serializable {
         }
     }
 
-    public int getFotospuestoCount() {
+    public int getFotoPuestoCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();

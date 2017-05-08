@@ -24,7 +24,7 @@ import java.util.List;
 public class VisorPuesto implements Serializable{
 
     private final PuestoJpaController jpaPuesto;
-    private final FotoPuestoJpaController jpaFotospuesto;
+    private final FotoPuestoJpaController jpaFotoPuesto;
     private final CalificacionJpaController jpaCalificacion;
     private final ComentarioJpaController jpaComentario;
     /* ID del puesto actual. */
@@ -44,7 +44,7 @@ public class VisorPuesto implements Serializable{
     public VisorPuesto() {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
         this.jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
-        this.jpaFotospuesto = new FabricaControladorJpa().obtenerControladorJpaFotospuesto();
+        this.jpaFotoPuesto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
         this.jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
         this.jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
     }
@@ -78,7 +78,7 @@ public class VisorPuesto implements Serializable{
         if (this.puesto == null) {
                 return "index";
         }
-        this.fotospuesto = jpaFotospuesto.findFotospuestoByPuestoId(puesto);
+        this.fotospuesto = jpaFotoPuesto.findFotoPuestoByPuestoId(puesto);
         this.calificacion = jpaCalificacion.findAllByPuestoID(this.puesto);
         this.comentario = jpaComentario.findAllByPuestoID(this.puesto);
 
@@ -95,9 +95,9 @@ public class VisorPuesto implements Serializable{
 
     /**
      *<code>getFotosPuesto</code> Método que regresa la lista de fotos del puesto actual.
-     *@return tipo <code>List<Fotospuesto></code>: Lista de fotos del puesto actual.
+     *@return tipo <code>List<FotoPuesto></code>: Lista de fotos del puesto actual.
      */
-    public List<FotoPuesto> getFotospuesto(){
+    public List<FotoPuesto> getFotoPuesto(){
         return this.fotospuesto;
     }
 

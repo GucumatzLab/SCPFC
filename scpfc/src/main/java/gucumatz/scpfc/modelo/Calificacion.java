@@ -17,21 +17,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Jaz
+ * @author lchacon
  */
 @Entity
-@Table(name = "calificacion")
+@Table(name = "calificacion", catalog = "gucumatz", schema = "", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Calificacion.findAll", query = "SELECT c FROM Calificacion c")
     , @NamedQuery(name = "Calificacion.findById", query = "SELECT c FROM Calificacion c WHERE c.id = :id")
-    , @NamedQuery(name = "Calificacion.findByPuestoId", query = "SELECT c FROM Calificacion c WHERE c.puestoId = :puestoId")
-    , @NamedQuery(name = "Calificacion.findByUsuarioId", query = "SELECT c FROM Calificacion c WHERE c.usuarioId = :usuarioId")
-    , @NamedQuery(name = "Calificacion.findByUsuarioPuesto", query = "SELECT c FROM Calificacion c WHERE c.usuarioId = :usuarioId AND c.puestoId = :puestoId")
+    , @NamedQuery(name = "Calificacion.findByPuestoId", query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto")
+    , @NamedQuery(name = "Calificacion.findByUsuarioId", query = "SELECT c FROM Calificacion c WHERE c.usuario = :usuario")
+    , @NamedQuery(name = "Calificacion.findByUsuarioPuesto", query = "SELECT c FROM Calificacion c WHERE c.usuario = :usuario AND c.puesto = :puesto")
     , @NamedQuery(name = "Calificacion.findByCalificacion", query = "SELECT c FROM Calificacion c WHERE c.calificacion = :calificacion")})
 public class Calificacion implements Serializable {
 
@@ -39,17 +41,17 @@ public class Calificacion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "calificacion")
+    @Column(name = "calificacion", nullable = false)
     private float calificacion;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id")
+    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Puesto puestoId;
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Puesto puesto;
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Usuario usuarioId;
+    private Usuario usuario;
 
     public Calificacion() {
     }
@@ -79,20 +81,20 @@ public class Calificacion implements Serializable {
         this.calificacion = calificacion;
     }
 
-    public Puesto getPuestoId() {
-        return puestoId;
+    public Puesto getPuesto() {
+        return puesto;
     }
 
-    public void setPuestoId(Puesto puestoId) {
-        this.puestoId = puestoId;
+    public void setPuesto(Puesto puesto) {
+        this.puesto = puesto;
     }
 
-    public Usuario getUsuarioId() {
-        return usuarioId;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioId(Usuario usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
@@ -119,5 +121,5 @@ public class Calificacion implements Serializable {
     public String toString() {
         return "gucumatz.scpfc.modelo.Calificacion[ id=" + id + " ]";
     }
-    
+
 }

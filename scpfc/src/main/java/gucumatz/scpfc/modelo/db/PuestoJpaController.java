@@ -12,7 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import gucumatz.scpfc.modelo.Calificacion;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
@@ -38,45 +38,45 @@ public class PuestoJpaController implements Serializable {
     }
 
     public void create(Puesto puesto) {
-        if (puesto.getCalificacionCollection() == null) {
-            puesto.setCalificacionCollection(new ArrayList<Calificacion>());
+        if (puesto.getCalificacionList() == null) {
+            puesto.setCalificacionList(new ArrayList<Calificacion>());
         }
-        if (puesto.getComentarioCollection() == null) {
-            puesto.setComentarioCollection(new ArrayList<Comentario>());
+        if (puesto.getComentarioList() == null) {
+            puesto.setComentarioList(new ArrayList<Comentario>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Calificacion> attachedCalificacionCollection = new ArrayList<Calificacion>();
-            for (Calificacion calificacionCollectionCalificacionToAttach : puesto.getCalificacionCollection()) {
-                calificacionCollectionCalificacionToAttach = em.getReference(calificacionCollectionCalificacionToAttach.getClass(), calificacionCollectionCalificacionToAttach.getId());
-                attachedCalificacionCollection.add(calificacionCollectionCalificacionToAttach);
+            List<Calificacion> attachedCalificacionList = new ArrayList<Calificacion>();
+            for (Calificacion calificacionListCalificacionToAttach : puesto.getCalificacionList()) {
+                calificacionListCalificacionToAttach = em.getReference(calificacionListCalificacionToAttach.getClass(), calificacionListCalificacionToAttach.getId());
+                attachedCalificacionList.add(calificacionListCalificacionToAttach);
             }
-            puesto.setCalificacionCollection(attachedCalificacionCollection);
-            Collection<Comentario> attachedComentarioCollection = new ArrayList<Comentario>();
-            for (Comentario comentarioCollectionComentarioToAttach : puesto.getComentarioCollection()) {
-                comentarioCollectionComentarioToAttach = em.getReference(comentarioCollectionComentarioToAttach.getClass(), comentarioCollectionComentarioToAttach.getId());
-                attachedComentarioCollection.add(comentarioCollectionComentarioToAttach);
+            puesto.setCalificacionList(attachedCalificacionList);
+            List<Comentario> attachedComentarioList = new ArrayList<Comentario>();
+            for (Comentario comentarioListComentarioToAttach : puesto.getComentarioList()) {
+                comentarioListComentarioToAttach = em.getReference(comentarioListComentarioToAttach.getClass(), comentarioListComentarioToAttach.getId());
+                attachedComentarioList.add(comentarioListComentarioToAttach);
             }
-            puesto.setComentarioCollection(attachedComentarioCollection);
+            puesto.setComentarioList(attachedComentarioList);
             em.persist(puesto);
-            for (Calificacion calificacionCollectionCalificacion : puesto.getCalificacionCollection()) {
-                Puesto oldPuestoIdOfCalificacionCollectionCalificacion = calificacionCollectionCalificacion.getPuestoId();
-                calificacionCollectionCalificacion.setPuestoId(puesto);
-                calificacionCollectionCalificacion = em.merge(calificacionCollectionCalificacion);
-                if (oldPuestoIdOfCalificacionCollectionCalificacion != null) {
-                    oldPuestoIdOfCalificacionCollectionCalificacion.getCalificacionCollection().remove(calificacionCollectionCalificacion);
-                    oldPuestoIdOfCalificacionCollectionCalificacion = em.merge(oldPuestoIdOfCalificacionCollectionCalificacion);
+            for (Calificacion calificacionListCalificacion : puesto.getCalificacionList()) {
+                Puesto oldPuestoIdOfCalificacionListCalificacion = calificacionListCalificacion.getPuesto();
+                calificacionListCalificacion.setPuesto(puesto);
+                calificacionListCalificacion = em.merge(calificacionListCalificacion);
+                if (oldPuestoIdOfCalificacionListCalificacion != null) {
+                    oldPuestoIdOfCalificacionListCalificacion.getCalificacionList().remove(calificacionListCalificacion);
+                    oldPuestoIdOfCalificacionListCalificacion = em.merge(oldPuestoIdOfCalificacionListCalificacion);
                 }
             }
-            for (Comentario comentarioCollectionComentario : puesto.getComentarioCollection()) {
-                Puesto oldPuestoIdOfComentarioCollectionComentario = comentarioCollectionComentario.getPuestoId();
-                comentarioCollectionComentario.setPuestoId(puesto);
-                comentarioCollectionComentario = em.merge(comentarioCollectionComentario);
-                if (oldPuestoIdOfComentarioCollectionComentario != null) {
-                    oldPuestoIdOfComentarioCollectionComentario.getComentarioCollection().remove(comentarioCollectionComentario);
-                    oldPuestoIdOfComentarioCollectionComentario = em.merge(oldPuestoIdOfComentarioCollectionComentario);
+            for (Comentario comentarioListComentario : puesto.getComentarioList()) {
+                Puesto oldPuestoIdOfComentarioListComentario = comentarioListComentario.getPuesto();
+                comentarioListComentario.setPuesto(puesto);
+                comentarioListComentario = em.merge(comentarioListComentario);
+                if (oldPuestoIdOfComentarioListComentario != null) {
+                    oldPuestoIdOfComentarioListComentario.getComentarioList().remove(comentarioListComentario);
+                    oldPuestoIdOfComentarioListComentario = em.merge(oldPuestoIdOfComentarioListComentario);
                 }
             }
             em.getTransaction().commit();
@@ -93,64 +93,64 @@ public class PuestoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Puesto persistentPuesto = em.find(Puesto.class, puesto.getId());
-            Collection<Calificacion> calificacionCollectionOld = persistentPuesto.getCalificacionCollection();
-            Collection<Calificacion> calificacionCollectionNew = puesto.getCalificacionCollection();
-            Collection<Comentario> comentarioCollectionOld = persistentPuesto.getComentarioCollection();
-            Collection<Comentario> comentarioCollectionNew = puesto.getComentarioCollection();
+            List<Calificacion> calificacionListOld = persistentPuesto.getCalificacionList();
+            List<Calificacion> calificacionListNew = puesto.getCalificacionList();
+            List<Comentario> comentarioListOld = persistentPuesto.getComentarioList();
+            List<Comentario> comentarioListNew = puesto.getComentarioList();
             List<String> illegalOrphanMessages = null;
-            for (Calificacion calificacionCollectionOldCalificacion : calificacionCollectionOld) {
-                if (!calificacionCollectionNew.contains(calificacionCollectionOldCalificacion)) {
+            for (Calificacion calificacionListOldCalificacion : calificacionListOld) {
+                if (!calificacionListNew.contains(calificacionListOldCalificacion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Calificacion " + calificacionCollectionOldCalificacion + " since its puestoId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Calificacion " + calificacionListOldCalificacion + " since its puestoId field is not nullable.");
                 }
             }
-            for (Comentario comentarioCollectionOldComentario : comentarioCollectionOld) {
-                if (!comentarioCollectionNew.contains(comentarioCollectionOldComentario)) {
+            for (Comentario comentarioListOldComentario : comentarioListOld) {
+                if (!comentarioListNew.contains(comentarioListOldComentario)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Comentario " + comentarioCollectionOldComentario + " since its puestoId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Comentario " + comentarioListOldComentario + " since its puestoId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Calificacion> attachedCalificacionCollectionNew = new ArrayList<Calificacion>();
-            for (Calificacion calificacionCollectionNewCalificacionToAttach : calificacionCollectionNew) {
-                calificacionCollectionNewCalificacionToAttach = em.getReference(calificacionCollectionNewCalificacionToAttach.getClass(), calificacionCollectionNewCalificacionToAttach.getId());
-                attachedCalificacionCollectionNew.add(calificacionCollectionNewCalificacionToAttach);
+            List<Calificacion> attachedCalificacionListNew = new ArrayList<Calificacion>();
+            for (Calificacion calificacionListNewCalificacionToAttach : calificacionListNew) {
+                calificacionListNewCalificacionToAttach = em.getReference(calificacionListNewCalificacionToAttach.getClass(), calificacionListNewCalificacionToAttach.getId());
+                attachedCalificacionListNew.add(calificacionListNewCalificacionToAttach);
             }
-            calificacionCollectionNew = attachedCalificacionCollectionNew;
-            puesto.setCalificacionCollection(calificacionCollectionNew);
-            Collection<Comentario> attachedComentarioCollectionNew = new ArrayList<Comentario>();
-            for (Comentario comentarioCollectionNewComentarioToAttach : comentarioCollectionNew) {
-                comentarioCollectionNewComentarioToAttach = em.getReference(comentarioCollectionNewComentarioToAttach.getClass(), comentarioCollectionNewComentarioToAttach.getId());
-                attachedComentarioCollectionNew.add(comentarioCollectionNewComentarioToAttach);
+            calificacionListNew = attachedCalificacionListNew;
+            puesto.setCalificacionList(calificacionListNew);
+            List<Comentario> attachedComentarioListNew = new ArrayList<Comentario>();
+            for (Comentario comentarioListNewComentarioToAttach : comentarioListNew) {
+                comentarioListNewComentarioToAttach = em.getReference(comentarioListNewComentarioToAttach.getClass(), comentarioListNewComentarioToAttach.getId());
+                attachedComentarioListNew.add(comentarioListNewComentarioToAttach);
             }
-            comentarioCollectionNew = attachedComentarioCollectionNew;
-            puesto.setComentarioCollection(comentarioCollectionNew);
+            comentarioListNew = attachedComentarioListNew;
+            puesto.setComentarioList(comentarioListNew);
             puesto = em.merge(puesto);
-            for (Calificacion calificacionCollectionNewCalificacion : calificacionCollectionNew) {
-                if (!calificacionCollectionOld.contains(calificacionCollectionNewCalificacion)) {
-                    Puesto oldPuestoIdOfCalificacionCollectionNewCalificacion = calificacionCollectionNewCalificacion.getPuestoId();
-                    calificacionCollectionNewCalificacion.setPuestoId(puesto);
-                    calificacionCollectionNewCalificacion = em.merge(calificacionCollectionNewCalificacion);
-                    if (oldPuestoIdOfCalificacionCollectionNewCalificacion != null && !oldPuestoIdOfCalificacionCollectionNewCalificacion.equals(puesto)) {
-                        oldPuestoIdOfCalificacionCollectionNewCalificacion.getCalificacionCollection().remove(calificacionCollectionNewCalificacion);
-                        oldPuestoIdOfCalificacionCollectionNewCalificacion = em.merge(oldPuestoIdOfCalificacionCollectionNewCalificacion);
+            for (Calificacion calificacionListNewCalificacion : calificacionListNew) {
+                if (!calificacionListOld.contains(calificacionListNewCalificacion)) {
+                    Puesto oldPuestoIdOfCalificacionListNewCalificacion = calificacionListNewCalificacion.getPuesto();
+                    calificacionListNewCalificacion.setPuesto(puesto);
+                    calificacionListNewCalificacion = em.merge(calificacionListNewCalificacion);
+                    if (oldPuestoIdOfCalificacionListNewCalificacion != null && !oldPuestoIdOfCalificacionListNewCalificacion.equals(puesto)) {
+                        oldPuestoIdOfCalificacionListNewCalificacion.getCalificacionList().remove(calificacionListNewCalificacion);
+                        oldPuestoIdOfCalificacionListNewCalificacion = em.merge(oldPuestoIdOfCalificacionListNewCalificacion);
                     }
                 }
             }
-            for (Comentario comentarioCollectionNewComentario : comentarioCollectionNew) {
-                if (!comentarioCollectionOld.contains(comentarioCollectionNewComentario)) {
-                    Puesto oldPuestoIdOfComentarioCollectionNewComentario = comentarioCollectionNewComentario.getPuestoId();
-                    comentarioCollectionNewComentario.setPuestoId(puesto);
-                    comentarioCollectionNewComentario = em.merge(comentarioCollectionNewComentario);
-                    if (oldPuestoIdOfComentarioCollectionNewComentario != null && !oldPuestoIdOfComentarioCollectionNewComentario.equals(puesto)) {
-                        oldPuestoIdOfComentarioCollectionNewComentario.getComentarioCollection().remove(comentarioCollectionNewComentario);
-                        oldPuestoIdOfComentarioCollectionNewComentario = em.merge(oldPuestoIdOfComentarioCollectionNewComentario);
+            for (Comentario comentarioListNewComentario : comentarioListNew) {
+                if (!comentarioListOld.contains(comentarioListNewComentario)) {
+                    Puesto oldPuestoIdOfComentarioListNewComentario = comentarioListNewComentario.getPuesto();
+                    comentarioListNewComentario.setPuesto(puesto);
+                    comentarioListNewComentario = em.merge(comentarioListNewComentario);
+                    if (oldPuestoIdOfComentarioListNewComentario != null && !oldPuestoIdOfComentarioListNewComentario.equals(puesto)) {
+                        oldPuestoIdOfComentarioListNewComentario.getComentarioList().remove(comentarioListNewComentario);
+                        oldPuestoIdOfComentarioListNewComentario = em.merge(oldPuestoIdOfComentarioListNewComentario);
                     }
                 }
             }
@@ -184,19 +184,19 @@ public class PuestoJpaController implements Serializable {
                 throw new NonexistentEntityException("The puesto with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Calificacion> calificacionCollectionOrphanCheck = puesto.getCalificacionCollection();
-            for (Calificacion calificacionCollectionOrphanCheckCalificacion : calificacionCollectionOrphanCheck) {
+            List<Calificacion> calificacionListOrphanCheck = puesto.getCalificacionList();
+            for (Calificacion calificacionListOrphanCheckCalificacion : calificacionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Puesto (" + puesto + ") cannot be destroyed since the Calificacion " + calificacionCollectionOrphanCheckCalificacion + " in its calificacionCollection field has a non-nullable puestoId field.");
+                illegalOrphanMessages.add("This Puesto (" + puesto + ") cannot be destroyed since the Calificacion " + calificacionListOrphanCheckCalificacion + " in its calificacionList field has a non-nullable puestoId field.");
             }
-            Collection<Comentario> comentarioCollectionOrphanCheck = puesto.getComentarioCollection();
-            for (Comentario comentarioCollectionOrphanCheckComentario : comentarioCollectionOrphanCheck) {
+            List<Comentario> comentarioListOrphanCheck = puesto.getComentarioList();
+            for (Comentario comentarioListOrphanCheckComentario : comentarioListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Puesto (" + puesto + ") cannot be destroyed since the Comentario " + comentarioCollectionOrphanCheckComentario + " in its comentarioCollection field has a non-nullable puestoId field.");
+                illegalOrphanMessages.add("This Puesto (" + puesto + ") cannot be destroyed since the Comentario " + comentarioListOrphanCheckComentario + " in its comentarioList field has a non-nullable puestoId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

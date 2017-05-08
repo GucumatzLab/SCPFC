@@ -6,7 +6,7 @@
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,15 +18,19 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Jaz
+ * @author lchacon
  */
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuario", catalog = "gucumatz", schema = "", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"id"})
+    , @UniqueConstraint(columnNames = {"correoElectronico"})
+    , @UniqueConstraint(columnNames = {"nombre"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
@@ -37,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByCodigoDeActivacion", query = "SELECT u FROM Usuario u WHERE u.codigoDeActivacion = :codigoDeActivacion")
     , @NamedQuery(name = "Usuario.findByEsAdministrador", query = "SELECT u FROM Usuario u WHERE u.esAdministrador = :esAdministrador")
     , @NamedQuery(name = "Usuario.findByConfirmada", query = "SELECT u FROM Usuario u WHERE u.confirmada = :confirmada")
+    , @NamedQuery(name = "Usuario.findByEliminada", query = "SELECT u FROM Usuario u WHERE u.eliminada = :eliminada")
     , @NamedQuery(name = "Usuario.findByRutaImagen", query = "SELECT u FROM Usuario u WHERE u.rutaImagen = :rutaImagen")})
 public class Usuario implements Serializable {
 
@@ -44,31 +49,34 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     @Basic(optional = false)
-    @Column(name = "correoElectronico")
+    @Column(name = "correoElectronico", nullable = false, length = 100)
     private String correoElectronico;
     @Basic(optional = false)
-    @Column(name = "contrasena")
+    @Column(name = "contrasena", nullable = false, length = 100)
     private String contrasena;
-    @Column(name = "codigoDeActivacion")
+    @Column(name = "codigoDeActivacion", length = 100)
     private String codigoDeActivacion;
     @Basic(optional = false)
-    @Column(name = "esAdministrador")
+    @Column(name = "esAdministrador", nullable = false)
     private boolean esAdministrador;
     @Basic(optional = false)
-    @Column(name = "confirmada")
+    @Column(name = "confirmada", nullable = false)
     private boolean confirmada;
-    @Column(name = "rutaImagen")
+    @Basic(optional = false)
+    @Column(name = "eliminada", nullable = false)
+    private boolean eliminada;
+    @Column(name = "rutaImagen", length = 100)
     private String rutaImagen;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
-    private Collection<Calificacion> calificacionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
-    private Collection<Comentario> comentarioCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Calificacion> calificacionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Comentario> comentarioList;
 
     public Usuario() {
     }
@@ -77,13 +85,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Long id, String nombre, String correoElectronico, String contrasena, boolean esAdministrador, boolean confirmada) {
+    public Usuario(Long id, String nombre, String correoElectronico, String contrasena, boolean esAdministrador, boolean confirmada, boolean eliminada) {
         this.id = id;
         this.nombre = nombre;
         this.correoElectronico = correoElectronico;
         this.contrasena = contrasena;
         this.esAdministrador = esAdministrador;
         this.confirmada = confirmada;
+        this.eliminada = eliminada;
     }
 
     public Long getId() {
@@ -142,6 +151,14 @@ public class Usuario implements Serializable {
         this.confirmada = confirmada;
     }
 
+    public boolean getEliminada() {
+        return eliminada;
+    }
+
+    public void setEliminada(boolean eliminada) {
+        this.eliminada = eliminada;
+    }
+
     public String getRutaImagen() {
         return rutaImagen;
     }
@@ -151,21 +168,21 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Calificacion> getCalificacionCollection() {
-        return calificacionCollection;
+    public List<Calificacion> getCalificacionList() {
+        return calificacionList;
     }
 
-    public void setCalificacionCollection(Collection<Calificacion> calificacionCollection) {
-        this.calificacionCollection = calificacionCollection;
+    public void setCalificacionList(List<Calificacion> calificacionList) {
+        this.calificacionList = calificacionList;
     }
 
     @XmlTransient
-    public Collection<Comentario> getComentarioCollection() {
-        return comentarioCollection;
+    public List<Comentario> getComentarioList() {
+        return comentarioList;
     }
 
-    public void setComentarioCollection(Collection<Comentario> comentarioCollection) {
-        this.comentarioCollection = comentarioCollection;
+    public void setComentarioList(List<Comentario> comentarioList) {
+        this.comentarioList = comentarioList;
     }
 
     @Override

@@ -121,8 +121,8 @@ public class AgregadorPuesto implements java.io.Serializable {
         // Validar
         try {
             if (validaNombre(this.puesto.getNombre(), this.puesto.getTipoComida())) {
-                if (this.puesto.getReferencias().length() == 0) {
-                    this.puesto.setReferencias("Ninguna Referencia");
+                if (this.puesto.getUbicacion().length() == 0) {
+                    this.puesto.setUbicacion("Ninguna Referencia");
                 }
                 if (this.puesto.getLatitud() == 0 && this.puesto.getLongitud() == 0) {
                     FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecciona la Localizacion", null);
@@ -130,7 +130,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                     return;
                 }
 
-                this.puesto.setFotospuestoList(new LinkedList<FotoPuesto>());
+                this.puesto.setFotoPuestoList(new LinkedList<FotoPuesto>());
                 jpaPuesto.create(this.puesto);
 
                 if (foto1 != null
@@ -239,8 +239,8 @@ public class AgregadorPuesto implements java.io.Serializable {
                 mdi.escribirImagen(up, nombreDeArchivo);
                 FotoPuesto f = new FotoPuesto();
                 f.setUrl(nombreDeArchivo);
-                f.setPuestoId(puesto);
-                puesto.getFotospuestoList().add(f);
+                f.setPuesto(puesto);
+                puesto.getFotoPuestoList().add(f);
                 return true;
             }
         } catch (Exception e) {

@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,27 +25,28 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lchacon
  */
 @Entity
-@Table(name = "fotospuesto")
+@Table(name = "foto_puesto", catalog = "gucumatz", schema = "", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Fotospuesto.findAll", query = "SELECT f FROM Fotospuesto f")
-    , @NamedQuery(name = "Fotospuesto.findById", query = "SELECT f FROM Fotospuesto f WHERE f.id = :id")
-    , @NamedQuery(name = "Fotospuesto.findByPuestoId", query = "SELECT f FROM Fotospuesto f WHERE f.puestoId = :puestoId")
-    , @NamedQuery(name = "Fotospuesto.findByUrl", query = "SELECT f FROM Fotospuesto f WHERE f.url = :url")})
+    @NamedQuery(name = "FotoPuesto.findAll", query = "SELECT f FROM FotoPuesto f")
+    , @NamedQuery(name = "FotoPuesto.findById", query = "SELECT f FROM FotoPuesto f WHERE f.id = :id")
+    , @NamedQuery(name = "FotoPuesto.findByPuestoId", query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puestoId")
+    , @NamedQuery(name = "FotoPuesto.findByUrl", query = "SELECT f FROM FotoPuesto f WHERE f.url = :url")})
 public class FotoPuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "url")
+    @Column(name = "url", nullable = false, length = 100)
     private String url;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id")
+    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Puesto puestoId;
+    private Puesto puesto;
 
     public FotoPuesto() {
     }
@@ -74,12 +76,12 @@ public class FotoPuesto implements Serializable {
         this.url = url;
     }
 
-    public Puesto getPuestoId() {
-        return puestoId;
+    public Puesto getPuesto() {
+        return puesto;
     }
 
-    public void setPuestoId(Puesto puestoId) {
-        this.puestoId = puestoId;
+    public void setPuesto(Puesto puesto) {
+        this.puesto = puesto;
     }
 
     @Override
@@ -104,7 +106,7 @@ public class FotoPuesto implements Serializable {
 
     @Override
     public String toString() {
-        return "gucumatz.scpfc.modelo.Fotospuesto[ id=" + id + " ]";
+        return "gucumatz.scpfc.modelo.FotoPuesto[ id=" + id + " ]";
     }
-    
+
 }

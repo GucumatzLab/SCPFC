@@ -180,8 +180,8 @@ public class CreadorCalificacion {
         // Caso 2: Crear
         } else {
             Calificacion c = new Calificacion();
-            c.setPuestoId(p);
-            c.setUsuarioId(u);
+            c.setPuesto(p);
+            c.setUsuario(u);
             c.setCalificacion(this.calificacion);
             
             jpaCalificacion.create(c);

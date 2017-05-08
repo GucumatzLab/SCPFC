@@ -41,7 +41,7 @@ public class EliminadorPuesto implements Serializable {
         jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
         jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
         jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
-        jpaFoto = new FabricaControladorJpa().obtenerControladorJpaFotospuesto();
+        jpaFoto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
         puestos = new LinkedList<Puesto>(jpaPuesto.findPuestoEntities());
         seleccionado = "";
         puestos2 = new LinkedList<SelectItem>();
@@ -111,23 +111,23 @@ public class EliminadorPuesto implements Serializable {
             }
             LinkedList<Comentario> com = new LinkedList<Comentario>(jpaComentario.findComentarioEntities());
             LinkedList<Calificacion> cal = new LinkedList<Calificacion>(jpaCalificacion.findCalificacionEntities());
-            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(jpaFoto.findFotospuestoEntities());
+            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(jpaFoto.findFotoPuestoEntities());
             //Puesto p = jpaPuesto.findPuesto(Long.parseLong(this.id));
 
             for (Comentario c : com) {
-                if (c.getPuestoId() == p) {
+                if (c.getPuesto() == p) {
                     jpaComentario.destroy(c.getId());
                 }
 
             }
             for (Calificacion c : cal) {
-                if (c.getPuestoId() == p) {
+                if (c.getPuesto() == p) {
                     jpaCalificacion.destroy(c.getId());
                 }
             }
 
             for (FotoPuesto f : ft) {
-                if (f.getPuestoId().equals(p)) {
+                if (f.getPuesto().equals(p)) {
                     jpaFoto.destroy(f.getId());
                 }
             }
