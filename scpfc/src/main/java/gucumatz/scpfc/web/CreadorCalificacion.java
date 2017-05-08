@@ -164,7 +164,7 @@ public class CreadorCalificacion {
                 visorPuesto.getCalificaciones().remove(prev);
                         
                 prev.setCalificacion(this.calificacion);
-                jpaCalificacion.edit(prev);
+                jpaCalificacion.editar(prev);
                 
                 visorPuesto.getCalificaciones().add(prev);
                 
@@ -184,7 +184,7 @@ public class CreadorCalificacion {
             c.setUsuario(u);
             c.setCalificacion(this.calificacion);
             
-            jpaCalificacion.create(c);
+            jpaCalificacion.crear(c);
 
             visorPuesto.getCalificaciones().add(c);
 

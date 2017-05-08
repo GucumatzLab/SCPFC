@@ -36,7 +36,7 @@ public class ControladorJpaUsuario implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Usuario usuario) {
+    public void crear(Usuario usuario) {
         if (usuario.getCalificaciones() == null) {
             usuario.setCalificaciones(new ArrayList<Calificacion>());
         }
@@ -86,7 +86,7 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
-    public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void editar(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -170,7 +170,7 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destruir(Long id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();

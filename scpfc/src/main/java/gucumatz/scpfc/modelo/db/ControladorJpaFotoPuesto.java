@@ -33,7 +33,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(FotoPuesto fotoPuesto) {
+    public void crear(FotoPuesto fotoPuesto) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -56,7 +56,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
-    public void edit(FotoPuesto fotoPuesto) throws NonexistentEntityException, Exception {
+    public void editar(FotoPuesto fotoPuesto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -94,7 +94,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();

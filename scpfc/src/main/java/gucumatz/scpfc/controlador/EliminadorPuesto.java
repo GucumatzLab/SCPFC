@@ -116,22 +116,22 @@ public class EliminadorPuesto implements Serializable {
 
             for (Comentario c : com) {
                 if (c.getPuesto() == p) {
-                    jpaComentario.destroy(c.getId());
+                    jpaComentario.destruir(c.getId());
                 }
 
             }
             for (Calificacion c : cal) {
                 if (c.getPuesto() == p) {
-                    jpaCalificacion.destroy(c.getId());
+                    jpaCalificacion.destruir(c.getId());
                 }
             }
 
             for (FotoPuesto f : ft) {
                 if (f.getPuesto().equals(p)) {
-                    jpaFoto.destroy(f.getId());
+                    jpaFoto.destruir(f.getId());
                 }
             }
-            jpaPuesto.destroy(p.getId());
+            jpaPuesto.destruir(p.getId());
 
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Eliminado con exito", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);

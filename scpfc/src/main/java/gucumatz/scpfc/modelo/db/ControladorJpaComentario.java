@@ -34,7 +34,7 @@ public class ControladorJpaComentario implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Comentario comentario) {
+    public void crear(Comentario comentario) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -66,7 +66,7 @@ public class ControladorJpaComentario implements Serializable {
         }
     }
 
-    public void edit(Comentario comentario) throws NonexistentEntityException, Exception {
+    public void editar(Comentario comentario) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -118,7 +118,7 @@ public class ControladorJpaComentario implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();

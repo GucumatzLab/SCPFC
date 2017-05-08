@@ -131,28 +131,28 @@ public class AgregadorPuesto implements java.io.Serializable {
                 }
 
                 this.puesto.setFotosPuesto(new LinkedList<FotoPuesto>());
-                jpaPuesto.create(this.puesto);
+                jpaPuesto.crear(this.puesto);
 
                 if (foto1 != null
                         && foto1.getSize() > 0
                         && !guardaImagen(this.foto1, 1)) {
-                    jpaPuesto.destroy(this.puesto.getId());
+                    jpaPuesto.destruir(this.puesto.getId());
                     return;
                 }
                 if (foto2 != null
                         && foto2.getSize() > 0
                         && !guardaImagen(this.foto2, 2)) {
-                    jpaPuesto.destroy(this.puesto.getId());
+                    jpaPuesto.destruir(this.puesto.getId());
                     return;
                 }
                 if (foto3 != null
                         && foto3.getSize() > 0
                         && !guardaImagen(this.foto3, 3)) {
-                    jpaPuesto.destroy(this.puesto.getId());
+                    jpaPuesto.destruir(this.puesto.getId());
                     return;
                 }
 
-                jpaPuesto.edit(this.puesto);
+                jpaPuesto.editar(this.puesto);
 
                 FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
                 FacesContext.getCurrentInstance().addMessage(null, facesMessage);

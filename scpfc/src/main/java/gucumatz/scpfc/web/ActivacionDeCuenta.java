@@ -36,7 +36,7 @@ public class ActivacionDeCuenta implements Serializable {
                 usuario.setConfirmada(true);
 
                 try {
-                    jpaUsuario.edit(usuario);
+                    jpaUsuario.editar(usuario);
                     sesionActiva.setUsuario(usuario);
                     FacesMessage mensaje
                             = new FacesMessage("Tu cuenta ha sido confirmada.");

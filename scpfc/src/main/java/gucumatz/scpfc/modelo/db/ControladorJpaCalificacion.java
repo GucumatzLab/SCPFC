@@ -34,7 +34,7 @@ public class ControladorJpaCalificacion implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Calificacion calificacion) {
+    public void crear(Calificacion calificacion) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -66,7 +66,7 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
-    public void edit(Calificacion calificacion) throws NonexistentEntityException, Exception {
+    public void editar(Calificacion calificacion) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -118,7 +118,7 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();

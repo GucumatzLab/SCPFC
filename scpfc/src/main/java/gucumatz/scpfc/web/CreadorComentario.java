@@ -159,7 +159,7 @@ public class CreadorComentario {
         // Finalmente, la fecha
         Date fecha = new Date();
         c.setFecha(fecha);
-        jpaComentario.create(c);
+        jpaComentario.crear(c);
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
         faceContext.addMessage(null, message);

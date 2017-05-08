@@ -127,7 +127,7 @@ public class Registro implements Serializable {
         u.setEsAdministrador(false);
         u.setCodigoDeActivacion(obtenerCadenaAleatoria());
 
-        jpaUsuario.create(u);
+        jpaUsuario.crear(u);
 
         try {
             enviarCorreoDeActivacion(u);
@@ -146,7 +146,7 @@ public class Registro implements Serializable {
             e.printStackTrace();
             /* Si no se pudo enviar el correo, eliminamos al usuario. */
             try {
-                jpaUsuario.destroy(u.getId());
+                jpaUsuario.destruir(u.getId());
             } catch (NonexistentEntityException | IllegalOrphanException nee) {
             }
             return null;
@@ -306,7 +306,7 @@ public class Registro implements Serializable {
         mdi.escribirImagen(foto, nombreDeArchivo);
 
         usuario.setRutaImagen(nombreDeArchivo);
-        jpaUsuario.edit(usuario);
+        jpaUsuario.editar(usuario);
     }
 
     /**
