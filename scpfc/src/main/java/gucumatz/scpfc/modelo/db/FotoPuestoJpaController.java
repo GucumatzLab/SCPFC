@@ -33,20 +33,20 @@ public class FotoPuestoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(FotoPuesto fotospuesto) {
+    public void create(FotoPuesto fotoPuesto) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Puesto puestoId = fotospuesto.getPuesto();
-            if (puestoId != null) {
-                puestoId = em.getReference(puestoId.getClass(), puestoId.getId());
-                fotospuesto.setPuesto(puestoId);
+            Puesto puesto = fotoPuesto.getPuesto();
+            if (puesto != null) {
+                puesto = em.getReference(puesto.getClass(), puesto.getId());
+                fotoPuesto.setPuesto(puesto);
             }
-            em.persist(fotospuesto);
-            if (puestoId != null) {
-                puestoId.getFotosPuesto().add(fotospuesto);
-                puestoId = em.merge(puestoId);
+            em.persist(fotoPuesto);
+            if (puesto != null) {
+                puesto.getFotosPuesto().add(fotoPuesto);
+                puesto = em.merge(puesto);
             }
             em.getTransaction().commit();
         } finally {
@@ -56,34 +56,34 @@ public class FotoPuestoJpaController implements Serializable {
         }
     }
 
-    public void edit(FotoPuesto fotospuesto) throws NonexistentEntityException, Exception {
+    public void edit(FotoPuesto fotoPuesto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            FotoPuesto persistentFotoPuesto = em.find(FotoPuesto.class, fotospuesto.getId());
-            Puesto puestoIdOld = persistentFotoPuesto.getPuesto();
-            Puesto puestoIdNew = fotospuesto.getPuesto();
-            if (puestoIdNew != null) {
-                puestoIdNew = em.getReference(puestoIdNew.getClass(), puestoIdNew.getId());
-                fotospuesto.setPuesto(puestoIdNew);
+            FotoPuesto persistentFotoPuesto = em.find(FotoPuesto.class, fotoPuesto.getId());
+            Puesto puestoOld = persistentFotoPuesto.getPuesto();
+            Puesto puestoNew = fotoPuesto.getPuesto();
+            if (puestoNew != null) {
+                puestoNew = em.getReference(puestoNew.getClass(), puestoNew.getId());
+                fotoPuesto.setPuesto(puestoNew);
             }
-            fotospuesto = em.merge(fotospuesto);
-            if (puestoIdOld != null && !puestoIdOld.equals(puestoIdNew)) {
-                puestoIdOld.getFotosPuesto().remove(fotospuesto);
-                puestoIdOld = em.merge(puestoIdOld);
+            fotoPuesto = em.merge(fotoPuesto);
+            if (puestoOld != null && !puestoOld.equals(puestoNew)) {
+                puestoOld.getFotosPuesto().remove(fotoPuesto);
+                puestoOld = em.merge(puestoOld);
             }
-            if (puestoIdNew != null && !puestoIdNew.equals(puestoIdOld)) {
-                puestoIdNew.getFotosPuesto().add(fotospuesto);
-                puestoIdNew = em.merge(puestoIdNew);
+            if (puestoNew != null && !puestoNew.equals(puestoOld)) {
+                puestoNew.getFotosPuesto().add(fotoPuesto);
+                puestoNew = em.merge(puestoNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = fotospuesto.getId();
+                Long id = fotoPuesto.getId();
                 if (findFotoPuesto(id) == null) {
-                    throw new NonexistentEntityException("The fotospuesto with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The fotoPuesto with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -99,19 +99,19 @@ public class FotoPuestoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            FotoPuesto fotospuesto;
+            FotoPuesto fotoPuesto;
             try {
-                fotospuesto = em.getReference(FotoPuesto.class, id);
-                fotospuesto.getId();
+                fotoPuesto = em.getReference(FotoPuesto.class, id);
+                fotoPuesto.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The fotospuesto with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The fotoPuesto with id " + id + " no longer exists.", enfe);
             }
-            Puesto puestoId = fotospuesto.getPuesto();
-            if (puestoId != null) {
-                puestoId.getFotosPuesto().remove(fotospuesto);
-                puestoId = em.merge(puestoId);
+            Puesto puesto = fotoPuesto.getPuesto();
+            if (puesto != null) {
+                puesto.getFotosPuesto().remove(fotoPuesto);
+                puesto = em.merge(puesto);
             }
-            em.remove(fotospuesto);
+            em.remove(fotoPuesto);
             em.getTransaction().commit();
         } finally {
             if (em != null) {

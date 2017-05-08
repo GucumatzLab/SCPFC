@@ -17,6 +17,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import gucumatz.scpfc.modelo.Usuario;
 
 /**
  *
@@ -38,7 +39,25 @@ public class ComentarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Puesto puesto = comentario.getPuesto();
+            if (puesto != null) {
+                puesto = em.getReference(puesto.getClass(), puesto.getId());
+                comentario.setPuesto(puesto);
+            }
+            Usuario usuario = comentario.getUsuario();
+            if (usuario != null) {
+                usuario = em.getReference(usuario.getClass(), usuario.getId());
+                comentario.setUsuario(usuario);
+            }
             em.persist(comentario);
+            if (puesto != null) {
+                puesto.getComentarios().add(comentario);
+                puesto = em.merge(puesto);
+            }
+            if (usuario != null) {
+                usuario.getComentarios().add(comentario);
+                usuario = em.merge(usuario);
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -52,7 +71,36 @@ public class ComentarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Comentario persistentComentario = em.find(Comentario.class, comentario.getId());
+            Puesto puestoOld = persistentComentario.getPuesto();
+            Puesto puestoNew = comentario.getPuesto();
+            Usuario usuarioOld = persistentComentario.getUsuario();
+            Usuario usuarioNew = comentario.getUsuario();
+            if (puestoNew != null) {
+                puestoNew = em.getReference(puestoNew.getClass(), puestoNew.getId());
+                comentario.setPuesto(puestoNew);
+            }
+            if (usuarioNew != null) {
+                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
+                comentario.setUsuario(usuarioNew);
+            }
             comentario = em.merge(comentario);
+            if (puestoOld != null && !puestoOld.equals(puestoNew)) {
+                puestoOld.getComentarios().remove(comentario);
+                puestoOld = em.merge(puestoOld);
+            }
+            if (puestoNew != null && !puestoNew.equals(puestoOld)) {
+                puestoNew.getComentarios().add(comentario);
+                puestoNew = em.merge(puestoNew);
+            }
+            if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
+                usuarioOld.getComentarios().remove(comentario);
+                usuarioOld = em.merge(usuarioOld);
+            }
+            if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
+                usuarioNew.getComentarios().add(comentario);
+                usuarioNew = em.merge(usuarioNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -81,6 +129,16 @@ public class ComentarioJpaController implements Serializable {
                 comentario.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The comentario with id " + id + " no longer exists.", enfe);
+            }
+            Puesto puesto = comentario.getPuesto();
+            if (puesto != null) {
+                puesto.getComentarios().remove(comentario);
+                puesto = em.merge(puesto);
+            }
+            Usuario usuario = comentario.getUsuario();
+            if (usuario != null) {
+                usuario.getComentarios().remove(comentario);
+                usuario = em.merge(usuario);
             }
             em.remove(comentario);
             em.getTransaction().commit();
@@ -137,38 +195,6 @@ public class ComentarioJpaController implements Serializable {
         }
     }
 
-    public Comentario findByID(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Comentario> query
-                = em.createNamedQuery("Comentario.findById", Comentario.class);
-            query.setParameter("id", id);
-            List<Comentario> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
-            return results.get(0);
-        } finally {
-            em.close();
-        }
-    }
-    
-    public Comentario findByUsuarioID(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Comentario> query
-                = em.createNamedQuery("Comentario.findByUsuarioId", Comentario.class);
-            query.setParameter("usuarioId", id);
-            List<Comentario> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
-            return results.get(0);
-        } finally {
-            em.close();
-        }
-    }
-    
     public Comentario findByPuestoID(Long id) {
         EntityManager em = getEntityManager();
         try {

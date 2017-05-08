@@ -8,6 +8,7 @@ package gucumatz.scpfc.web;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import java.io.Serializable;
@@ -146,7 +147,7 @@ public class Registro implements Serializable {
             /* Si no se pudo enviar el correo, eliminamos al usuario. */
             try {
                 jpaUsuario.destroy(u.getId());
-            } catch (NonexistentEntityException nee) {
+            } catch (NonexistentEntityException | IllegalOrphanException nee) {
             }
             return null;
         }

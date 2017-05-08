@@ -39,7 +39,25 @@ public class CalificacionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Puesto puesto = calificacion.getPuesto();
+            if (puesto != null) {
+                puesto = em.getReference(puesto.getClass(), puesto.getId());
+                calificacion.setPuesto(puesto);
+            }
+            Usuario usuario = calificacion.getUsuario();
+            if (usuario != null) {
+                usuario = em.getReference(usuario.getClass(), usuario.getId());
+                calificacion.setUsuario(usuario);
+            }
             em.persist(calificacion);
+            if (puesto != null) {
+                puesto.getCalificaciones().add(calificacion);
+                puesto = em.merge(puesto);
+            }
+            if (usuario != null) {
+                usuario.getCalificaciones().add(calificacion);
+                usuario = em.merge(usuario);
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -53,7 +71,36 @@ public class CalificacionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Calificacion persistentCalificacion = em.find(Calificacion.class, calificacion.getId());
+            Puesto puestoOld = persistentCalificacion.getPuesto();
+            Puesto puestoNew = calificacion.getPuesto();
+            Usuario usuarioOld = persistentCalificacion.getUsuario();
+            Usuario usuarioNew = calificacion.getUsuario();
+            if (puestoNew != null) {
+                puestoNew = em.getReference(puestoNew.getClass(), puestoNew.getId());
+                calificacion.setPuesto(puestoNew);
+            }
+            if (usuarioNew != null) {
+                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
+                calificacion.setUsuario(usuarioNew);
+            }
             calificacion = em.merge(calificacion);
+            if (puestoOld != null && !puestoOld.equals(puestoNew)) {
+                puestoOld.getCalificaciones().remove(calificacion);
+                puestoOld = em.merge(puestoOld);
+            }
+            if (puestoNew != null && !puestoNew.equals(puestoOld)) {
+                puestoNew.getCalificaciones().add(calificacion);
+                puestoNew = em.merge(puestoNew);
+            }
+            if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
+                usuarioOld.getCalificaciones().remove(calificacion);
+                usuarioOld = em.merge(usuarioOld);
+            }
+            if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
+                usuarioNew.getCalificaciones().add(calificacion);
+                usuarioNew = em.merge(usuarioNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -82,6 +129,16 @@ public class CalificacionJpaController implements Serializable {
                 calificacion.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The calificacion with id " + id + " no longer exists.", enfe);
+            }
+            Puesto puesto = calificacion.getPuesto();
+            if (puesto != null) {
+                puesto.getCalificaciones().remove(calificacion);
+                puesto = em.merge(puesto);
+            }
+            Usuario usuario = calificacion.getUsuario();
+            if (usuario != null) {
+                usuario.getCalificaciones().remove(calificacion);
+                usuario = em.merge(usuario);
             }
             em.remove(calificacion);
             em.getTransaction().commit();
@@ -133,22 +190,6 @@ public class CalificacionJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
-
-    public Calificacion findById(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findById", Calificacion.class);
-            query.setParameter("id", id);
-            List<Calificacion> results = query.getResultList();
-            if (results.isEmpty()) {
-                return null;
-            }
-            return results.get(0);
         } finally {
             em.close();
         }
