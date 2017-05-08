@@ -48,7 +48,7 @@ public class Mapa implements Serializable{
         ControladorJpaPuesto jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
 
         /* Se obtienen todos los puestos y se agregan los respectivos marcadores. */
-        for (Puesto p : jpaPuesto.findPuestoEntities()) {
+        for (Puesto p : jpaPuesto.buscarTodos()) {
             Double latitud = p.getLatitud();
             Double longitud = p.getLongitud();
             String nombre = p.getNombre();

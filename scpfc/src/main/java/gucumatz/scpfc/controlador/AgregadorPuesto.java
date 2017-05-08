@@ -174,7 +174,7 @@ public class AgregadorPuesto implements java.io.Serializable {
      * @return Devuelve true si el nombre esta disponible.
      */
     public boolean validaNombre(String nombrePuesto, String tipoComida) {
-        Puesto p = jpaPuesto.findByNombre(nombrePuesto);
+        Puesto p = jpaPuesto.buscarPorNombre(nombrePuesto);
         if (p != null) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nEl nombre ya existe", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);

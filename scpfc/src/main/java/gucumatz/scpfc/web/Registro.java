@@ -180,7 +180,7 @@ public class Registro implements Serializable {
         }
 
         /* Verifica que el nombre esté disponible. */
-        Usuario usuario = jpaUsuario.findByNombre(nombreDeUsuario);
+        Usuario usuario = jpaUsuario.buscarPorNombre(nombreDeUsuario);
         if (usuario != null) {
             throw new ValidatorException(crearMensajeDeError(MENSAJE_USUARIO_NO_DISPONIBLE));
         }
@@ -210,7 +210,7 @@ public class Registro implements Serializable {
         }
 
         /* Verifica que el correo electrónico no se haya usado. */
-        Usuario usuario = jpaUsuario.findByCorreoElectronico(correoElectronico);
+        Usuario usuario = jpaUsuario.buscarPorCorreoElectronico(correoElectronico);
         if (usuario != null) {
             throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_DISPONIBLE));
         }

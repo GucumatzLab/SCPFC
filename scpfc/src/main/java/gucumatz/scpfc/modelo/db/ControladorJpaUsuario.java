@@ -20,6 +20,7 @@ import gucumatz.scpfc.modelo.Calificacion;
 import java.util.ArrayList;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -158,7 +159,7 @@ public class ControladorJpaUsuario implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = usuario.getId();
-                if (findUsuario(id) == null) {
+                if (buscarPorId(id) == null) {
                     throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.");
                 }
             }
@@ -233,7 +234,7 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
-    public Usuario findUsuario(Long id) {
+    public Usuario buscarPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Usuario.class, id);
@@ -255,33 +256,35 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
-    public Usuario findByNombre(String nombre) {
+    public Usuario buscarPorNombre(String nombre) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.findByNombre", Usuario.class);
+                    = em.createNamedQuery("Usuario.buscarPorNombre", Usuario.class);
             query.setParameter("nombre", nombre);
-            List<Usuario> results = query.getResultList();
-            if (results.isEmpty()) {
+            try {
+                Usuario result = query.getSingleResult();
+                return result;
+            } catch (NoResultException nre) {
                 return null;
             }
-            return results.get(0);
         } finally {
             em.close();
         }
     }
 
-    public Usuario findByCorreoElectronico(String correoElectronico) {
+    public Usuario buscarPorCorreoElectronico(String correoElectronico) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.findByCorreoElectronico", Usuario.class);
+                    = em.createNamedQuery("Usuario.buscarPorCorreoElectronico", Usuario.class);
             query.setParameter("correoElectronico", correoElectronico);
-            List<Usuario> results = query.getResultList();
-            if (results.isEmpty()) {
+            try {
+                Usuario result = query.getSingleResult();
+                return result;
+            } catch (NoResultException nre) {
                 return null;
             }
-            return results.get(0);
         } finally {
             em.close();
         }
@@ -295,12 +298,20 @@ public class ControladorJpaUsuario implements Serializable {
      * si no existe.
      */
     public Usuario buscarUsuario(String cuenta) {
-        Usuario u = findByNombre(cuenta);
-        if (u != null) {
-            return u;
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Usuario> query
+                    = em.createNamedQuery("Usuario.buscarPorCuenta", Usuario.class);
+            query.setParameter("cuenta", cuenta);
+            try {
+                Usuario result = query.getSingleResult();
+                return result;
+            } catch (NoResultException nre) {
+                return null;
+            }
+        } finally {
+            em.close();
         }
-
-        return findByCorreoElectronico(cuenta);
     }
 
 }

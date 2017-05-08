@@ -60,7 +60,7 @@ public class CreadorCalificacion {
         // Obtener puesto, ver si hay calificación previa
         Puesto p = visorPuesto.getPuesto();
         ControladorJpaCalificacion jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
-        Calificacion prev = jpaCalificacion.findByUsuarioPuesto(u, p);
+        Calificacion prev = jpaCalificacion.buscarPorUsuarioYPuesto(u, p);
         
         if (prev != null)
             this.calificacion = prev.getCalificacion();
@@ -157,7 +157,7 @@ public class CreadorCalificacion {
 
         // Revisar si debemos crear o editar
         // Caso 1: Editar
-        Calificacion prev = jpaCalificacion.findByUsuarioPuesto(u, p);
+        Calificacion prev = jpaCalificacion.buscarPorUsuarioYPuesto(u, p);
         
         if (prev != null) {
             try {

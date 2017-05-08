@@ -205,7 +205,7 @@ public class ControladorJpaPuesto implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = puesto.getId();
-                if (findPuesto(id) == null) {
+                if (buscarPorId(id) == null) {
                     throw new NonexistentEntityException("The puesto with id " + id + " no longer exists.");
                 }
             }
@@ -263,7 +263,7 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
-    public List<Puesto> findPuestoEntities() {
+    public List<Puesto> buscarTodos() {
         return findPuestoEntities(true, -1, -1);
     }
 
@@ -287,7 +287,7 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
-    public Puesto findPuesto(Long id) {
+    public Puesto buscarPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Puesto.class, id);
@@ -309,10 +309,10 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
-    public Puesto findByNombre(String nombre) {
+    public Puesto buscarPorNombre(String nombre) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Puesto> query = em.createNamedQuery("Puesto.findByNombre", Puesto.class);
+            TypedQuery<Puesto> query = em.createNamedQuery("Puesto.buscarPorNombre", Puesto.class);
             query.setParameter("nombre", nombre);
             List<Puesto> results = query.getResultList();
             if (results.isEmpty()) {

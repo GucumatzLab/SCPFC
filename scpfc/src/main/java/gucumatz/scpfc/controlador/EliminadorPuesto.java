@@ -42,7 +42,7 @@ public class EliminadorPuesto implements Serializable {
         jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
         jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
         jpaFoto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
-        puestos = new LinkedList<Puesto>(jpaPuesto.findPuestoEntities());
+        puestos = new LinkedList<Puesto>(jpaPuesto.buscarTodos());
         seleccionado = "";
         puestos2 = new LinkedList<SelectItem>();
         SelectItemGroup g = new SelectItemGroup();
@@ -99,20 +99,20 @@ public class EliminadorPuesto implements Serializable {
     public void elimina() {
 
         try {
-            //if (jpaPuesto.findPuesto(Long.parseLong(this.id)) == null) {
+            //if (jpaPuesto.buscarPorId(Long.parseLong(this.id)) == null) {
             if (this.seleccionado.equals("")) {
                 return;
             }
-            Puesto p = jpaPuesto.findByNombre(this.seleccionado);
+            Puesto p = jpaPuesto.buscarPorNombre(this.seleccionado);
             if (p == null) {
                 FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Advertencia:\nEl id no esta en la base de datos", null);
                 FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                 return;
             }
             LinkedList<Comentario> com = new LinkedList<Comentario>(jpaComentario.findComentarioEntities());
-            LinkedList<Calificacion> cal = new LinkedList<Calificacion>(jpaCalificacion.findCalificacionEntities());
+            LinkedList<Calificacion> cal = new LinkedList<Calificacion>(jpaCalificacion.buscarTodos());
             LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(jpaFoto.findFotoPuestoEntities());
-            //Puesto p = jpaPuesto.findPuesto(Long.parseLong(this.id));
+            //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
                 if (c.getPuesto() == p) {

@@ -199,7 +199,7 @@ public class ControladorJpaComentario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                = em.createNamedQuery("Comentario.findByPuesto", Comentario.class);
+                    = em.createNamedQuery("Comentario.findByPuesto", Comentario.class);
             query.setParameter("puestoID", id);
             List<Comentario> results = query.getResultList();
             if (results.isEmpty()) {
@@ -211,12 +211,25 @@ public class ControladorJpaComentario implements Serializable {
         }
     }
 
-    public List<Comentario> findAllByPuestoID(Puesto id) {
+    public List<Comentario> buscarPorPuesto(Puesto puesto) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                = em.createNamedQuery("Comentario.findByPuesto", Comentario.class);
-            query.setParameter("puestoID", id);
+                    = em.createNamedQuery("Comentario.buscarPorPuesto", Comentario.class);
+            query.setParameter("puesto", puesto);
+            List<Comentario> results = query.getResultList();
+            return results;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Comentario> buscarPorUsuario(Usuario usuario) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Comentario> query
+                    = em.createNamedQuery("Comentario.buscarPorUsuario", Comentario.class);
+            query.setParameter("usuario", usuario);
             List<Comentario> results = query.getResultList();
             return results;
         } finally {

@@ -74,13 +74,13 @@ public class VisorPuesto implements Serializable{
             return "index";
         }
 
-        this.puesto = jpaPuesto.findPuesto(this.id);
+        this.puesto = jpaPuesto.buscarPorId(this.id);
         if (this.puesto == null) {
                 return "index";
         }
-        this.fotospuesto = jpaFotoPuesto.findFotoPuestoByPuestoId(puesto);
-        this.calificacion = jpaCalificacion.findAllByPuestoID(this.puesto);
-        this.comentario = jpaComentario.findAllByPuestoID(this.puesto);
+        this.fotospuesto = jpaFotoPuesto.buscarPorPuesto(puesto);
+        this.calificacion = jpaCalificacion.buscarPorPuesto(this.puesto);
+        this.comentario = jpaComentario.buscarPorPuesto(this.puesto);
 
         return null;
     }

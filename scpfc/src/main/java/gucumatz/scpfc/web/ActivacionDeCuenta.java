@@ -29,7 +29,7 @@ public class ActivacionDeCuenta implements Serializable {
             ControladorJpaUsuario jpaUsuario
                     = new FabricaControladorJpa().obtenerControladorJpaUsuario();
 
-            Usuario usuario = jpaUsuario.findUsuario(idUsuario);
+            Usuario usuario = jpaUsuario.buscarPorId(idUsuario);
             if (usuario != null
                     && codigoDeActivacion.equals(usuario.getCodigoDeActivacion())) {
                 usuario.setCodigoDeActivacion(null);

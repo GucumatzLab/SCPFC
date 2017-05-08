@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -106,7 +107,7 @@ public class ControladorJpaCalificacion implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = calificacion.getId();
-                if (findCalificacion(id) == null) {
+                if (buscarPorId(id) == null) {
                     throw new NonexistentEntityException("The calificacion with id " + id + " no longer exists.");
                 }
             }
@@ -149,7 +150,7 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
-    public List<Calificacion> findCalificacionEntities() {
+    public List<Calificacion> buscarTodos() {
         return findCalificacionEntities(true, -1, -1);
     }
 
@@ -173,7 +174,7 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
-    public Calificacion findCalificacion(Long id) {
+    public Calificacion buscarPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Calificacion.class, id);
@@ -194,32 +195,45 @@ public class ControladorJpaCalificacion implements Serializable {
             em.close();
         }
     }
-    
-    public Calificacion findByUsuarioPuesto(Usuario u, Puesto p) {
+
+    public Calificacion buscarPorUsuarioYPuesto(Usuario u, Puesto p) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByUsuarioPuesto", Calificacion.class);
-            query.setParameter("usuarioId", u);
-            query.setParameter("puestoId", p);
-            List<Calificacion> results = query.getResultList();
-            if (results.isEmpty()) {
+                    = em.createNamedQuery("Calificacion.buscarPorUsuarioYPuesto", Calificacion.class);
+            query.setParameter("usuario", u);
+            query.setParameter("puesto", p);
+            try {
+                Calificacion result = query.getSingleResult();
+                return result;
+            } catch (NoResultException nre) {
                 return null;
             }
-            return results.get(0);
         } finally {
             em.close();
         }
     }
-    
-    public List<Calificacion> findAllByPuestoID(Puesto id) {
+
+    public List<Calificacion> buscarPorPuesto(Puesto puesto) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.findByPuestoId", Calificacion.class);
-            query.setParameter("puestoId", id);
+                    = em.createNamedQuery("Calificacion.buscarPorPuesto", Calificacion.class);
+            query.setParameter("puesto", puesto);
             List<Calificacion> results = query.getResultList();
             return results;
+        } finally {
+            em.close();
+        }
+    }
+
+    public double promedioDePuesto(Puesto puesto) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Double> query
+                    = em.createNamedQuery("Calificacion.promedioDePuesto", Double.class);
+            query.setParameter("puesto", puesto);
+            return query.getSingleResult();
         } finally {
             em.close();
         }
