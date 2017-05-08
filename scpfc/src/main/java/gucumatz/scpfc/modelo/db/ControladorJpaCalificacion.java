@@ -23,9 +23,9 @@ import javax.persistence.criteria.Root;
  *
  * @author lchacon
  */
-public class CalificacionJpaController implements Serializable {
+public class ControladorJpaCalificacion implements Serializable {
 
-    public CalificacionJpaController(EntityManagerFactory emf) {
+    public ControladorJpaCalificacion(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

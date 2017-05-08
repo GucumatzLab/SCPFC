@@ -22,22 +22,22 @@ public class FabricaControladorJpa implements Serializable {
         this.emf = Persistence.createEntityManagerFactory("SCPFC-PU");
     }
 
-    public ComentarioJpaController obtenerControladorJpaComentario() {
-        return new ComentarioJpaController(emf);
+    public ControladorJpaComentario obtenerControladorJpaComentario() {
+        return new ControladorJpaComentario(emf);
     }
     
-    public CalificacionJpaController obtenerControladorJpaCalificacion() {
-        return new CalificacionJpaController(emf);
+    public ControladorJpaCalificacion obtenerControladorJpaCalificacion() {
+        return new ControladorJpaCalificacion(emf);
     }
     
-    public UsuarioJpaController obtenerControladorJpaUsuario() {
-        return new UsuarioJpaController(emf);
+    public ControladorJpaUsuario obtenerControladorJpaUsuario() {
+        return new ControladorJpaUsuario(emf);
     }
     
-    public PuestoJpaController obtenerControladorJpaPuesto() {
-        return new PuestoJpaController(emf);
+    public ControladorJpaPuesto obtenerControladorJpaPuesto() {
+        return new ControladorJpaPuesto(emf);
     }
-    public FotoPuestoJpaController obtenerControladorJpaFotoPuesto(){
-        return new FotoPuestoJpaController(emf);
+    public ControladorJpaFotoPuesto obtenerControladorJpaFotoPuesto(){
+        return new ControladorJpaFotoPuesto(emf);
     }
 }

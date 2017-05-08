@@ -22,9 +22,9 @@ import javax.persistence.TypedQuery;
  *
  * @author lchacon
  */
-public class FotoPuestoJpaController implements Serializable {
+public class ControladorJpaFotoPuesto implements Serializable {
 
-    public FotoPuestoJpaController(EntityManagerFactory emf) {
+    public ControladorJpaFotoPuesto(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

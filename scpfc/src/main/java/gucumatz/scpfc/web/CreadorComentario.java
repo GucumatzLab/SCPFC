@@ -9,9 +9,9 @@ import gucumatz.scpfc.controlador.VisorPuesto;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
-import gucumatz.scpfc.modelo.db.ComentarioJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
-import gucumatz.scpfc.modelo.db.PuestoJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -106,7 +106,7 @@ public class CreadorComentario {
         FabricaControladorJpa fab = new FabricaControladorJpa();
 
         // Obtener el puesto relacionado al ID
-        PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
 
         // Validar puesto
@@ -140,14 +140,14 @@ public class CreadorComentario {
             return;
 
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        ComentarioJpaController jpaComentario = fab.obtenerControladorJpaComentario();
+        ControladorJpaComentario jpaComentario = fab.obtenerControladorJpaComentario();
 
         // Crear el comentario
         Comentario c = new Comentario();
         c.setComentario(this.comentario);
 
         // Obtener el puesto relacionado al ID
-        PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
         c.setPuesto(p);
         visorPuesto.getComentario().add(c);

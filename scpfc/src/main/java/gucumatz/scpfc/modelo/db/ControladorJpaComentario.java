@@ -23,9 +23,9 @@ import gucumatz.scpfc.modelo.Usuario;
  *
  * @author lchacon
  */
-public class ComentarioJpaController implements Serializable {
+public class ControladorJpaComentario implements Serializable {
 
-    public ComentarioJpaController(EntityManagerFactory emf) {
+    public ControladorJpaComentario(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

@@ -7,7 +7,7 @@ package gucumatz.scpfc.web;
 
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
-import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
 import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class Registro implements Serializable {
     /**
      * Controlador JPA para acceder a la BD.
      */
-    private final UsuarioJpaController jpaUsuario;
+    private final ControladorJpaUsuario jpaUsuario;
 
     /**
      * Nombre del nuevo usuario.

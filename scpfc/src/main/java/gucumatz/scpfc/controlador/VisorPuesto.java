@@ -23,10 +23,10 @@ import java.util.List;
 @ViewScoped
 public class VisorPuesto implements Serializable{
 
-    private final PuestoJpaController jpaPuesto;
-    private final FotoPuestoJpaController jpaFotoPuesto;
-    private final CalificacionJpaController jpaCalificacion;
-    private final ComentarioJpaController jpaComentario;
+    private final ControladorJpaPuesto jpaPuesto;
+    private final ControladorJpaFotoPuesto jpaFotoPuesto;
+    private final ControladorJpaCalificacion jpaCalificacion;
+    private final ControladorJpaComentario jpaComentario;
     /* ID del puesto actual. */
     private Long id;
     /* Objeto del puesto actual. */

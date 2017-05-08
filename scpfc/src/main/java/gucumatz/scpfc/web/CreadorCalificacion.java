@@ -9,9 +9,9 @@ import gucumatz.scpfc.controlador.VisorPuesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
-import gucumatz.scpfc.modelo.db.CalificacionJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaCalificacion;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
-import gucumatz.scpfc.modelo.db.PuestoJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -59,7 +59,7 @@ public class CreadorCalificacion {
         
         // Obtener puesto, ver si hay calificación previa
         Puesto p = visorPuesto.getPuesto();
-        CalificacionJpaController jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
+        ControladorJpaCalificacion jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
         Calificacion prev = jpaCalificacion.findByUsuarioPuesto(u, p);
         
         if (prev != null)
@@ -108,10 +108,10 @@ public class CreadorCalificacion {
      */
     private boolean esValida() {
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        CalificacionJpaController jpaCalificacion = fab.obtenerControladorJpaCalificacion();
+        ControladorJpaCalificacion jpaCalificacion = fab.obtenerControladorJpaCalificacion();
 
         // Obtener el puesto relacionado al ID
-        PuestoJpaController jpaPuesto = fab.obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
 
         // Validar puesto
@@ -147,7 +147,7 @@ public class CreadorCalificacion {
 
         // Crear la calificación
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        CalificacionJpaController jpaCalificacion = fab.obtenerControladorJpaCalificacion();
+        ControladorJpaCalificacion jpaCalificacion = fab.obtenerControladorJpaCalificacion();
 
         // Obtener el puesto relacionado al ID
         Puesto p = visorPuesto.getPuesto();

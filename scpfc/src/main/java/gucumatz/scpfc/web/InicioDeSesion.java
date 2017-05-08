@@ -7,7 +7,7 @@ package gucumatz.scpfc.web;
 
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
-import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -39,7 +39,7 @@ public class InicioDeSesion implements Serializable {
     /**
      * Controlador de JPA para buscar al usuario en la BD.
      */
-    private final UsuarioJpaController jpaUsuario;
+    private final ControladorJpaUsuario jpaUsuario;
 
     /**
      * La cuenta con la que se quiere iniciar sesión. Puede ser un nombre de

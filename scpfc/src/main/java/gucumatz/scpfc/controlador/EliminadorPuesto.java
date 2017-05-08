@@ -24,10 +24,10 @@ import javax.annotation.PostConstruct;
 @ViewScoped
 public class EliminadorPuesto implements Serializable {
 
-    private PuestoJpaController jpaPuesto;
-    private ComentarioJpaController jpaComentario;
-    private CalificacionJpaController jpaCalificacion;
-    private FotoPuestoJpaController jpaFoto;
+    private ControladorJpaPuesto jpaPuesto;
+    private ControladorJpaComentario jpaComentario;
+    private ControladorJpaCalificacion jpaCalificacion;
+    private ControladorJpaFotoPuesto jpaFoto;
     private List<Puesto> puestos;
     private List<SelectItem> puestos2;
     private String seleccionado;

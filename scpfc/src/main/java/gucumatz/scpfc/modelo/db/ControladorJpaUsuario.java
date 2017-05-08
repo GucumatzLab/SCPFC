@@ -25,9 +25,9 @@ import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
  *
  * @author lchacon
  */
-public class UsuarioJpaController implements Serializable {
+public class ControladorJpaUsuario implements Serializable {
 
-    public UsuarioJpaController(EntityManagerFactory emf) {
+    public ControladorJpaUsuario(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

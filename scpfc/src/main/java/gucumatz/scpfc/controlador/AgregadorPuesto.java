@@ -23,7 +23,7 @@ import gucumatz.scpfc.web.ManejadorDeImagenes;
 
 public class AgregadorPuesto implements java.io.Serializable {
 
-    private final PuestoJpaController jpaPuesto;
+    private final ControladorJpaPuesto jpaPuesto;
     private UploadedFile foto1;
     private UploadedFile foto2;
     private UploadedFile foto3;

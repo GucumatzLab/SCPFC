@@ -45,7 +45,7 @@ public class Mapa implements Serializable{
         
         advancedModel = new DefaultMapModel();
         
-        PuestoJpaController jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
 
         /* Se obtienen todos los puestos y se agregan los respectivos marcadores. */
         for (Puesto p : jpaPuesto.findPuestoEntities()) {

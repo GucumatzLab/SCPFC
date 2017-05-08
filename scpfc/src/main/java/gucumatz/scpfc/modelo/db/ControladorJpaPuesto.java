@@ -26,9 +26,9 @@ import javax.persistence.TypedQuery;
  *
  * @author lchacon
  */
-public class PuestoJpaController implements Serializable {
+public class ControladorJpaPuesto implements Serializable {
 
-    public PuestoJpaController(EntityManagerFactory emf) {
+    public ControladorJpaPuesto(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

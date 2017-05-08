@@ -2,7 +2,7 @@ package gucumatz.scpfc.web;
 
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
-import gucumatz.scpfc.modelo.db.UsuarioJpaController;
+import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -26,7 +26,7 @@ public class ActivacionDeCuenta implements Serializable {
 
     public String activarCuenta() {
         if (idUsuario != null && codigoDeActivacion != null) {
-            UsuarioJpaController jpaUsuario
+            ControladorJpaUsuario jpaUsuario
                     = new FabricaControladorJpa().obtenerControladorJpaUsuario();
 
             Usuario usuario = jpaUsuario.findUsuario(idUsuario);
