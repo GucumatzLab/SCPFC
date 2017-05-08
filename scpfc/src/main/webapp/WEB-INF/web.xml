@@ -19,7 +19,7 @@
     </servlet>
     <servlet>
         <servlet-name>CreadorCalificacionIH</servlet-name>
-        <servlet-class>gucumatz.scpfc.web.CreadorCalificacion</servlet-class>
+        <servlet-class>gucumatz.scpfc.controlador.CreadorCalificacion</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>FacesServlet</servlet-name>

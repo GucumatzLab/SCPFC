@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gucumatz.scpfc.web;
+package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.controlador.VisorPuesto;
 import gucumatz.scpfc.modelo.Comentario;

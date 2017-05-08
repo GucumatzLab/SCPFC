@@ -1,4 +1,4 @@
-package gucumatz.scpfc.web;
+package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
 import java.io.InputStream;

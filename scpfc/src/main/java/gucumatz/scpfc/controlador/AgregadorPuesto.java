@@ -10,7 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.model.UploadedFile;
-import gucumatz.scpfc.web.ManejadorDeImagenes;
 
 /**
  * Clase para controlar un objeto de la Clase Puesto
