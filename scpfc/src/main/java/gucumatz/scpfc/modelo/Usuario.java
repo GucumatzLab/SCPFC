@@ -63,11 +63,11 @@ public class Usuario implements Serializable {
     @Column(name = "esAdministrador", nullable = false)
     private boolean esAdministrador;
     @Basic(optional = false)
-    @Column(name = "confirmada", nullable = false)
-    private boolean confirmada;
+    @Column(name = "confirmado", nullable = false)
+    private boolean confirmado;
     @Basic(optional = false)
-    @Column(name = "eliminada", nullable = false)
-    private boolean eliminada;
+    @Column(name = "eliminado", nullable = false)
+    private boolean eliminado;
     @Column(name = "rutaImagen", length = 100)
     private String rutaImagen;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
@@ -82,14 +82,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Long id, String nombre, String correoElectronico, String contrasena, boolean esAdministrador, boolean confirmada, boolean eliminada) {
+    public Usuario(Long id, String nombre, String correoElectronico, String contrasena, boolean esAdministrador, boolean confirmado, boolean eliminado) {
         this.id = id;
         this.nombre = nombre;
         this.correoElectronico = correoElectronico;
         this.contrasena = contrasena;
         this.esAdministrador = esAdministrador;
-        this.confirmada = confirmada;
-        this.eliminada = eliminada;
+        this.confirmado = confirmado;
+        this.eliminado = eliminado;
     }
 
     public Long getId() {
@@ -140,20 +140,20 @@ public class Usuario implements Serializable {
         this.esAdministrador = esAdministrador;
     }
 
-    public boolean getConfirmada() {
-        return confirmada;
+    public boolean getConfirmado() {
+        return confirmado;
     }
 
-    public void setConfirmada(boolean confirmada) {
-        this.confirmada = confirmada;
+    public void setConfirmado(boolean confirmado) {
+        this.confirmado = confirmado;
     }
 
-    public boolean getEliminada() {
-        return eliminada;
+    public boolean getEliminado() {
+        return eliminado;
     }
 
-    public void setEliminada(boolean eliminada) {
-        this.eliminada = eliminada;
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     public String getRutaImagen() {

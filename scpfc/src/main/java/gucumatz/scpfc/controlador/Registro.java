@@ -123,7 +123,7 @@ public class Registro implements Serializable {
         u.setNombre(nombreDeUsuario);
         u.setCorreoElectronico(correoElectronico);
         u.setContrasena(contrasena);
-        u.setConfirmada(false);
+        u.setConfirmado(false);
         u.setEsAdministrador(false);
         u.setCodigoDeActivacion(obtenerCadenaAleatoria());
 

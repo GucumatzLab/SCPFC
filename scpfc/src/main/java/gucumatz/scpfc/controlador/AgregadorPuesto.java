@@ -23,6 +23,7 @@ import org.primefaces.model.UploadedFile;
 public class AgregadorPuesto implements java.io.Serializable {
 
     private final ControladorJpaPuesto jpaPuesto;
+    private final ControladorJpaFotoPuesto jpaFotoPuesto;
     private UploadedFile foto1;
     private UploadedFile foto2;
     private UploadedFile foto3;
@@ -34,6 +35,7 @@ public class AgregadorPuesto implements java.io.Serializable {
     public AgregadorPuesto() {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
         jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
+        jpaFotoPuesto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
     }
 
     /**
@@ -135,23 +137,30 @@ public class AgregadorPuesto implements java.io.Serializable {
                 if (foto1 != null
                         && foto1.getSize() > 0
                         && !guardaImagen(this.foto1, 1)) {
+                    for (FotoPuesto foto : this.puesto.getFotosPuesto()) {
+                        jpaFotoPuesto.destruir(foto.getId());
+                    }
                     jpaPuesto.destruir(this.puesto.getId());
                     return;
                 }
                 if (foto2 != null
                         && foto2.getSize() > 0
                         && !guardaImagen(this.foto2, 2)) {
+                    for (FotoPuesto foto : this.puesto.getFotosPuesto()) {
+                        jpaFotoPuesto.destruir(foto.getId());
+                    }
                     jpaPuesto.destruir(this.puesto.getId());
                     return;
                 }
                 if (foto3 != null
                         && foto3.getSize() > 0
                         && !guardaImagen(this.foto3, 3)) {
+                    for (FotoPuesto foto : this.puesto.getFotosPuesto()) {
+                        jpaFotoPuesto.destruir(foto.getId());
+                    }
                     jpaPuesto.destruir(this.puesto.getId());
                     return;
                 }
-
-                jpaPuesto.editar(this.puesto);
 
                 FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
                 FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -240,6 +249,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                 f.setUrl(nombreDeArchivo);
                 f.setPuesto(puesto);
                 puesto.getFotosPuesto().add(f);
+                jpaFotoPuesto.crear(f);
                 return true;
             }
         } catch (Exception e) {

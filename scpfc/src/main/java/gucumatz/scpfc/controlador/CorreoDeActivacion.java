@@ -40,7 +40,7 @@ public class CorreoDeActivacion {
 
     public CorreoDeActivacion(Usuario usuario) throws IOException {
         if (usuario == null
-                || usuario.getConfirmada()
+                || usuario.getConfirmado()
                 || usuario.getCodigoDeActivacion() == null) {
             throw new IllegalArgumentException();
         }

@@ -32,7 +32,7 @@ public class VisorPuesto implements Serializable{
     /* Objeto del puesto actual. */
     private Puesto puesto;
     /* Lista de fotos del puesto actual. */
-    private List<FotoPuesto> fotospuesto;
+    private List<FotoPuesto> fotosPuesto;
     /* Lista de calificaciones del puesto actual. */
     private List<Calificacion> calificacion;
     /* Lista de comentarios del puesto actual. */
@@ -78,7 +78,7 @@ public class VisorPuesto implements Serializable{
         if (this.puesto == null) {
                 return "index";
         }
-        this.fotospuesto = jpaFotoPuesto.buscarPorPuesto(puesto);
+        this.fotosPuesto = jpaFotoPuesto.buscarPorPuesto(puesto);
         this.calificacion = jpaCalificacion.buscarPorPuesto(this.puesto);
         this.comentario = jpaComentario.buscarPorPuesto(this.puesto);
 
@@ -97,8 +97,8 @@ public class VisorPuesto implements Serializable{
      *<code>getFotosPuesto</code> Método que regresa la lista de fotos del puesto actual.
      *@return tipo <code>List<FotoPuesto></code>: Lista de fotos del puesto actual.
      */
-    public List<FotoPuesto> getFotoPuesto(){
-        return this.fotospuesto;
+    public List<FotoPuesto> getFotosPuesto(){
+        return this.fotosPuesto;
     }
 
     /**

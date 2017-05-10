@@ -33,7 +33,7 @@ public class ActivacionDeCuenta implements Serializable {
             if (usuario != null
                     && codigoDeActivacion.equals(usuario.getCodigoDeActivacion())) {
                 usuario.setCodigoDeActivacion(null);
-                usuario.setConfirmada(true);
+                usuario.setConfirmado(true);
 
                 try {
                     jpaUsuario.editar(usuario);

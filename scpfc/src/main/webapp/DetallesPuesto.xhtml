@@ -44,10 +44,10 @@
         <h:inputHidden id="pNom" value="#{visorPuesto.puesto.nombre}" />
 
         <b:column span="6">
-          <b:row rendered="#{not empty visorPuesto.fotospuesto}">
+          <b:row rendered="#{not empty visorPuesto.fotosPuesto}">
             <center>
               <b:carousel id="cfotos">
-                <c:forEach items="#{visorPuesto.fotospuesto}" var="fppk">
+                <c:forEach items="#{visorPuesto.fotosPuesto}" var="fppk">
                   <b:carouselItem>
                     <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 300px">
                       <f:param name="ruta" value="#{fppk.url}"/>
@@ -61,7 +61,7 @@
             <center>
               <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
             </center>
-            <p><b>Ubicación: </b> <h:outputText value="#{visorPuesto.puesto.referencias}"/></p>
+            <p><b>Ubicación: </b> <h:outputText value="#{visorPuesto.puesto.ubicacion}"/></p>
             <p><b>Tipo de comida: </b> <h:outputText value="#{visorPuesto.puesto.tipoComida}"/></p>
           </b:row>
 

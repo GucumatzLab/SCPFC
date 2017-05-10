@@ -91,7 +91,7 @@ public class InicioDeSesion implements Serializable {
     public String iniciarSesion() {
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
         /* No hace nada si no está confirmada. */
-        if (!usuario.getConfirmada()) {
+        if (!usuario.getConfirmado()) {
             return null;
         }
 
@@ -147,7 +147,7 @@ public class InicioDeSesion implements Serializable {
         }
 
         /* Verifica que la cuenta esté confirmada. */
-        if (!usuario.getConfirmada()) {
+        if (!usuario.getConfirmado()) {
             /* No arrojamos una excepción para que este valor sea
              * marcado como válido y podamos usarlo al reenviar el
              * correo de confirmación. */
@@ -200,7 +200,7 @@ public class InicioDeSesion implements Serializable {
     public void reenviarCorreoDeConfirmacion() {
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
 
-        if (usuario == null || usuario.getConfirmada()) {
+        if (usuario == null || usuario.getConfirmado()) {
             return;
         }
 
