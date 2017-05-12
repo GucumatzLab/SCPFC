@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Información del proyecto -->
@@ -11,14 +11,14 @@
   <url>http://github.com/Pablo-G/SCPFC</url>
 
   <properties>
-	<!-- Usa JDK 1.7 -->
-	<jdk-version>1.7</jdk-version>
-	<maven.compiler.source>${jdk-version}</maven.compiler.source>
-	<maven.compiler.target>${jdk-version}</maven.compiler.target>
+    <!-- Usa JDK 1.7 -->
+    <jdk-version>1.7</jdk-version>
+    <maven.compiler.source>${jdk-version}</maven.compiler.source>
+    <maven.compiler.target>${jdk-version}</maven.compiler.target>
 
-	<!-- Evita una advertencia por depender de la plataforma para
-	     determinar el encoding. -->
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Evita una advertencia por depender de la plataforma para
+         determinar el encoding. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -29,12 +29,12 @@
       <scope>test</scope>
     </dependency>
 
-	<dependency>
-	  <groupId>javax.servlet</groupId>
-	  <artifactId>javax.servlet-api</artifactId>
-	  <version>3.1.0</version>
-	  <scope>provided</scope>
-	</dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- Soporte para JavaServer Faces -->
     <dependency>
@@ -61,9 +61,9 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-        <groupId>org.primefaces.extensions</groupId>
-        <artifactId>primefaces-extensions</artifactId>
-        <version>6.0.0</version>
+      <groupId>org.primefaces.extensions</groupId>
+      <artifactId>primefaces-extensions</artifactId>
+      <version>6.0.0</version>
     </dependency>
     <!-- Soporte para JPA -->
     <dependency>
@@ -101,25 +101,25 @@
   <build>
     <finalName>scpfc</finalName>
 
-	<plugins>
-	  <!-- Tomcat -->
-	  <plugin>
-		<groupId>org.apache.tomcat.maven</groupId>
-		<artifactId>tomcat7-maven-plugin</artifactId>
-		<version>2.2</version>
-		<configuration>
-		  <path>/scpfc</path>
-		</configuration>
-	  </plugin>
-	</plugins>
+    <plugins>
+      <!-- Tomcat -->
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <path>/scpfc</path>
+        </configuration>
+      </plugin>
+    </plugins>
 
   </build>
-    <repositories>
-        <repository>
-            <url>http://repository.primefaces.org/</url>
-            <id>PrimeFaces-maven-lib</id>
-            <layout>default</layout>
-            <name>Repository for library PrimeFaces-maven-lib</name>
-        </repository>
-    </repositories>
+  <repositories>
+    <repository>
+      <url>http://repository.primefaces.org/</url>
+      <id>PrimeFaces-maven-lib</id>
+      <layout>default</layout>
+      <name>Repository for library PrimeFaces-maven-lib</name>
+    </repository>
+  </repositories>
 </project>
