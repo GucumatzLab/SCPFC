@@ -29,6 +29,11 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class Registro implements Serializable {
 
+    /* Las contraseñase deben tener al menos 4 caracteres. */
+    private static final int CONTRASENA_TAM_MIN = 4;
+    /* Las imágenes deben tener tamaño máximo de 4MB. */
+    private static final int FOTO_TAM_MAX = 4 * 1024 * 1024;
+
     /* Mensajes de error. */
     private static final String MENSAJE_USUARIO_NO_DISPONIBLE
             = "Ya existe una cuenta con este nombre de usuario";
@@ -256,7 +261,7 @@ public class Registro implements Serializable {
         }
 
         /* Verifica el tamaño de la contraseña. */
-        if (contrasena.length() < 4) {
+        if (contrasena.length() < CONTRASENA_TAM_MIN) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CONTRASENA_CORTA);
             throw new ValidatorException(mensajeDeError);
@@ -288,7 +293,7 @@ public class Registro implements Serializable {
 
         /* Verificamos que el tamaño sea adecuado. */
         long tamanoFoto = foto.getSize();
-        if (tamanoFoto > 4 * 1024 * 1024) {
+        if (tamanoFoto > FOTO_TAM_MAX) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_FOTO_GRANDE);
             throw new ValidatorException(mensajeDeError);
@@ -346,8 +351,16 @@ public class Registro implements Serializable {
      * Genera una cadena aleatoria para usarse como código de activación.
      */
     private String obtenerCadenaAleatoria() {
+        /* La base que se usa para convertir un número a cadena. */
+        final int base = 32;
+        /*
+         * Tamaño de la cadena aleatoria. Usa 30 caracteres, y cada carácter
+         * corresponde a 5 bits.
+         */
+        final int tam = 30 * 5;
+
         Random rnd = new Random();
-        return new BigInteger(150, rnd).toString(32);
+        return new BigInteger(tam, rnd).toString(base);
     }
 
 }

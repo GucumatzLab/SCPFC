@@ -29,6 +29,11 @@ import javax.faces.context.FacesContext;
 @RequestScoped
 public class CreadorComentario {
 
+    /**
+     * Longitud máxima de un comenario.
+     */
+    private static final int COMENTARIO_TAM_MAX = 1024;
+
     private String comentario;
     // Obtiene información de la aplicación
     private final FacesContext faceContext;
@@ -97,7 +102,7 @@ public class CreadorComentario {
             faceContext.addMessage(null, message);
 
             return false;
-        } else if(this.comentario.length() > 1024) {
+        } else if(this.comentario.length() > COMENTARIO_TAM_MAX) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Error: Comentario demasiado largo.", null);
             faceContext.addMessage(null, message);

@@ -22,6 +22,11 @@ import org.primefaces.model.UploadedFile;
 
 public class AgregadorPuesto implements java.io.Serializable {
 
+    /**
+     * Tamaño máximo para cada foto. El máximo es 4MB.
+     */
+    private static final int FOTO_TAM_MAX = 4 * 1024 * 1024;
+
     private final ControladorJpaPuesto jpaPuesto;
     private final ControladorJpaFotoPuesto jpaFotoPuesto;
     private UploadedFile foto1;
@@ -250,7 +255,7 @@ public class AgregadorPuesto implements java.io.Serializable {
             if (up != null) {
                 String extensionFoto = null;
                 String nombreDeArchivo2 = up.getFileName();
-                if (up.getSize() > (4 * 1024 * 1024)) {
+                if (up.getSize() > FOTO_TAM_MAX) {
                     FacesMessage facesMessage
                         = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Tamaño invalido : Foto " + id

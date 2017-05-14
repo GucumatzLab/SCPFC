@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
             query = "SELECT u FROM Usuario u"
                 + " WHERE u.nombre = :cuenta OR u.correoElectronico = :cuenta")
 })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;

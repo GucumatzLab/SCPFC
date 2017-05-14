@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Puesto.buscarPorNombre",
             query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre")
 })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Puesto implements Serializable {
 
     private static final long serialVersionUID = 1L;

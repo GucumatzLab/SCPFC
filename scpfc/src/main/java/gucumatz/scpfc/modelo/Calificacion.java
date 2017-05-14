@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             query = "SELECT AVG(c.calificacion) FROM Calificacion c"
                 + " WHERE c.puesto = :puesto")
 })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Calificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;

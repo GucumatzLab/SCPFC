@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FotoPuesto.buscarPorPuesto",
             query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puesto")
 })
+@SuppressWarnings("checkstyle:magicnumber")
 public class FotoPuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;

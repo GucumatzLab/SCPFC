@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Comentario.buscarPorUsuario",
             query = "SELECT c FROM Comentario c WHERE c.usuario = :usuario")
 })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Comentario implements Serializable {
 
     private static final long serialVersionUID = 1L;
