@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+"-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+"http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+
+  <property name="charset" value="UTF-8"/>
+  <property name="fileExtensions" value="java"/>
+
+  <property name="localeLanguage" value="es"/>
+  <property name="localeCountry" value="MX"/>
+
+  <module name="TreeWalker">
+    <property name="tabWidth" value="4"/>
+
+    <!-- Evita sentencias import redundantes. -->
+    <module name="RedundantImport"/>
+
+    <!-- Requiere que las clases estén documentadas. -->
+    <module name="JavadocType"/>
+
+    <!-- Requiere que los métodos estén documentados. -->
+    <module name="JavadocMethod">
+      <!-- Verifica que las anotaciones @throw sean correctas. -->
+      <property name="validateThrows" value="true"/>
+      <!-- Permite que getters y setters no tengan comentarios. -->
+      <property name="allowMissingPropertyJavadoc" value="true"/>
+    </module>
+
+    <!-- Verifica el orden de declaración de los miembros de una
+         clase. -->
+    <module name="DeclarationOrder"/>
+
+    <!-- Verifica la indentación del código. -->
+    <module name="Indentation"/>
+
+    <!-- Evita líneas de más de 80 caracteres. -->
+    <module name="LineLength">
+      <property name="max" value="80"/>
+    </module>
+
+    <!-- Verifica las políticas para líneas envolventes. -->
+    <!-- Parte después de coma. -->
+    <module name="SeparatorWrap">
+      <property name="tokens" value="COMMA"/>
+    </module>
+    <!-- Parte antes de operador. -->
+    <module name="OperatorWrap"/>
+
+    <!-- Verifica la indentación de los comentarios. -->
+    <module name="CommentsIndentation"/>
+
+    <!-- Verifica que cada variable esté declarada en su propia
+         línea. -->
+    <module name="MultipleVariableDeclarations"/>
+
+    <!-- Evita que las declaraciones locales oculten atributos. -->
+    <module name="HiddenField">
+      <property name="ignoreConstructorParameter" value="true"/>
+      <property name="ignoreSetter" value="true"/>
+    </module>
+
+    <!-- Evita espacios entre los nombres de métodos y el paréntesis
+         izquierdo. -->
+    <module name="MethodParamPad"/>
+
+    <!-- Verifica la posición de las llaves {}. -->
+    <module name="LeftCurly"/>
+    <module name="RightCurly"/>
+
+    <!-- Evita múltiples sentencias en una línea. -->
+    <module name="OneStatementPerLine"/>
+
+    <!-- Requiere llaves en todos los bloques. -->
+    <module name="NeedBraces"/>
+
+    <!-- Requiere separar ciertos elementos con líneas en blanco. -->
+    <module name="EmptyLineSeparator">
+      <property name="allowNoEmptyLineBetweenFields" value="true"/>
+    </module>
+
+    <!-- Requiere espacio después de ciertas palabras, como if, while
+         o for. -->
+    <module name="WhitespaceAfter"/>
+
+    <!-- Requiere espacio alrededor de operadores binarios. -->
+    <module name="WhitespaceAround"/>
+
+    <!-- Requiere espacio después de un typecast. -->
+    <module name="TypecastParenPad">
+      <property name="option" value="space"/>
+    </module>
+
+    <!-- Usa sólo letras minúsculas para nombres de paquete. -->
+    <module name="PackageName">
+      <property name="format" value="^[a-z]+(\.[a-z]+)*$"/>
+    </module>
+
+    <!-- Verifica los nombres de clases, interfaces, métodos,
+         variables y constantes. -->
+    <module name="TypeName"/>
+    <module name="MethodName"/>
+    <module name="LocalVariableName">
+      <property name="allowOneCharVarInForLoop" value="true"/>
+    </module>
+    <module name="ConstantName"/>
+
+    <!-- Evita uso de constantes en el código. -->
+    <module name="MagicNumber"/>
+
+    <!-- Evita asignaciones en subexpresiones. -->
+    <module name="InnerAssignment"/>
+
+    <!-- Evita espacios al final de una línea. -->
+    <module name="Regexp">
+      <property name="format" value="[ \t]+$"/>
+      <property name="illegalPattern" value="true"/>
+      <property name="message" value="Espacio en blanco al final de la línea."/>
+    </module>
+  </module>
+
+  <!-- Limita la longitud de los archivos a 2000 líneas. -->
+  <module name="FileLength">
+    <property name="max" value="2000"/>
+  </module>
+
+  <!-- Evita que se usen tabs. -->
+  <module name="FileTabCharacter"/>
+
+</module>
