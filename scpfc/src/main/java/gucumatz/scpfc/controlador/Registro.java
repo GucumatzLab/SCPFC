@@ -181,15 +181,16 @@ public class Registro implements Serializable {
                                        UIComponent component,
                                        Object value)
             throws ValidatorException {
-        String nombreDeUsuario = (String) value;
+        String nombreDeUsuarioPorValidar = (String) value;
 
         /* Si es vacío, el atributo required lo rechazará. */
-        if (nombreDeUsuario == null || nombreDeUsuario.isEmpty()) {
+        if (nombreDeUsuarioPorValidar == null
+                || nombreDeUsuarioPorValidar.isEmpty()) {
             return;
         }
 
         /* Verifica que el nombre esté disponible. */
-        Usuario usuario = jpaUsuario.buscarPorNombre(nombreDeUsuario);
+        Usuario usuario = jpaUsuario.buscarPorNombre(nombreDeUsuarioPorValidar);
         if (usuario != null) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_USUARIO_NO_DISPONIBLE);
@@ -205,22 +206,23 @@ public class Registro implements Serializable {
                                          UIComponent component,
                                          Object value)
             throws ValidatorException {
-        String correoElectronico = (String) value;
+        String correoPorValidar = (String) value;
 
         /* Si es vacío, el atributo required lo rechazará. */
-        if (correoElectronico == null || correoElectronico.isEmpty()) {
+        if (correoPorValidar == null
+                || correoPorValidar.isEmpty()) {
             return;
         }
 
         /* Verifica que el correo sea de @ciencias.unam.mx. */
-        if (!correoElectronico.endsWith(DOMINIO_CORREO)) {
+        if (!correoPorValidar.endsWith(DOMINIO_CORREO)) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CORREO_NO_CIENCIAS);
             throw new ValidatorException(mensajeDeError);
         }
 
         /* Verifica que el correo tenga una parte local (antes de @). */
-        if (correoElectronico.equals(DOMINIO_CORREO)) {
+        if (correoPorValidar.equals(DOMINIO_CORREO)) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CORREO_NO_VALIDO);
             throw new ValidatorException(mensajeDeError);
@@ -228,7 +230,7 @@ public class Registro implements Serializable {
 
         /* Verifica que el correo electrónico no se haya usado. */
         Usuario usuario
-            = jpaUsuario.buscarPorCorreoElectronico(correoElectronico);
+            = jpaUsuario.buscarPorCorreoElectronico(correoPorValidar);
         if (usuario != null) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CORREO_NO_DISPONIBLE);
@@ -244,7 +246,7 @@ public class Registro implements Serializable {
                                   UIComponent component,
                                   Object value)
             throws ValidatorException {
-        String contrasena = (String) value;
+        String contrasenaPorValidar = (String) value;
 
         /* Obtiene al componente con la confirmación y la extrae. */
         UIInput componenteConfirmacion
@@ -253,20 +255,20 @@ public class Registro implements Serializable {
             = (String) componenteConfirmacion.getSubmittedValue();
 
         /* Si alguno está vacío, el atributo required lo rechaza. */
-        if (contrasena == null || contrasena.isEmpty()
+        if (contrasenaPorValidar == null || contrasenaPorValidar.isEmpty()
                 || confirmacion == null || confirmacion.isEmpty()) {
             return;
         }
 
         /* Verifica el tamaño de la contraseña. */
-        if (contrasena.length() < CONTRASENA_TAM_MIN) {
+        if (contrasenaPorValidar.length() < CONTRASENA_TAM_MIN) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CONTRASENA_CORTA);
             throw new ValidatorException(mensajeDeError);
         }
 
         /* Verifica que la confirmación coincida. */
-        if (!confirmacion.equals(contrasena)) {
+        if (!confirmacion.equals(contrasenaPorValidar)) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CONFIRMACION_INCORRECTA);
             throw new ValidatorException(mensajeDeError);
@@ -281,16 +283,16 @@ public class Registro implements Serializable {
                             UIComponent component,
                             Object value)
             throws ValidatorException {
-        UploadedFile foto = (UploadedFile) value;
+        UploadedFile fotoPorValidar = (UploadedFile) value;
         extensionFoto = null;
 
         /* Si no hay foto, la aceptamos. */
-        if (foto == null || foto.getSize() == 0) {
+        if (fotoPorValidar == null || fotoPorValidar.getSize() == 0) {
             return;
         }
 
         /* Verificamos que el tamaño sea adecuado. */
-        long tamanoFoto = foto.getSize();
+        long tamanoFoto = fotoPorValidar.getSize();
         if (tamanoFoto > FOTO_TAM_MAX) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_FOTO_GRANDE);
@@ -298,7 +300,7 @@ public class Registro implements Serializable {
         }
 
         /* Verificamos que el tipo sea adecuado. */
-        String nombreDeArchivo = foto.getFileName();
+        String nombreDeArchivo = fotoPorValidar.getFileName();
         if (nombreDeArchivo.endsWith(".jpg")
                 || nombreDeArchivo.endsWith(".jpeg")) {
             extensionFoto = ".jpg";

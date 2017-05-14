@@ -97,9 +97,9 @@ public class ManejadorDeImagenes {
     public void escribirImagen(UploadedFile archivo, String nombre)
             throws IOException {
         Path rutaArchivo = Paths.get(directorio, nombre);
-        Path directorio = rutaArchivo.getParent();
+        Path directorioImagen = rutaArchivo.getParent();
         try (InputStream in = archivo.getInputstream()) {
-            Files.createDirectories(directorio);
+            Files.createDirectories(directorioImagen);
             Files.copy(in, rutaArchivo);
         }
     }

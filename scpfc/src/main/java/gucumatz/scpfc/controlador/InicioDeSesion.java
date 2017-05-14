@@ -138,15 +138,15 @@ public class InicioDeSesion implements Serializable {
                               Object value)
             throws ValidatorException {
         sinConfirmar = false;
-        String cuenta = (String) value;
+        String cuentaPorValidar = (String) value;
 
         /* Si está vacío, el atributo required lo rechazará. */
-        if (cuenta == null || cuenta.isEmpty()) {
+        if (cuentaPorValidar == null || cuentaPorValidar.isEmpty()) {
             return;
         }
 
         /* Verifica que la cuenta exista. */
-        Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
+        Usuario usuario = jpaUsuario.buscarUsuario(cuentaPorValidar);
         if (usuario == null) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CUENTA_NO_EXISTE);
@@ -171,16 +171,16 @@ public class InicioDeSesion implements Serializable {
                                   UIComponent component,
                                   Object value)
             throws ValidatorException {
-        String contrasena = (String) value;
+        String contrasenaPorValidar = (String) value;
 
         /* Obtiene la componente con el nombre de usuario y lo extrae. */
         UIInput componenteCuenta
             = (UIInput) component.getAttributes().get("cuenta");
-        String cuenta = (String) componenteCuenta.getValue();
+        String cuentaRecibida = (String) componenteCuenta.getValue();
 
         /* Si alguno está vacío, el atributo required lo rechazará. */
-        if (contrasena == null || contrasena.isEmpty()
-                || cuenta == null || cuenta.isEmpty()) {
+        if (contrasenaPorValidar == null || contrasenaPorValidar.isEmpty()
+                || cuentaRecibida == null || cuentaRecibida.isEmpty()) {
             return;
         }
 
@@ -188,13 +188,13 @@ public class InicioDeSesion implements Serializable {
          * Obtiene al usuario. Si el resultado es nulo, el validador de la
          * cuenta lo rechazará.
          */
-        Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
+        Usuario usuario = jpaUsuario.buscarUsuario(cuentaRecibida);
         if (usuario == null) {
             return;
         }
 
         /* Verifica que la contraseña sea correcta. */
-        if (!contrasena.equals(usuario.getContrasena())) {
+        if (!contrasenaPorValidar.equals(usuario.getContrasena())) {
             FacesMessage mensajeDeError
                 = crearMensajeDeError(MENSAJE_CONTRASENA_INCORRECTA);
             throw new ValidatorException(mensajeDeError);
