@@ -1,19 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.validator.ValidatorException;
 import javax.mail.MessagingException;
+
 import org.primefaces.model.UploadedFile;
 
 @ManagedBean

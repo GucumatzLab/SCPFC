@@ -1,26 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo.db;
 
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import gucumatz.scpfc.modelo.Calificacion;
-import java.util.ArrayList;
-import java.util.List;
-import gucumatz.scpfc.modelo.FotoPuesto;
 import gucumatz.scpfc.modelo.Comentario;
+import gucumatz.scpfc.modelo.FotoPuesto;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *

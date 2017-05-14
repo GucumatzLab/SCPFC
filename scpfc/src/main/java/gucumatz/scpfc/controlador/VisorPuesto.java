@@ -1,16 +1,14 @@
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
-import gucumatz.scpfc.modelo.Calificacion;
-import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.FotoPuesto;
+import gucumatz.scpfc.modelo.db.*;
+
 import java.io.Serializable;
 import java.util.Locale;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.List;
 
 /**
  * Clase controlador de DetallesPuesto.

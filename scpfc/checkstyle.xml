@@ -23,6 +23,9 @@
     <!-- Evita sentencias import redundantes. -->
     <module name="RedundantImport"/>
 
+    <!-- Verifica que las sentencias import estén ordenadas. -->
+    <module name="ImportOrder"/>
+
     <!-- Requiere que las clases estén documentadas. -->
     <module name="JavadocType"/>
 

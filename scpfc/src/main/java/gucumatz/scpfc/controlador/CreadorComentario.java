@@ -1,18 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.controlador.VisorPuesto;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+
 import java.util.Date;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;

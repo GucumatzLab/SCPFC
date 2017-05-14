@@ -1,23 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.controlador.VisorPuesto;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.ControladorJpaCalificacion;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
-import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
 /**

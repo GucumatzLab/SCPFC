@@ -1,18 +1,20 @@
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.*;
+import gucumatz.scpfc.modelo.db.*;
+
 import java.io.Serializable;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
-import javax.faces.context.FacesContext;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 
 /**
  * Clase para controlar un objeto de la Clase Puesto

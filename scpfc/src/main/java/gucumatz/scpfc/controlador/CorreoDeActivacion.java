@@ -1,19 +1,20 @@
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
-import java.io.InputStream;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**

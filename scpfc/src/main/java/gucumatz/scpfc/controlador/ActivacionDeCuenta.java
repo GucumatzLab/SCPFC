@@ -1,9 +1,11 @@
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+
 import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;

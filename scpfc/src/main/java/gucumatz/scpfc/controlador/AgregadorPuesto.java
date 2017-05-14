@@ -1,14 +1,16 @@
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.modelo.db.*;
-import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.*;
-import java.util.Locale;
+import gucumatz.scpfc.modelo.db.*;
+
 import java.util.LinkedList;
+import java.util.Locale;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
 import org.primefaces.model.UploadedFile;
 
 /**
