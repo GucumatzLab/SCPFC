@@ -27,14 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Calificacion.buscarPorPuesto",
-            query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto")
-    , @NamedQuery(name = "Calificacion.buscarPorUsuarioYPuesto",
-            query = "SELECT c FROM Calificacion c"
-                + " WHERE c.usuario = :usuario AND c.puesto = :puesto")
-    , @NamedQuery(name = "Calificacion.promedioDePuesto",
-            query = "SELECT AVG(c.calificacion) FROM Calificacion c"
-                + " WHERE c.puesto = :puesto")
-})
+        query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto"),
+    @NamedQuery(name = "Calificacion.buscarPorUsuarioYPuesto",
+        query = "SELECT c FROM Calificacion c"
+            + " WHERE c.usuario = :usuario AND c.puesto = :puesto"),
+    @NamedQuery(name = "Calificacion.promedioDePuesto",
+        query = "SELECT AVG(c.calificacion) FROM Calificacion c"
+            + " WHERE c.puesto = :puesto"),
+    })
 @SuppressWarnings("checkstyle:magicnumber")
 public class Calificacion implements Serializable {
 

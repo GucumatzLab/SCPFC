@@ -26,14 +26,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "comentario", catalog = "gucumatz", schema = "",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})})
+        @UniqueConstraint(columnNames = {"id"})
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Comentario.buscarPorPuesto",
-            query = "SELECT c FROM Comentario c WHERE c.puesto = :puesto")
-    , @NamedQuery(name = "Comentario.buscarPorUsuario",
-            query = "SELECT c FROM Comentario c WHERE c.usuario = :usuario")
-})
+            query = "SELECT c FROM Comentario c WHERE c.puesto = :puesto"),
+    @NamedQuery(name = "Comentario.buscarPorUsuario",
+            query = "SELECT c FROM Comentario c WHERE c.usuario = :usuario"),
+    })
 @SuppressWarnings("checkstyle:magicnumber")
 public class Comentario implements Serializable {
 

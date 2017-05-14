@@ -25,20 +25,21 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "usuario", catalog = "gucumatz", schema = "",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})
-        , @UniqueConstraint(columnNames = {"correoElectronico"})
-        , @UniqueConstraint(columnNames = {"nombre"})})
+        @UniqueConstraint(columnNames = {"id"}),
+        @UniqueConstraint(columnNames = {"correoElectronico"}),
+        @UniqueConstraint(columnNames = {"nombre"}),
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.buscarPorNombre",
-            query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
-    , @NamedQuery(name = "Usuario.buscarPorCorreoElectronico",
-            query = "SELECT u FROM Usuario u"
-                + " WHERE u.correoElectronico = :correoElectronico")
-    , @NamedQuery(name = "Usuario.buscarPorCuenta",
-            query = "SELECT u FROM Usuario u"
-                + " WHERE u.nombre = :cuenta OR u.correoElectronico = :cuenta")
-})
+        query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuario.buscarPorCorreoElectronico",
+        query = "SELECT u FROM Usuario u"
+            + " WHERE u.correoElectronico = :correoElectronico"),
+    @NamedQuery(name = "Usuario.buscarPorCuenta",
+        query = "SELECT u FROM Usuario u"
+            + " WHERE u.nombre = :cuenta OR u.correoElectronico = :cuenta"),
+    })
 @SuppressWarnings("checkstyle:magicnumber")
 public class Usuario implements Serializable {
 

@@ -23,12 +23,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "foto_puesto", catalog = "gucumatz", schema = "",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})})
+        @UniqueConstraint(columnNames = {"id"})
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FotoPuesto.buscarPorPuesto",
-            query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puesto")
-})
+        query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puesto"),
+    })
 @SuppressWarnings("checkstyle:magicnumber")
 public class FotoPuesto implements Serializable {
 

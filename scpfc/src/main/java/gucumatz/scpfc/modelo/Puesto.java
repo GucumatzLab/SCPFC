@@ -25,12 +25,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "puesto", catalog = "gucumatz", schema = "",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})})
+        @UniqueConstraint(columnNames = {"id"})
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Puesto.buscarPorNombre",
-            query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre")
-})
+            query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre"),
+    })
 @SuppressWarnings("checkstyle:magicnumber")
 public class Puesto implements Serializable {
 
