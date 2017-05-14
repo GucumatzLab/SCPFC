@@ -87,9 +87,9 @@
     <!-- Requiere espacio alrededor de operadores binarios. -->
     <module name="WhitespaceAround"/>
 
-    <!-- Requiere espacio después de un typecast. -->
+    <!-- Evita espacio dentro de un typecast. -->
     <module name="TypecastParenPad">
-      <property name="option" value="space"/>
+      <property name="option" value="nospace"/>
     </module>
 
     <!-- Usa sólo letras minúsculas para nombres de paquete. -->
