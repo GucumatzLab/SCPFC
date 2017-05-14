@@ -25,15 +25,15 @@ public class FabricaControladorJpa implements Serializable {
     public ControladorJpaComentario obtenerControladorJpaComentario() {
         return new ControladorJpaComentario(emf);
     }
-    
+
     public ControladorJpaCalificacion obtenerControladorJpaCalificacion() {
         return new ControladorJpaCalificacion(emf);
     }
-    
+
     public ControladorJpaUsuario obtenerControladorJpaUsuario() {
         return new ControladorJpaUsuario(emf);
     }
-    
+
     public ControladorJpaPuesto obtenerControladorJpaPuesto() {
         return new ControladorJpaPuesto(emf);
     }

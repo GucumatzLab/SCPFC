@@ -47,21 +47,21 @@ public class CreadorCalificacion {
     public CreadorCalificacion() {
         faceContext = FacesContext.getCurrentInstance();
     }
-    
+
     @PostConstruct
     public void initCal() {
-        
+
         // Ver si hay usuario
         Usuario u = sesionActiva.getUsuario();
-        
+
         if (u == null)
             return;
-        
+
         // Obtener puesto, ver si hay calificación previa
         Puesto p = visorPuesto.getPuesto();
         ControladorJpaCalificacion jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
         Calificacion prev = jpaCalificacion.buscarPorUsuarioYPuesto(u, p);
-        
+
         if (prev != null)
             this.calificacion = prev.getCalificacion();
     }
@@ -86,7 +86,7 @@ public class CreadorCalificacion {
 
     /**
      * Obtiene el objeto relacionado a la vista del puesto.
-     * 
+     *
      * @return el <code>VisorPuesto</code> ligado.
      */
     public VisorPuesto getVisorPuesto() {
@@ -95,7 +95,7 @@ public class CreadorCalificacion {
 
     /**
      * Actualiza el objeto relacionado a la vista del puesto.
-     * 
+     *
      * @param visorPuesto el nuevo <code>VisorPuesto</code>.
      */
     public void setVisorPuesto(VisorPuesto visorPuesto) {
@@ -158,16 +158,16 @@ public class CreadorCalificacion {
         // Revisar si debemos crear o editar
         // Caso 1: Editar
         Calificacion prev = jpaCalificacion.buscarPorUsuarioYPuesto(u, p);
-        
+
         if (prev != null) {
             try {
                 visorPuesto.getPuesto().getCalificaciones().remove(prev);
-                        
+
                 prev.setCalificacion(this.calificacion);
                 jpaCalificacion.editar(prev);
-                
+
                 visorPuesto.getPuesto().getCalificaciones().add(prev);
-                
+
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación actualizada.", null);
                 faceContext.addMessage(null, message);
             } catch (Exception e) {
@@ -176,14 +176,14 @@ public class CreadorCalificacion {
 
                 return;
             }
-            
+
         // Caso 2: Crear
         } else {
             Calificacion c = new Calificacion();
             c.setPuesto(p);
             c.setUsuario(u);
             c.setCalificacion(this.calificacion);
-            
+
             jpaCalificacion.crear(c);
 
             visorPuesto.getPuesto().getCalificaciones().add(c);
@@ -197,8 +197,8 @@ public class CreadorCalificacion {
 
     /**
      * Regresa la sesión activa actual.
-     * 
-     * @return El <code>SesionActiva</code> actual. 
+     *
+     * @return El <code>SesionActiva</code> actual.
      */
     public SesionActiva getSesionActiva() {
         return sesionActiva;
@@ -206,7 +206,7 @@ public class CreadorCalificacion {
 
     /**
      * Actualiza la sesión activa actual.
-     * 
+     *
      * @param sesionActiva El nuevo objeto <code>SesionActiva</code> actual.
      */
     public void setSesionActiva(SesionActiva sesionActiva) {

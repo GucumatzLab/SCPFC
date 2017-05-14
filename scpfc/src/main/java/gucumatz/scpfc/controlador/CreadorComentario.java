@@ -67,7 +67,7 @@ public class CreadorComentario {
 
     /**
      * Obtiene el objeto relacionado a la vista del puesto.
-     * 
+     *
      * @return el <code>VisorPuesto</code> ligado.
      */
     public VisorPuesto getVisorPuesto() {
@@ -76,7 +76,7 @@ public class CreadorComentario {
 
     /**
      * Actualiza el objeto relacionado a la vista del puesto.
-     * 
+     *
      * @param visorPuesto el nuevo <code>VisorPuesto</code>.
      */
     public void setVisorPuesto(VisorPuesto visorPuesto) {
@@ -88,7 +88,7 @@ public class CreadorComentario {
      * @return true si el comentario es válido, false e.o.c.
      */
     private boolean esValido() {
-        
+
         // Validar comentario
         if(this.comentario.equals("")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: El comentario debe contener texto.", null);
@@ -169,8 +169,8 @@ public class CreadorComentario {
 
     /**
      * Regresa la sesión activa actual.
-     * 
-     * @return El <code>SesionActiva</code> actual. 
+     *
+     * @return El <code>SesionActiva</code> actual.
      */
     public SesionActiva getSesionActiva() {
         return sesionActiva;
@@ -178,7 +178,7 @@ public class CreadorComentario {
 
     /**
      * Actualiza la sesión activa actual.
-     * 
+     *
      * @param sesionActiva El nuevo objeto <code>SesionActiva</code> actual.
      */
     public void setSesionActiva(SesionActiva sesionActiva) {

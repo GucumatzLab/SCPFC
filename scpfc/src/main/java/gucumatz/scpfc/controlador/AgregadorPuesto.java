@@ -118,7 +118,7 @@ public class AgregadorPuesto implements java.io.Serializable {
         // Hacer el trim
         this.puesto.setNombre(this.puesto.getNombre().trim());
         this.puesto.setTipoComida(this.puesto.getTipoComida().trim());
-        
+
         // Validar
         try {
             if (validaNombre(this.puesto.getNombre(), this.puesto.getTipoComida())) {
@@ -188,19 +188,19 @@ public class AgregadorPuesto implements java.io.Serializable {
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
-        
+
         if (nombrePuesto.equals("")) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un nombre vacío.", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
-        
+
         if (tipoComida.equals("")) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un tipo de comida vacío.", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
-        
+
         return true;
     }
 

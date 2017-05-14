@@ -42,9 +42,9 @@ public class Mapa implements Serializable{
      */
     @PostConstruct
     public void init() {
-        
+
         advancedModel = new DefaultMapModel();
-        
+
         ControladorJpaPuesto jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
 
         /* Se obtienen todos los puestos y se agregan los respectivos marcadores. */
@@ -80,5 +80,5 @@ public class Mapa implements Serializable{
     public Marker getMarker() {
         return marker;
     }
-    
+
 }
