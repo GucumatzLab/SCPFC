@@ -25,7 +25,7 @@ import javax.faces.context.FacesContext;
 public class CreadorCalificacion {
 
     private float calificacion;
-     // Obtiene información de la aplicación
+    // Obtiene información de la aplicación
     private final FacesContext faceContext;
     private FacesMessage message;
 

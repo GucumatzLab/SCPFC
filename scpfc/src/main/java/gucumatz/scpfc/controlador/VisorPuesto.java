@@ -68,7 +68,7 @@ public class VisorPuesto implements Serializable {
 
         this.puesto = jpaPuesto.buscarPorId(this.id);
         if (this.puesto == null) {
-                return "index";
+            return "index";
         }
 
         return null;

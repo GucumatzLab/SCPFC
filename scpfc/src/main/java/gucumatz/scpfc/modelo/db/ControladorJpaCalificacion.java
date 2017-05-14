@@ -241,7 +241,7 @@ public class ControladorJpaCalificacion implements Serializable {
             query.setParameter("puesto", puesto);
             return query.getSingleResult();
         } catch (Exception e) {
-	        return 0;
+            return 0;
         } finally {
             em.close();
         }
