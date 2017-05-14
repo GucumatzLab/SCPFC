@@ -44,10 +44,10 @@
         <h:inputHidden id="pNom" value="#{visorPuesto.puesto.nombre}" />
 
         <b:column span="6">
-          <b:row rendered="#{not empty visorPuesto.fotosPuesto}">
+          <b:row rendered="#{not empty visorPuesto.puesto.fotosPuesto}">
             <center>
               <b:carousel id="cfotos">
-                <c:forEach items="#{visorPuesto.fotosPuesto}" var="fppk">
+                <c:forEach items="#{visorPuesto.puesto.fotosPuesto}" var="fppk">
                   <b:carouselItem>
                     <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 300px">
                       <f:param name="ruta" value="#{fppk.url}"/>
@@ -123,11 +123,11 @@
         <column span="8" offset="2">
           <h2>Comentarios</h2>
 
-          <b:row rendered="#{empty visorPuesto.comentario}">
+          <b:row rendered="#{empty visorPuesto.puesto.comentarios}">
             <p>No hay comentarios sobre este puesto.</p>
           </b:row>
 
-          <ui:repeat value="#{visorPuesto.comentario}" var="c">
+          <ui:repeat value="#{visorPuesto.puesto.comentarios}" var="c">
             <b:panel collapsible="true">
               <b:row>
                 <b:column span="3">

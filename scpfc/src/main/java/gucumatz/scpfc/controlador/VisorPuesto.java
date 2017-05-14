@@ -24,19 +24,11 @@ import java.util.List;
 public class VisorPuesto implements Serializable{
 
     private final ControladorJpaPuesto jpaPuesto;
-    private final ControladorJpaFotoPuesto jpaFotoPuesto;
     private final ControladorJpaCalificacion jpaCalificacion;
-    private final ControladorJpaComentario jpaComentario;
     /* ID del puesto actual. */
     private Long id;
     /* Objeto del puesto actual. */
     private Puesto puesto;
-    /* Lista de fotos del puesto actual. */
-    private List<FotoPuesto> fotosPuesto;
-    /* Lista de calificaciones del puesto actual. */
-    private List<Calificacion> calificacion;
-    /* Lista de comentarios del puesto actual. */
-    private List<Comentario> comentario;
 
     /**
      *<code>VisorPuesto</code> Constructor.
@@ -44,9 +36,7 @@ public class VisorPuesto implements Serializable{
     public VisorPuesto() {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
         this.jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
-        this.jpaFotoPuesto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
         this.jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
-        this.jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
     }
 
     /**
@@ -78,9 +68,6 @@ public class VisorPuesto implements Serializable{
         if (this.puesto == null) {
                 return "index";
         }
-        this.fotosPuesto = jpaFotoPuesto.buscarPorPuesto(puesto);
-        this.calificacion = jpaCalificacion.buscarPorPuesto(this.puesto);
-        this.comentario = jpaComentario.buscarPorPuesto(this.puesto);
 
         return null;
     }
@@ -94,41 +81,11 @@ public class VisorPuesto implements Serializable{
     }
 
     /**
-     *<code>getFotosPuesto</code> Método que regresa la lista de fotos del puesto actual.
-     *@return tipo <code>List<FotoPuesto></code>: Lista de fotos del puesto actual.
-     */
-    public List<FotoPuesto> getFotosPuesto(){
-        return this.fotosPuesto;
-    }
-
-    /**
      *<code>getPromedioCalificacion</code> Método que regresa el promedio de calificaciones del puesto actual.
      *@return tipo <code>int</code>: Promedio de calificaciones del puesto actual. (Valores entre 0 - 5)
      */
     public int getPromedioCalificacion(){
-        float promedio = 0;
-        if(this.calificacion != null) {
-            for(Calificacion c : this.calificacion) {
-                promedio = promedio + c.getCalificacion();
-            }
-            promedio = promedio / this.calificacion.size();
-        }
-        return Math.round(promedio);
-    }
-    
-    /**
-     *<code>getComentario</code> Método que regresa la lista de comentarios del puesto actual.
-     *@return tipo <code>List<Comentario></code>: Lista de comentarios del puesto actual.
-     */
-    public List<Comentario> getComentario(){
-        return this.comentario;
+        return (int) jpaCalificacion.promedioDePuesto(puesto);
     }
 
-    /**
-     *<code>getCalificacion</code> Método que regresa la lista de calificaciones del puesto actual.
-     *@return tipo <code>List<Calificacion></code>: Lista de calificaciones del puesto actual.
-     */
-    public List<Calificacion> getCalificaciones(){
-        return this.calificacion;
-    }
 }

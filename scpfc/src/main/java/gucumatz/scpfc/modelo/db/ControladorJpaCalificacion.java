@@ -234,6 +234,8 @@ public class ControladorJpaCalificacion implements Serializable {
                     = em.createNamedQuery("Calificacion.promedioDePuesto", Double.class);
             query.setParameter("puesto", puesto);
             return query.getSingleResult();
+        } catch (Exception e) {
+	        return 0;
         } finally {
             em.close();
         }

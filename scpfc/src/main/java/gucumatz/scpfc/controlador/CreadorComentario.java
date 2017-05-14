@@ -150,7 +150,7 @@ public class CreadorComentario {
         ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
         c.setPuesto(p);
-        visorPuesto.getComentario().add(c);
+        visorPuesto.getPuesto().getComentarios().add(c);
 
         // Obtener usuario actual
         Usuario u = sesionActiva.getUsuario();

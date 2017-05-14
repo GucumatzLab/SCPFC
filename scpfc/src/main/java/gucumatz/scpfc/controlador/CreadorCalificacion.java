@@ -161,12 +161,12 @@ public class CreadorCalificacion {
         
         if (prev != null) {
             try {
-                visorPuesto.getCalificaciones().remove(prev);
+                visorPuesto.getPuesto().getCalificaciones().remove(prev);
                         
                 prev.setCalificacion(this.calificacion);
                 jpaCalificacion.editar(prev);
                 
-                visorPuesto.getCalificaciones().add(prev);
+                visorPuesto.getPuesto().getCalificaciones().add(prev);
                 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación actualizada.", null);
                 faceContext.addMessage(null, message);
@@ -186,7 +186,7 @@ public class CreadorCalificacion {
             
             jpaCalificacion.crear(c);
 
-            visorPuesto.getCalificaciones().add(c);
+            visorPuesto.getPuesto().getCalificaciones().add(c);
 
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación registrada.", null);
             faceContext.addMessage(null, message);
