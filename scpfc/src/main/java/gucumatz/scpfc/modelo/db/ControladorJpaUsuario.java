@@ -37,6 +37,7 @@ public class ControladorJpaUsuario implements Serializable {
         return emf.createEntityManager();
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void crear(Usuario usuario) {
         if (usuario.getCalificaciones() == null) {
             usuario.setCalificaciones(new ArrayList<Calificacion>());
@@ -87,6 +88,7 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void editar(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -171,6 +173,7 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -214,10 +217,12 @@ public class ControladorJpaUsuario implements Serializable {
         return findUsuarioEntities(true, -1, -1);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<Usuario> findUsuarioEntities(int maxResults, int firstResult) {
         return findUsuarioEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     private List<Usuario> findUsuarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -260,7 +265,8 @@ public class ControladorJpaUsuario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.buscarPorNombre", Usuario.class);
+                = em.createNamedQuery("Usuario.buscarPorNombre",
+                    Usuario.class);
             query.setParameter("nombre", nombre);
             try {
                 Usuario result = query.getSingleResult();
@@ -277,7 +283,8 @@ public class ControladorJpaUsuario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.buscarPorCorreoElectronico", Usuario.class);
+                = em.createNamedQuery("Usuario.buscarPorCorreoElectronico",
+                    Usuario.class);
             query.setParameter("correoElectronico", correoElectronico);
             try {
                 Usuario result = query.getSingleResult();
@@ -301,7 +308,8 @@ public class ControladorJpaUsuario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.buscarPorCuenta", Usuario.class);
+                = em.createNamedQuery("Usuario.buscarPorCuenta",
+                    Usuario.class);
             query.setParameter("cuenta", cuenta);
             try {
                 Usuario result = query.getSingleResult();

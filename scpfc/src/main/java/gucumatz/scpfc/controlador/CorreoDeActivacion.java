@@ -52,7 +52,10 @@ public class CorreoDeActivacion {
         final String usuarioCorreo;
         final String contrasena;
 
-        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/autenticacion-correo.properties")) {
+        String archivoPropiedadesAutenticacion
+            = "WEB-INF/autenticacion-correo.properties";
+        try (InputStream is = externalContext
+                .getResourceAsStream(archivoPropiedadesAutenticacion)) {
             Properties prop = new Properties();
             prop.load(is);
 
@@ -64,16 +67,20 @@ public class CorreoDeActivacion {
 
         this.usuario = usuario;
 
-        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/correo.properties")) {
+        String archivoPropiedadesCorreo = "WEB-INF/correo.properties";
+        try (InputStream is = externalContext
+                .getResourceAsStream(archivoPropiedadesCorreo)) {
             Properties prop = new Properties();
             prop.load(is);
-            sesionEmail = Session.getInstance(prop,
-                new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(usuarioCorreo, contrasena);
-                    }
-                });
+            Authenticator autenticador = new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    PasswordAuthentication pa
+                        = new PasswordAuthentication(usuarioCorreo, contrasena);
+                    return pa;
+                }
+            };
+            sesionEmail = Session.getInstance(prop, autenticador);
         }
     }
 
@@ -96,7 +103,8 @@ public class CorreoDeActivacion {
         String urlBase = obtenerDireccionBase();
 
         String textoMensaje = String.format(
-                "Para confirmar tu cuenta ve a %s/activar-cuenta.xhtml?id=%d&codigo=%s",
+                "Para confirmar tu cuenta ve a "
+                    + "%s/activar-cuenta.xhtml?id=%d&codigo=%s",
                 urlBase,
                 usuario.getId(),
                 usuario.getCodigoDeActivacion());
@@ -112,14 +120,16 @@ public class CorreoDeActivacion {
     private String obtenerDireccionBase() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
-        HttpServletRequest solicitud = (HttpServletRequest) externalContext.getRequest();
+        HttpServletRequest solicitud
+            = (HttpServletRequest) externalContext.getRequest();
 
         String urlSolicitud = solicitud.getRequestURL().toString();
 
         /* Obtiene el dominio donde está la aplicación. Por ejemplo,
          * http://localhost:8080/. Esto no incluye el contexto, por
          * ejemplo scpfc/ */
-        int longitudDominio = urlSolicitud.length() - solicitud.getRequestURI().length();
+        int longitudDominio
+            = urlSolicitud.length() - solicitud.getRequestURI().length();
         String dominio = urlSolicitud.substring(0, longitudDominio);
 
         /* Obtiene la dirección base de la aplicación pegándole el

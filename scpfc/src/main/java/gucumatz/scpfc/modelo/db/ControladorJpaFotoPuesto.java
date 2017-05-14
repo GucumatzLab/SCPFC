@@ -33,6 +33,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
         return emf.createEntityManager();
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void crear(FotoPuesto fotoPuesto) {
         EntityManager em = null;
         try {
@@ -56,6 +57,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void editar(FotoPuesto fotoPuesto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -94,6 +96,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -124,7 +127,8 @@ public class ControladorJpaFotoPuesto implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<FotoPuesto> query
-                    = em.createNamedQuery("FotoPuesto.buscarPorPuesto", FotoPuesto.class);
+                = em.createNamedQuery("FotoPuesto.buscarPorPuesto",
+                    FotoPuesto.class);
             query.setParameter("puesto", puesto);
             List<FotoPuesto> results = query.getResultList();
             return results;
@@ -133,14 +137,17 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<FotoPuesto> findFotoPuestoEntities() {
         return findFotoPuestoEntities(true, -1, -1);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<FotoPuesto> findFotoPuestoEntities(int maxResults, int firstResult) {
         return findFotoPuestoEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     private List<FotoPuesto> findFotoPuestoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {

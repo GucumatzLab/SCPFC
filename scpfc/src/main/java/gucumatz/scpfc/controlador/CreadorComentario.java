@@ -30,7 +30,8 @@ import javax.faces.context.FacesContext;
 public class CreadorComentario {
 
     private String comentario;
-    private final FacesContext faceContext; // Obtiene información de la aplicación
+    // Obtiene información de la aplicación
+    private final FacesContext faceContext;
     private FacesMessage message;
 
     @ManagedProperty("#{sesionActiva}")
@@ -91,12 +92,14 @@ public class CreadorComentario {
 
         // Validar comentario
         if(this.comentario.equals("")) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: El comentario debe contener texto.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: El comentario debe contener texto.", null);
             faceContext.addMessage(null, message);
 
             return false;
         } else if(this.comentario.length() > 1024) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Comentario demasiado largo.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: Comentario demasiado largo.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -111,7 +114,8 @@ public class CreadorComentario {
 
         // Validar puesto
         if (p == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Puesto no registrado.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: Puesto no registrado.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -122,7 +126,8 @@ public class CreadorComentario {
 
         // Validar al usuario
         if (u == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debes iniciar sesión para calificar.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Debes iniciar sesión para calificar.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -140,14 +145,16 @@ public class CreadorComentario {
             return;
 
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        ControladorJpaComentario jpaComentario = fab.obtenerControladorJpaComentario();
+        ControladorJpaComentario jpaComentario
+            = fab.obtenerControladorJpaComentario();
 
         // Crear el comentario
         Comentario c = new Comentario();
         c.setComentario(this.comentario);
 
         // Obtener el puesto relacionado al ID
-        ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto
+            = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
         c.setPuesto(p);
         visorPuesto.getPuesto().getComentarios().add(c);
@@ -161,7 +168,8 @@ public class CreadorComentario {
         c.setFecha(fecha);
         jpaComentario.crear(c);
 
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+            "Comentario registrado.", null);
         faceContext.addMessage(null, message);
 
         return;

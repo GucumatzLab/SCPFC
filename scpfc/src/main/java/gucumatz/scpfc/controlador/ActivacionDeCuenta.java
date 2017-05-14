@@ -26,12 +26,15 @@ public class ActivacionDeCuenta implements Serializable {
 
     public String activarCuenta() {
         if (idUsuario != null && codigoDeActivacion != null) {
+            FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
+
             ControladorJpaUsuario jpaUsuario
-                    = new FabricaControladorJpa().obtenerControladorJpaUsuario();
+                = fabricaJpa.obtenerControladorJpaUsuario();
 
             Usuario usuario = jpaUsuario.buscarPorId(idUsuario);
             if (usuario != null
-                    && codigoDeActivacion.equals(usuario.getCodigoDeActivacion())) {
+                    && codigoDeActivacion
+                        .equals(usuario.getCodigoDeActivacion())) {
                 usuario.setCodigoDeActivacion(null);
                 usuario.setConfirmado(true);
 

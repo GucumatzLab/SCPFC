@@ -34,9 +34,11 @@ public class VisorPuesto implements Serializable{
      *<code>VisorPuesto</code> Constructor.
      */
     public VisorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
-        this.jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
-        this.jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
+        FacesContext.getCurrentInstance().getViewRoot()
+            .setLocale(new Locale("es-Mx"));
+        FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
+        this.jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
+        this.jpaCalificacion = fabricaJpa.obtenerControladorJpaCalificacion();
     }
 
     /**
@@ -56,7 +58,9 @@ public class VisorPuesto implements Serializable{
     }
 
     /**
-     *<code>obtenerPuesto</code> Método inicializa los objetos relacionados con el puesto actual.
+     * <code>obtenerPuesto</code> Método inicializa los objetos relacionados con
+     * el puesto actual.
+     *
      *@return tipo <code>String</code>: Dirección de redireccionamiento.
      */
     public String obtenerPuesto(){
@@ -81,8 +85,11 @@ public class VisorPuesto implements Serializable{
     }
 
     /**
-     *<code>getPromedioCalificacion</code> Método que regresa el promedio de calificaciones del puesto actual.
-     *@return tipo <code>int</code>: Promedio de calificaciones del puesto actual. (Valores entre 0 - 5)
+     * <code>getPromedioCalificacion</code> Método que regresa el promedio de
+     * calificaciones del puesto actual.
+     *
+     * @return tipo <code>int</code>: Promedio de calificaciones del puesto
+     * actual. (Valores entre 0 - 5)
      */
     public int getPromedioCalificacion(){
         return (int) jpaCalificacion.promedioDePuesto(puesto);

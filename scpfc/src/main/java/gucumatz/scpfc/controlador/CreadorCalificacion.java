@@ -31,7 +31,8 @@ import javax.faces.context.FacesContext;
 public class CreadorCalificacion {
 
     private float calificacion;
-    private final FacesContext faceContext; // Obtiene información de la aplicación
+     // Obtiene información de la aplicación
+    private final FacesContext faceContext;
     private FacesMessage message;
 
     @ManagedProperty("#{sesionActiva}")
@@ -59,7 +60,8 @@ public class CreadorCalificacion {
 
         // Obtener puesto, ver si hay calificación previa
         Puesto p = visorPuesto.getPuesto();
-        ControladorJpaCalificacion jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
+        ControladorJpaCalificacion jpaCalificacion
+            = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
         Calificacion prev = jpaCalificacion.buscarPorUsuarioYPuesto(u, p);
 
         if (prev != null)
@@ -108,7 +110,8 @@ public class CreadorCalificacion {
      */
     private boolean esValida() {
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        ControladorJpaCalificacion jpaCalificacion = fab.obtenerControladorJpaCalificacion();
+        ControladorJpaCalificacion jpaCalificacion
+            = fab.obtenerControladorJpaCalificacion();
 
         // Obtener el puesto relacionado al ID
         ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
@@ -116,7 +119,8 @@ public class CreadorCalificacion {
 
         // Validar puesto
         if (p == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Puesto no registrado.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: Puesto no registrado.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -127,7 +131,8 @@ public class CreadorCalificacion {
 
         // Validar al usuario
         if (u == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debes iniciar sesión para calificar.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Debes iniciar sesión para calificar.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -147,7 +152,8 @@ public class CreadorCalificacion {
 
         // Crear la calificación
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        ControladorJpaCalificacion jpaCalificacion = fab.obtenerControladorJpaCalificacion();
+        ControladorJpaCalificacion jpaCalificacion
+            = fab.obtenerControladorJpaCalificacion();
 
         // Obtener el puesto relacionado al ID
         Puesto p = visorPuesto.getPuesto();
@@ -168,10 +174,12 @@ public class CreadorCalificacion {
 
                 visorPuesto.getPuesto().getCalificaciones().add(prev);
 
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación actualizada.", null);
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Calificación actualizada.", null);
                 faceContext.addMessage(null, message);
             } catch (Exception e) {
-                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: La calificación ya no existe.", null);
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error: La calificación ya no existe.", null);
                 faceContext.addMessage(null, message);
 
                 return;
@@ -188,7 +196,8 @@ public class CreadorCalificacion {
 
             visorPuesto.getPuesto().getCalificaciones().add(c);
 
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Calificación registrada.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Calificación registrada.", null);
             faceContext.addMessage(null, message);
         }
 

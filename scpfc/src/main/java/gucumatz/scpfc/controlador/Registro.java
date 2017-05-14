@@ -47,6 +47,12 @@ public class Registro implements Serializable {
     private static final String MENSAJE_FOTO_TIPO_INVALIDO
             = "Sólo se aceptan fotografías en formato JPG o PNG";
 
+    private static final String MENSAJE_CORREO_ENVIADO
+        =  "Se ha reenviado el correo de confirmación a tu dirección de correo";
+    private static final String MENSAJE_CORREO_NO_ENVIADO
+        = "No se ha podido enviar el correo de confirmación."
+        + " Vuelve a intentarlo más tarde.";
+
     /* Único dominio aceptado en los correos electrónicos. */
     private static final String DOMINIO_CORREO = "@ciencias.unam.mx";
 
@@ -133,15 +139,13 @@ public class Registro implements Serializable {
             enviarCorreoDeActivacion(u);
 
             FacesMessage facesMessage
-                    = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Se ha enviado un correo de confirmación a la dirección " + correoElectronico,
-                            null);
+                = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    MENSAJE_CORREO_ENVIADO + correoElectronico, null);
             facesContext.addMessage(null, facesMessage);
         } catch (MessagingException | IOException e) {
             FacesMessage facesMessage
                     = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
-                            null);
+                        MENSAJE_CORREO_NO_ENVIADO, null);
             facesContext.addMessage(null, facesMessage);
             e.printStackTrace();
             /* Si no se pudo enviar el correo, eliminamos al usuario. */
@@ -170,7 +174,9 @@ public class Registro implements Serializable {
     /**
      * Comprueba que el nombre de usuario esté disponible.
      */
-    public void validarNombreDeUsuario(FacesContext context, UIComponent component, Object value)
+    public void validarNombreDeUsuario(FacesContext context,
+                                       UIComponent component,
+                                       Object value)
             throws ValidatorException {
         String nombreDeUsuario = (String) value;
 
@@ -182,7 +188,9 @@ public class Registro implements Serializable {
         /* Verifica que el nombre esté disponible. */
         Usuario usuario = jpaUsuario.buscarPorNombre(nombreDeUsuario);
         if (usuario != null) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_USUARIO_NO_DISPONIBLE));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_USUARIO_NO_DISPONIBLE);
+            throw new ValidatorException(mensajeDeError);
         }
     }
 
@@ -190,7 +198,9 @@ public class Registro implements Serializable {
      * Comprueba que el correo electrónico sea de @ciencias.unam.mx y que no se
      * haya usado para otra cuenta.
      */
-    public void validarCorreoElectronico(FacesContext context, UIComponent component, Object value)
+    public void validarCorreoElectronico(FacesContext context,
+                                         UIComponent component,
+                                         Object value)
             throws ValidatorException {
         String correoElectronico = (String) value;
 
@@ -201,18 +211,25 @@ public class Registro implements Serializable {
 
         /* Verifica que el correo sea de @ciencias.unam.mx. */
         if (!correoElectronico.endsWith(DOMINIO_CORREO)) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_CIENCIAS));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CORREO_NO_CIENCIAS);
+            throw new ValidatorException(mensajeDeError);
         }
 
         /* Verifica que el correo tenga una parte local (antes de @). */
         if (correoElectronico.equals(DOMINIO_CORREO)) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_VALIDO));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CORREO_NO_VALIDO);
+            throw new ValidatorException(mensajeDeError);
         }
 
         /* Verifica que el correo electrónico no se haya usado. */
-        Usuario usuario = jpaUsuario.buscarPorCorreoElectronico(correoElectronico);
+        Usuario usuario
+            = jpaUsuario.buscarPorCorreoElectronico(correoElectronico);
         if (usuario != null) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CORREO_NO_DISPONIBLE));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CORREO_NO_DISPONIBLE);
+            throw new ValidatorException(mensajeDeError);
         }
     }
 
@@ -220,13 +237,17 @@ public class Registro implements Serializable {
      * Verifica que la contraseña sea del tamaño adecuado y que la confirmación
      * sea correcta.
      */
-    public void validarContrasena(FacesContext context, UIComponent component, Object value)
+    public void validarContrasena(FacesContext context,
+                                  UIComponent component,
+                                  Object value)
             throws ValidatorException {
         String contrasena = (String) value;
 
         /* Obtiene al componente con la confirmación y la extrae. */
-        UIInput componenteConfirmacion = (UIInput) component.getAttributes().get("confirmacion");
-        String confirmacion = (String) componenteConfirmacion.getSubmittedValue();
+        UIInput componenteConfirmacion
+            = (UIInput) component.getAttributes().get("confirmacion");
+        String confirmacion
+            = (String) componenteConfirmacion.getSubmittedValue();
 
         /* Si alguno está vacío, el atributo required lo rechaza. */
         if (contrasena == null || contrasena.isEmpty()
@@ -236,12 +257,16 @@ public class Registro implements Serializable {
 
         /* Verifica el tamaño de la contraseña. */
         if (contrasena.length() < 4) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CONTRASENA_CORTA));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CONTRASENA_CORTA);
+            throw new ValidatorException(mensajeDeError);
         }
 
         /* Verifica que la confirmación coincida. */
         if (!confirmacion.equals(contrasena)) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CONFIRMACION_INCORRECTA));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CONFIRMACION_INCORRECTA);
+            throw new ValidatorException(mensajeDeError);
         }
     }
 
@@ -249,7 +274,9 @@ public class Registro implements Serializable {
      * Verifica que la foto subida sea del tipo y tamaño adecuado. Establece el
      * valor de extensionFoto.
      */
-    public void validarFoto(FacesContext context, UIComponent component, Object value)
+    public void validarFoto(FacesContext context,
+                            UIComponent component,
+                            Object value)
             throws ValidatorException {
         UploadedFile foto = (UploadedFile) value;
         extensionFoto = null;
@@ -262,24 +289,30 @@ public class Registro implements Serializable {
         /* Verificamos que el tamaño sea adecuado. */
         long tamanoFoto = foto.getSize();
         if (tamanoFoto > 4 * 1024 * 1024) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_GRANDE));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_FOTO_GRANDE);
+            throw new ValidatorException(mensajeDeError);
         }
 
         /* Verificamos que el tipo sea adecuado. */
         String nombreDeArchivo = foto.getFileName();
-        if (nombreDeArchivo.endsWith(".jpg") || nombreDeArchivo.endsWith(".jpeg")) {
+        if (nombreDeArchivo.endsWith(".jpg")
+                || nombreDeArchivo.endsWith(".jpeg")) {
             extensionFoto = ".jpg";
         } else if (nombreDeArchivo.endsWith(".png")) {
             extensionFoto = ".png";
         } else {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_FOTO_TIPO_INVALIDO));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_FOTO_TIPO_INVALIDO);
+            throw new ValidatorException(mensajeDeError);
         }
     }
 
     public void mostrarErrorDeValidacion(ComponentSystemEvent e) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext.isValidationFailed()) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Los datos que proporcionaste no son válidos", null);
             facesContext.addMessage(null, facesMessage);
         }

@@ -45,14 +45,20 @@ public class Mapa implements Serializable{
 
         advancedModel = new DefaultMapModel();
 
-        ControladorJpaPuesto jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto
+            = new FabricaControladorJpa().obtenerControladorJpaPuesto();
 
-        /* Se obtienen todos los puestos y se agregan los respectivos marcadores. */
+        /*
+         * Se obtienen todos los puestos y se agregan los respectivos
+         * marcadores.
+         */
         for (Puesto p : jpaPuesto.buscarTodos()) {
             Double latitud = p.getLatitud();
             Double longitud = p.getLongitud();
             String nombre = p.getNombre();
-            advancedModel.addOverlay(new Marker(new LatLng(latitud, longitud), nombre, p));
+            Marker marcador
+                = new Marker(new LatLng(latitud, longitud), nombre, p);
+            advancedModel.addOverlay(marcador);
         }
     }
 
@@ -65,9 +71,11 @@ public class Mapa implements Serializable{
     }
 
     /**
-     *<code>onMarkerSelect</code> Método que se invoca cuando se hace click en un marcador del mapa
-     *para mostrar la información del puesto.
-     *@param event tipo <code>OverlaySelectEvent</code>: Evento que invocó al método.
+     * <code>onMarkerSelect</code> Método que se invoca cuando se hace click en
+     * un marcador del mapa para mostrar la información del puesto.
+     *
+     * @param event tipo <code>OverlaySelectEvent</code>: Evento que invocó al
+     * método.
      */
     public void onMarkerSelect(OverlaySelectEvent event) {
         marker = (Marker) event.getOverlay();

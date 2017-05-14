@@ -33,9 +33,11 @@ public class AgregadorPuesto implements java.io.Serializable {
      * Constructor de la clase AgregadorPuesto
      */
     public AgregadorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
-        jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
-        jpaFotoPuesto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
+        FacesContext.getCurrentInstance().getViewRoot()
+            .setLocale(new Locale("es-Mx"));
+        FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
+        jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
+        jpaFotoPuesto = fabricaJpa.obtenerControladorJpaFotoPuesto();
     }
 
     /**
@@ -119,15 +121,20 @@ public class AgregadorPuesto implements java.io.Serializable {
         this.puesto.setNombre(this.puesto.getNombre().trim());
         this.puesto.setTipoComida(this.puesto.getTipoComida().trim());
 
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
         // Validar
         try {
-            if (validaNombre(this.puesto.getNombre(), this.puesto.getTipoComida())) {
+            if (validaNombre(puesto.getNombre(), puesto.getTipoComida())) {
                 if (this.puesto.getUbicacion().length() == 0) {
                     this.puesto.setUbicacion("Ninguna Referencia");
                 }
-                if (this.puesto.getLatitud() == 0 && this.puesto.getLongitud() == 0) {
-                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecciona la Localizacion", null);
-                    FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+                if (this.puesto.getLatitud() == 0
+                        && this.puesto.getLongitud() == 0) {
+                    FacesMessage facesMessage
+                        = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Selecciona la Localizacion", null);
+                    facesContext.addMessage(null, facesMessage);
                     return;
                 }
 
@@ -162,14 +169,19 @@ public class AgregadorPuesto implements java.io.Serializable {
                     return;
                 }
 
-                FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Agregado con exito", null);
-                FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Puesto Agregado con exito", null);
+                facesContext.addMessage(null, facesMessage);
+                facesContext.getExternalContext()
+                    .getFlash().setKeepMessages(true);
                 redirecciona();
             }
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR GRAVE\n" + e.getMessage(), null);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR GRAVE\n" + e.getMessage(), null);
+            facesContext.addMessage(null, facesMessage);
         }
 
     }
@@ -184,19 +196,25 @@ public class AgregadorPuesto implements java.io.Serializable {
     public boolean validaNombre(String nombrePuesto, String tipoComida) {
         Puesto p = jpaPuesto.buscarPorNombre(nombrePuesto);
         if (p != null) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nEl nombre ya existe", null);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR\nEl nombre ya existe", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
 
         if (nombrePuesto.equals("")) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un nombre vacío.", null);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR\nNo se puede tener un nombre vacío.", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
 
         if (tipoComida.equals("")) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un tipo de comida vacío.", null);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "ERROR\nNo se puede tener un tipo de comida vacío.", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
@@ -209,9 +227,12 @@ public class AgregadorPuesto implements java.io.Serializable {
      */
     public void redirecciona() {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("./Administrar.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext()
+                .redirect("./Administrar.xhtml");
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR 01" + e.toString(), null);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR 01" + e.toString(), null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
     }
@@ -224,25 +245,35 @@ public class AgregadorPuesto implements java.io.Serializable {
      * @return Devuelve true si no hubo problemas al guardar los datos.
      */
     public boolean guardaImagen(UploadedFile up, int id) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         try {
             if (up != null) {
                 String extensionFoto = null;
                 String nombreDeArchivo2 = up.getFileName();
                 if (up.getSize() > (4 * 1024 * 1024)) {
-                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tamaño invalido : Foto " + id + ", puedes cambiar la foto más tarde", null);
-                    FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+                    FacesMessage facesMessage
+                        = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Tamaño invalido : Foto " + id
+                                + ", puedes cambiar la foto más tarde",
+                            null);
+                    facesContext.addMessage(null, facesMessage);
                     return false;
                 }
-                if (nombreDeArchivo2.endsWith(".jpg") || nombreDeArchivo2.endsWith(".jpeg")) {
+                if (nombreDeArchivo2.endsWith(".jpg")
+                    || nombreDeArchivo2.endsWith(".jpeg")) {
                     extensionFoto = ".jpg";
                 } else if (nombreDeArchivo2.endsWith(".png")) {
                     extensionFoto = ".png";
                 } else {
-                    FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato invalido : Foto 1, puedes cambiar la foto más tarde", null);
-                    FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+                    FacesMessage facesMessage
+                        = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Formato invalido : Foto " + id
+                            +", puedes cambiar la foto más tarde", null);
+                    facesContext.addMessage(null, facesMessage);
                     return false;
                 }
-                String nombreDeArchivo = "puesto/" + puesto.getId() + "-" + id + extensionFoto;
+                String nombreDeArchivo
+                    = "puesto/" + puesto.getId() + "-" + id + extensionFoto;
                 ManejadorDeImagenes mdi = new ManejadorDeImagenes();
                 mdi.escribirImagen(up, nombreDeArchivo);
                 FotoPuesto f = new FotoPuesto();
@@ -253,8 +284,10 @@ public class AgregadorPuesto implements java.io.Serializable {
                 return true;
             }
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR Al tratar de subir la foto " + e.getMessage(), null);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR Al tratar de subir la foto " + e.getMessage(), null);
+            facesContext.addMessage(null, facesMessage);
         }
         return false;
     }

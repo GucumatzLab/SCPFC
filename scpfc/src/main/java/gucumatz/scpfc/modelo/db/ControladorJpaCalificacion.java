@@ -35,6 +35,7 @@ public class ControladorJpaCalificacion implements Serializable {
         return emf.createEntityManager();
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void crear(Calificacion calificacion) {
         EntityManager em = null;
         try {
@@ -67,6 +68,7 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void editar(Calificacion calificacion) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -119,6 +121,7 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -154,10 +157,12 @@ public class ControladorJpaCalificacion implements Serializable {
         return findCalificacionEntities(true, -1, -1);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<Calificacion> findCalificacionEntities(int maxResults, int firstResult) {
         return findCalificacionEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     private List<Calificacion> findCalificacionEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -200,7 +205,8 @@ public class ControladorJpaCalificacion implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                    = em.createNamedQuery("Calificacion.buscarPorUsuarioYPuesto", Calificacion.class);
+                = em.createNamedQuery("Calificacion.buscarPorUsuarioYPuesto",
+                    Calificacion.class);
             query.setParameter("usuario", u);
             query.setParameter("puesto", p);
             try {
@@ -218,7 +224,8 @@ public class ControladorJpaCalificacion implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Calificacion> query
-                    = em.createNamedQuery("Calificacion.buscarPorPuesto", Calificacion.class);
+                = em.createNamedQuery("Calificacion.buscarPorPuesto",
+                    Calificacion.class);
             query.setParameter("puesto", puesto);
             List<Calificacion> results = query.getResultList();
             return results;
@@ -231,7 +238,8 @@ public class ControladorJpaCalificacion implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Double> query
-                    = em.createNamedQuery("Calificacion.promedioDePuesto", Double.class);
+                = em.createNamedQuery("Calificacion.promedioDePuesto",
+                    Double.class);
             query.setParameter("puesto", puesto);
             return query.getSingleResult();
         } catch (Exception e) {

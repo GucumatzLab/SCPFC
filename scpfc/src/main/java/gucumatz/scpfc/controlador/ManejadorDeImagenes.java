@@ -44,7 +44,9 @@ public class ManejadorDeImagenes {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
-        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/imagenes.properties")) {
+        String archivoPropiedades = "WEB-INF/imagenes.properties";
+        try (InputStream is
+                = externalContext.getResourceAsStream(archivoPropiedades)) {
             Properties prop = new Properties();
             prop.load(is);
             directorio = prop.getProperty("raiz-imagenes");
@@ -55,7 +57,8 @@ public class ManejadorDeImagenes {
     /**
      * Regresa una imagen del disco como StreamedContent.
      */
-    public StreamedContent obtenerImagenDeArchivo(String archivo) throws IOException {
+    public StreamedContent obtenerImagenDeArchivo(String archivo)
+            throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         if (facesContext.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
@@ -67,21 +70,25 @@ public class ManejadorDeImagenes {
     }
 
     public StreamedContent getImagenDeArchivo() throws IOException {
-        String rutaImagen = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ruta");
+        String rutaImagen
+            = FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestParameterMap().get("ruta");
         return obtenerImagenDeArchivo(rutaImagen);
     }
 
     /**
      * Regresa un recurso de la aplicación como imagen.
      */
-    public StreamedContent obtenerImagenDeRecurso(String recurso) throws IOException {
+    public StreamedContent obtenerImagenDeRecurso(String recurso)
+            throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         if (facesContext.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
             /* No hacemos nada si está generando la vista. */
             return new DefaultStreamedContent();
         } else {
-            InputStream in = facesContext.getExternalContext().getResourceAsStream(recurso);
+            InputStream in = facesContext.getExternalContext()
+                .getResourceAsStream(recurso);
             return new DefaultStreamedContent(in);
         }
     }
@@ -89,7 +96,8 @@ public class ManejadorDeImagenes {
     /**
      * Escribe una imagen a un archivo en el directorio adecuado.
      */
-    public void escribirImagen(UploadedFile archivo, String nombre) throws IOException {
+    public void escribirImagen(UploadedFile archivo, String nombre)
+            throws IOException {
         Path rutaArchivo = Paths.get(directorio, nombre);
         Path directorio = rutaArchivo.getParent();
         try (InputStream in = archivo.getInputstream()) {
@@ -107,7 +115,8 @@ public class ManejadorDeImagenes {
      */
     public StreamedContent getFotoDeUsuario() throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        String rutaImagen = facesContext.getExternalContext().getRequestParameterMap().get("rutaImagen");
+        String rutaImagen = facesContext.getExternalContext()
+            .getRequestParameterMap().get("rutaImagen");
         if (rutaImagen == null || rutaImagen.equals("")) {
             return obtenerFotoDeUsuarioPorOmision();
         }
@@ -118,7 +127,8 @@ public class ManejadorDeImagenes {
      * Regresa la foto de un usuario. Si no tiene o recibe null, regresa una por
      * defecto.
      */
-    public StreamedContent getFotoDeUsuario(Usuario usuario) throws IOException {
+    public StreamedContent getFotoDeUsuario(Usuario usuario)
+            throws IOException {
         String rutaImagen = null;
         if (usuario != null) {
             rutaImagen = usuario.getRutaImagen();

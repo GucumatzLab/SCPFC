@@ -3,6 +3,7 @@ package gucumatz.scpfc.modelo.db.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("checkstyle:linelength")
 public class IllegalOrphanException extends Exception {
     private List<String> messages;
     public IllegalOrphanException(List<String> messages) {

@@ -28,8 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lchacon
  */
 @Entity
-@Table(name = "comentario", catalog = "gucumatz", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "comentario", catalog = "gucumatz", schema = "",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Comentario.buscarPorPuesto",
@@ -52,10 +53,12 @@ public class Comentario implements Serializable {
     @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "puesto_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Puesto puesto;
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "usuario_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
 
@@ -120,6 +123,7 @@ public class Comentario implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:linelength")
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Comentario)) {

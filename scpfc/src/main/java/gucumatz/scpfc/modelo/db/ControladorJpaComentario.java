@@ -34,6 +34,7 @@ public class ControladorJpaComentario implements Serializable {
         return emf.createEntityManager();
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void crear(Comentario comentario) {
         EntityManager em = null;
         try {
@@ -66,6 +67,7 @@ public class ControladorJpaComentario implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void editar(Comentario comentario) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -118,6 +120,7 @@ public class ControladorJpaComentario implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -149,14 +152,17 @@ public class ControladorJpaComentario implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<Comentario> findComentarioEntities() {
         return findComentarioEntities(true, -1, -1);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<Comentario> findComentarioEntities(int maxResults, int firstResult) {
         return findComentarioEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     private List<Comentario> findComentarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -199,7 +205,8 @@ public class ControladorJpaComentario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                    = em.createNamedQuery("Comentario.findByPuesto", Comentario.class);
+                = em.createNamedQuery("Comentario.findByPuesto",
+                    Comentario.class);
             query.setParameter("puestoID", id);
             List<Comentario> results = query.getResultList();
             if (results.isEmpty()) {
@@ -215,7 +222,8 @@ public class ControladorJpaComentario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                    = em.createNamedQuery("Comentario.buscarPorPuesto", Comentario.class);
+                = em.createNamedQuery("Comentario.buscarPorPuesto",
+                    Comentario.class);
             query.setParameter("puesto", puesto);
             List<Comentario> results = query.getResultList();
             return results;
@@ -228,7 +236,8 @@ public class ControladorJpaComentario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Comentario> query
-                    = em.createNamedQuery("Comentario.buscarPorUsuario", Comentario.class);
+                = em.createNamedQuery("Comentario.buscarPorUsuario",
+                    Comentario.class);
             query.setParameter("usuario", usuario);
             List<Comentario> results = query.getResultList();
             return results;

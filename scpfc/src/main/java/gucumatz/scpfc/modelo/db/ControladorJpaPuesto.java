@@ -37,6 +37,7 @@ public class ControladorJpaPuesto implements Serializable {
         return emf.createEntityManager();
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void crear(Puesto puesto) {
         if (puesto.getCalificaciones() == null) {
             puesto.setCalificaciones(new ArrayList<Calificacion>());
@@ -105,6 +106,7 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void editar(Puesto puesto) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -217,6 +219,7 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -267,10 +270,12 @@ public class ControladorJpaPuesto implements Serializable {
         return findPuestoEntities(true, -1, -1);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     public List<Puesto> findPuestoEntities(int maxResults, int firstResult) {
         return findPuestoEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("checkstyle:linelength")
     private List<Puesto> findPuestoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -312,7 +317,8 @@ public class ControladorJpaPuesto implements Serializable {
     public Puesto buscarPorNombre(String nombre) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Puesto> query = em.createNamedQuery("Puesto.buscarPorNombre", Puesto.class);
+            TypedQuery<Puesto> query
+                = em.createNamedQuery("Puesto.buscarPorNombre", Puesto.class);
             query.setParameter("nombre", nombre);
             List<Puesto> results = query.getResultList();
             if (results.isEmpty()) {

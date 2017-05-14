@@ -36,6 +36,12 @@ public class InicioDeSesion implements Serializable {
     private static final String MENSAJE_CONTRASENA_INCORRECTA
             = "Contraseña incorrecta";
 
+    private static final String MENSAJE_CORREO_ENVIADO
+        =  "Se ha reenviado el correo de confirmación a tu dirección de correo";
+    private static final String MENSAJE_CORREO_NO_ENVIADO
+        = "No se ha podido enviar el correo de confirmación."
+        + " Vuelve a intentarlo más tarde.";
+
     /**
      * Controlador de JPA para buscar al usuario en la BD.
      */
@@ -130,7 +136,9 @@ public class InicioDeSesion implements Serializable {
     /**
      * Verifica que la cuenta de usuario exista y esté confirmada.
      */
-    public void validarCuenta(FacesContext context, UIComponent component, Object value)
+    public void validarCuenta(FacesContext context,
+                              UIComponent component,
+                              Object value)
             throws ValidatorException {
         sinConfirmar = false;
         String cuenta = (String) value;
@@ -143,7 +151,9 @@ public class InicioDeSesion implements Serializable {
         /* Verifica que la cuenta exista. */
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
         if (usuario == null) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CUENTA_NO_EXISTE));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CUENTA_NO_EXISTE);
+            throw new ValidatorException(mensajeDeError);
         }
 
         /* Verifica que la cuenta esté confirmada. */
@@ -160,12 +170,15 @@ public class InicioDeSesion implements Serializable {
     /**
      * Verifica que la contraseña recibida coincida con la del usuario.
      */
-    public void validarContrasena(FacesContext context, UIComponent component, Object value)
+    public void validarContrasena(FacesContext context,
+                                  UIComponent component,
+                                  Object value)
             throws ValidatorException {
         String contrasena = (String) value;
 
         /* Obtiene la componente con el nombre de usuario y lo extrae. */
-        UIInput componenteCuenta = (UIInput) component.getAttributes().get("cuenta");
+        UIInput componenteCuenta
+            = (UIInput) component.getAttributes().get("cuenta");
         String cuenta = (String) componenteCuenta.getValue();
 
         /* Si alguno está vacío, el atributo required lo rechazará. */
@@ -174,7 +187,10 @@ public class InicioDeSesion implements Serializable {
             return;
         }
 
-        /* Obtiene al usuario. Si el resultado es nulo, el validador de la cuenta lo rechazará. */
+        /*
+         * Obtiene al usuario. Si el resultado es nulo, el validador de la
+         * cuenta lo rechazará.
+         */
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
         if (usuario == null) {
             return;
@@ -182,7 +198,9 @@ public class InicioDeSesion implements Serializable {
 
         /* Verifica que la contraseña sea correcta. */
         if (!contrasena.equals(usuario.getContrasena())) {
-            throw new ValidatorException(crearMensajeDeError(MENSAJE_CONTRASENA_INCORRECTA));
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_CONTRASENA_INCORRECTA);
+            throw new ValidatorException(mensajeDeError);
         }
     }
 
@@ -209,16 +227,14 @@ public class InicioDeSesion implements Serializable {
             correo.enviar();
 
             FacesMessage facesMessage
-                    = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Se ha reenviado el correo de confirmación a tu dirección de correo",
-                            null);
+                = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    MENSAJE_CORREO_ENVIADO, null);
             FacesContext facesContext = FacesContext.getCurrentInstance();
             facesContext.addMessage("reenviarCorreo", facesMessage);
         } catch (MessagingException | IOException e) {
             FacesMessage facesMessage
-                    = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "No se ha podido enviar el correo de confirmación. Vuelve a intentarlo más tarde.",
-                            null);
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    MENSAJE_CORREO_NO_ENVIADO, null);
             FacesContext facesContext = FacesContext.getCurrentInstance();
             facesContext.addMessage("reenviarCorreo", facesMessage);
         }
