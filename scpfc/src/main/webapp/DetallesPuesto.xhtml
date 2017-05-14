@@ -144,6 +144,16 @@
                     <b:row>
                       #{c.fecha}
                     </b:row>
+
+                    <b:row rendered="#{sesionActiva.esAdministrador}">
+                      <h:form>
+                        <b:commandButton value="Eliminar comentario"
+                                         action="#{eliminadorComentario.eliminarComentario()}">
+                          <f:param name="idComentario" value="#{c.id}"/>
+                          <p:ajax process="@form" update=":mensajes :comentarios"/>
+                        </b:commandButton>
+                      </h:form>
+                    </b:row>
                   </center>
                 </b:column>
 
