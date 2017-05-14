@@ -21,10 +21,11 @@ import javax.persistence.criteria.Root;
  */
 public class ControladorJpaFotoPuesto implements Serializable {
 
+    private EntityManagerFactory emf = null;
+
     public ControladorJpaFotoPuesto(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();

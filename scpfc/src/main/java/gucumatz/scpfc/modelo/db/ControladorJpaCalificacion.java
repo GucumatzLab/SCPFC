@@ -23,10 +23,11 @@ import javax.persistence.criteria.Root;
  */
 public class ControladorJpaCalificacion implements Serializable {
 
+    private EntityManagerFactory emf = null;
+
     public ControladorJpaCalificacion(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
