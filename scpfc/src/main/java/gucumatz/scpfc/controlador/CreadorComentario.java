@@ -142,8 +142,9 @@ public class CreadorComentario {
      */
     public void agregarComentario() {
         // Revisar que sea válido el comentario
-        if (!esValido())
+        if (!esValido()) {
             return;
+        }
 
         FabricaControladorJpa fab = new FabricaControladorJpa();
         ControladorJpaComentario jpaComentario

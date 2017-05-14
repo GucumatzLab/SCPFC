@@ -49,8 +49,9 @@ public class CreadorCalificacion {
         // Ver si hay usuario
         Usuario u = sesionActiva.getUsuario();
 
-        if (u == null)
+        if (u == null) {
             return;
+        }
 
         // Obtener puesto, ver si hay calificación previa
         Puesto p = visorPuesto.getPuesto();
@@ -58,8 +59,9 @@ public class CreadorCalificacion {
             = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
         Calificacion prev = jpaCalificacion.buscarPorUsuarioYPuesto(u, p);
 
-        if (prev != null)
+        if (prev != null) {
             this.calificacion = prev.getCalificacion();
+        }
     }
 
     /**
@@ -141,8 +143,9 @@ public class CreadorCalificacion {
     public void agregarCalificacion() {
 
         // Revisar que no haya errores
-        if (!esValida())
+        if (!esValida()) {
             return;
+        }
 
         // Crear la calificación
         FabricaControladorJpa fab = new FabricaControladorJpa();

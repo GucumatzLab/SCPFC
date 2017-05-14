@@ -10,8 +10,7 @@ public class IllegalOrphanException extends Exception {
         super((messages != null && messages.size() > 0 ? messages.get(0) : null));
         if (messages == null) {
             this.messages = new ArrayList<String>();
-        }
-        else {
+        } else {
             this.messages = messages;
         }
     }
