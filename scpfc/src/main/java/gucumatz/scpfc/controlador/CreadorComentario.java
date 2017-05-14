@@ -25,7 +25,7 @@ import javax.faces.context.FacesContext;
  *
  * @author Jaz
  */
-@ManagedBean(name="comBean")
+@ManagedBean (name = "comBean")
 @RequestScoped
 public class CreadorComentario {
 
@@ -96,13 +96,13 @@ public class CreadorComentario {
     private boolean esValido() {
 
         // Validar comentario
-        if(this.comentario.equals("")) {
+        if (this.comentario.equals("")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Error: El comentario debe contener texto.", null);
             faceContext.addMessage(null, message);
 
             return false;
-        } else if(this.comentario.length() > COMENTARIO_TAM_MAX) {
+        } else if (this.comentario.length() > COMENTARIO_TAM_MAX) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Error: Comentario demasiado largo.", null);
             faceContext.addMessage(null, message);

@@ -21,7 +21,7 @@ import java.util.List;
 @ManagedBean
 //@RequestScoped
 @ViewScoped
-public class VisorPuesto implements Serializable{
+public class VisorPuesto implements Serializable {
 
     private final ControladorJpaPuesto jpaPuesto;
     private final ControladorJpaCalificacion jpaCalificacion;
@@ -45,7 +45,7 @@ public class VisorPuesto implements Serializable{
      *<code>setId</code> Método actualiza el valor del ID del puesto actual.
      *@param l tipo <code>long</code>: ID del puesto.
      */
-    public void setId(Long l){
+    public void setId(Long l) {
         this.id = l;
     }
 
@@ -53,7 +53,7 @@ public class VisorPuesto implements Serializable{
      *<code>getId</code> Método que regresa el ID del puesto actual.
      *@return tipo <code>long</code>: ID del puesto actual.
      */
-    public Long getId(){
+    public Long getId() {
         return this.id;
     }
 
@@ -63,7 +63,7 @@ public class VisorPuesto implements Serializable{
      *
      *@return tipo <code>String</code>: Dirección de redireccionamiento.
      */
-    public String obtenerPuesto(){
+    public String obtenerPuesto() {
         if (this.id == null) {
             return "index";
         }
@@ -91,7 +91,7 @@ public class VisorPuesto implements Serializable{
      * @return tipo <code>int</code>: Promedio de calificaciones del puesto
      * actual. (Valores entre 0 - 5)
      */
-    public int getPromedioCalificacion(){
+    public int getPromedioCalificacion() {
         return (int) jpaCalificacion.promedioDePuesto(puesto);
     }
 

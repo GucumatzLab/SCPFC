@@ -31,7 +31,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @ViewScoped
-public class Mapa implements Serializable{
+public class Mapa implements Serializable {
 
     private MapModel advancedModel;
     /* El marcador del mapa que esta seleccionado. */

@@ -273,7 +273,7 @@ public class AgregadorPuesto implements java.io.Serializable {
                     FacesMessage facesMessage
                         = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Formato invalido : Foto " + id
-                            +", puedes cambiar la foto más tarde", null);
+                            + ", puedes cambiar la foto más tarde", null);
                     facesContext.addMessage(null, facesMessage);
                     return false;
                 }

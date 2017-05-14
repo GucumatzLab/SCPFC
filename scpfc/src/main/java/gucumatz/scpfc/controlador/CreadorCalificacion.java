@@ -26,7 +26,7 @@ import javax.faces.context.FacesContext;
  *
  * @author Jaz
  */
-@ManagedBean(name="calBean")
+@ManagedBean (name = "calBean")
 @RequestScoped
 public class CreadorCalificacion {
 
