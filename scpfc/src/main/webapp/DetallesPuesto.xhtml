@@ -145,7 +145,8 @@
                       #{c.fecha}
                     </b:row>
 
-                    <b:row rendered="#{sesionActiva.esAdministrador}">
+                    <b:row rendered="#{sesionActiva.esAdministrador
+                                       or (c.usuario eq sesionActiva.usuario)}">
                       <h:form>
                         <p:commandButton value="Eliminar comentario"
                                          actionListener="#{eliminadorComentario.eliminarComentario()}">
