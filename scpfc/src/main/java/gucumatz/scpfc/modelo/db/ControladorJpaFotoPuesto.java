@@ -121,20 +121,6 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
-    public List<FotoPuesto> buscarPorPuesto(Puesto puesto) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<FotoPuesto> query
-                = em.createNamedQuery("FotoPuesto.buscarPorPuesto",
-                    FotoPuesto.class);
-            query.setParameter("puesto", puesto);
-            List<FotoPuesto> results = query.getResultList();
-            return results;
-        } finally {
-            em.close();
-        }
-    }
-
     @SuppressWarnings("checkstyle:linelength")
     public List<FotoPuesto> findFotoPuestoEntities() {
         return findFotoPuestoEntities(true, -1, -1);

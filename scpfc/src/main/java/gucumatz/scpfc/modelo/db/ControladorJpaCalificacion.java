@@ -218,20 +218,6 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
-    public List<Calificacion> buscarPorPuesto(Puesto puesto) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Calificacion> query
-                = em.createNamedQuery("Calificacion.buscarPorPuesto",
-                    Calificacion.class);
-            query.setParameter("puesto", puesto);
-            List<Calificacion> results = query.getResultList();
-            return results;
-        } finally {
-            em.close();
-        }
-    }
-
     public double promedioDePuesto(Puesto puesto) {
         EntityManager em = getEntityManager();
         try {
