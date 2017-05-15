@@ -23,6 +23,11 @@ import javax.mail.MessagingException;
 
 import org.primefaces.model.UploadedFile;
 
+/**
+ * Clase que implementa el registro de un nuevo usuario.
+ *
+ * @author lchacon
+ */
 @ManagedBean
 @ViewScoped
 public class Registro implements Serializable {
@@ -125,6 +130,11 @@ public class Registro implements Serializable {
         this.foto = foto;
     }
 
+    /**
+     * Registra a un usuario con los datos recibidos.
+     *
+     * @return la siguiente página a mostrar.
+     */
     public String registrar() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
@@ -145,12 +155,12 @@ public class Registro implements Serializable {
                 = new FacesMessage(FacesMessage.SEVERITY_INFO,
                     MENSAJE_CORREO_ENVIADO + correoElectronico, null);
             facesContext.addMessage(null, facesMessage);
-        } catch (MessagingException | IOException e) {
+        } catch (MessagingException e) {
             FacesMessage facesMessage
                     = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         MENSAJE_CORREO_NO_ENVIADO, null);
             facesContext.addMessage(null, facesMessage);
-            e.printStackTrace();
+
             /* Si no se pudo enviar el correo, eliminamos al usuario. */
             try {
                 jpaUsuario.destruir(u.getId());
@@ -176,6 +186,11 @@ public class Registro implements Serializable {
 
     /**
      * Comprueba que el nombre de usuario esté disponible.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
      */
     public void validarNombreDeUsuario(FacesContext context,
                                        UIComponent component,
@@ -201,6 +216,11 @@ public class Registro implements Serializable {
     /**
      * Comprueba que el correo electrónico sea de @ciencias.unam.mx y que no se
      * haya usado para otra cuenta.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
      */
     public void validarCorreoElectronico(FacesContext context,
                                          UIComponent component,
@@ -241,6 +261,11 @@ public class Registro implements Serializable {
     /**
      * Verifica que la contraseña sea del tamaño adecuado y que la confirmación
      * sea correcta.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
      */
     public void validarContrasena(FacesContext context,
                                   UIComponent component,
@@ -278,6 +303,11 @@ public class Registro implements Serializable {
     /**
      * Verifica que la foto subida sea del tipo y tamaño adecuado. Establece el
      * valor de extensionFoto.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
      */
     public void validarFoto(FacesContext context,
                             UIComponent component,
@@ -313,6 +343,12 @@ public class Registro implements Serializable {
         }
     }
 
+    /**
+     * Agrega un mensaje de error global en el contexto actual si hay errores de
+     * validación.
+     *
+     * @param e (no se usa)
+     */
     public void mostrarErrorDeValidacion(ComponentSystemEvent e) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext.isValidationFailed()) {
@@ -326,17 +362,36 @@ public class Registro implements Serializable {
     /**
      * Crea un nuevo mensaje de error. El mensaje no contiene detalles y tiene
      * severidad de error.
+     *
+     * @param mensaje el mensaje de error
+     * @return un FacesMessage con severidad error y el mensaje dado
      */
     private FacesMessage crearMensajeDeError(String mensaje) {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
     }
 
+    /**
+     * Envia el correo de activación para el usuario dado.
+     *
+     * @param usuario el usuario al que se le envia el correo
+     * @throws MessagingException si hubo un error al enviar el correo
+     */
     private void enviarCorreoDeActivacion(Usuario usuario)
-            throws IOException, MessagingException {
-        CorreoDeActivacion correo = new CorreoDeActivacion(usuario);
-        correo.enviar();
+            throws MessagingException {
+        try {
+            CorreoDeActivacion correo = new CorreoDeActivacion(usuario);
+            correo.enviar();
+        } catch (IOException ioe) {
+            throw new MessagingException();
+        }
     }
 
+    /**
+     * Guarda la foto de un usuario en el disco.
+     *
+     * @param usuario el usuario con el que se asocia la foto
+     * @throws Exception si ocurre un error al guardar la foto
+     */
     private void guardarFoto(Usuario usuario)
             throws Exception {
         String nombreDeArchivo = "usuario/" + usuario.getId() + extensionFoto;
@@ -349,6 +404,8 @@ public class Registro implements Serializable {
 
     /**
      * Genera una cadena aleatoria para usarse como código de activación.
+     *
+     * @return una cadena aleatoria de 30 caracteres
      */
     private String obtenerCadenaAleatoria() {
         /* La base que se usa para convertir un número a cadena. */

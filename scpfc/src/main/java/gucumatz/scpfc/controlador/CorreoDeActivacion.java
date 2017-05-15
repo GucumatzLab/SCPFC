@@ -39,6 +39,13 @@ public class CorreoDeActivacion {
     private String nombre;
     private String direccion;
 
+    /**
+     * Construye un nuevo correo de activación para el usuario dado.
+     *
+     * @param usuario el usuario al que se le enviará el correo.
+     * @throws IOException si no se puede leer la configuración de correo del
+     * disco
+     */
     public CorreoDeActivacion(Usuario usuario) throws IOException {
         if (usuario == null
                 || usuario.getConfirmado()
@@ -87,9 +94,10 @@ public class CorreoDeActivacion {
 
     /**
      * Envía el correo de activación al usuario.
+     *
+     * @throws MessagingException si ocurre un error al enviar el correo.
      */
-    public void enviar()
-            throws MessagingException {
+    public void enviar() throws MessagingException {
         MimeMessage mensaje = new MimeMessage(sesionEmail);
 
         String remitente = String.format("%s <%s>", nombre, direccion);
@@ -117,6 +125,8 @@ public class CorreoDeActivacion {
     /**
      * Calcula la dirección base de la aplicación. Se usa para poder enviar una
      * URL completa.
+     *
+     * @return la dirección base de la aplicación.
      */
     private String obtenerDireccionBase() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

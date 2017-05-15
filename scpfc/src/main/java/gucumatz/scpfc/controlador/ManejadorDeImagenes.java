@@ -54,6 +54,10 @@ public class ManejadorDeImagenes {
 
     /**
      * Regresa una imagen del disco como StreamedContent.
+     *
+     * @param archivo el nombre del archivo donde se encuentra la imagen
+     * @return la imagen con un formato adecuado para p:graphicImage
+     * @throws IOException si ocurre un error al leer la imagen
      */
     public StreamedContent obtenerImagenDeArchivo(String archivo)
             throws IOException {
@@ -67,6 +71,13 @@ public class ManejadorDeImagenes {
         }
     }
 
+    /**
+     * Obtiene una imagen desde un archivo. El nombre de la imagen se obtiene
+     * como un parámetro en el contexto con nombre "ruta".
+     *
+     * @return la imagen con un formato adecuado para p:graphicImage
+     * @throws IOException si ocurre un error al leer la imagen
+     */
     public StreamedContent getImagenDeArchivo() throws IOException {
         String rutaImagen
             = FacesContext.getCurrentInstance().getExternalContext()
@@ -76,6 +87,10 @@ public class ManejadorDeImagenes {
 
     /**
      * Regresa un recurso de la aplicación como imagen.
+     *
+     * @param recurso el nombre del recurso que contiene a la imagen
+     * @return el recurso como una imagen adecuada para p:graphicImage
+     * @throws IOException si ocurre un error al leer la imagen
      */
     public StreamedContent obtenerImagenDeRecurso(String recurso)
             throws IOException {
@@ -93,6 +108,10 @@ public class ManejadorDeImagenes {
 
     /**
      * Escribe una imagen a un archivo en el directorio adecuado.
+     *
+     * @param archivo la imagen que se quiere guardar
+     * @param nombre el nombre con el que se guardará la imagen
+     * @throws IOException si ocurre un error al escribir la imagen
      */
     public void escribirImagen(UploadedFile archivo, String nombre)
             throws IOException {
@@ -104,12 +123,23 @@ public class ManejadorDeImagenes {
         }
     }
 
+    /**
+     * Regresa la foto que se asigna a los usuarios que no suben una propia.
+     *
+     * @return la foto de usuario por omisión
+     * @throws IOException si ocurre un error al leer la foto
+     */
     public StreamedContent obtenerFotoDeUsuarioPorOmision() throws IOException {
         return obtenerImagenDeRecurso("/imagenes/usuario.png");
     }
 
     /**
      * Regresa la foto de un usuario. Si no tiene, regresa una por defecto.
+     * Obtiene la ruta de la foto como parámetro en el contexto con nombre
+     * "rutaImagen".
+     *
+     * @return la foto del usuario en un formato adecuado para p:graphicImage
+     * @throws IOException si hay un error al leer la imagen
      */
     public StreamedContent getFotoDeUsuario() throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -124,6 +154,10 @@ public class ManejadorDeImagenes {
     /**
      * Regresa la foto de un usuario. Si no tiene o recibe null, regresa una por
      * defecto.
+     *
+     * @param usuario el usuario cuya foto se quiere obtener
+     * @return la foto del usuario en un formato adecuado para p:graphicImage
+     * @throws IOException si hay un error al leer la imagen
      */
     public StreamedContent getFotoDeUsuario(Usuario usuario)
             throws IOException {

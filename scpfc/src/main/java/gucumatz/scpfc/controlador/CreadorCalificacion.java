@@ -43,6 +43,10 @@ public class CreadorCalificacion {
         faceContext = FacesContext.getCurrentInstance();
     }
 
+    /**
+     * Inicializa el bean. Busca si el usuario actual ya calificó al puesto que
+     * se está viendo y, si lo hizo, recupera la calificación anterior.
+     */
     @PostConstruct
     public void initCal() {
 

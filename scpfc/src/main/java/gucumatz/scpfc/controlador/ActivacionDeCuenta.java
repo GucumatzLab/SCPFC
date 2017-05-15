@@ -12,6 +12,11 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
+/**
+ * Clase para activar cuentas de usuario.
+ *
+ * @author lchacon
+ */
 @ManagedBean(name = "activador")
 @RequestScoped
 public class ActivacionDeCuenta implements Serializable {
@@ -26,6 +31,12 @@ public class ActivacionDeCuenta implements Serializable {
     public ActivacionDeCuenta() {
     }
 
+    /**
+     * Activa la cuenta de usuario. La cuenta que se activa está dada por la
+     * propiedad {@code idUsuario}
+     *
+     * @return la página que se debe mostrar después
+     */
     public String activarCuenta() {
         if (idUsuario != null && codigoDeActivacion != null) {
             FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();

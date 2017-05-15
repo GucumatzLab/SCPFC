@@ -132,6 +132,11 @@ public class InicioDeSesion implements Serializable {
 
     /**
      * Verifica que la cuenta de usuario exista y esté confirmada.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
      */
     public void validarCuenta(FacesContext context,
                               UIComponent component,
@@ -166,6 +171,11 @@ public class InicioDeSesion implements Serializable {
 
     /**
      * Verifica que la contraseña recibida coincida con la del usuario.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
      */
     public void validarContrasena(FacesContext context,
                                   UIComponent component,
@@ -204,6 +214,9 @@ public class InicioDeSesion implements Serializable {
     /**
      * Crea un nuevo mensaje de error. El mensaje no contiene detalles y tiene
      * severidad de error.
+     *
+     * @param mensaje el mensaje de error
+     * @return un FacesMessage con severidad error y el mensaje dado
      */
     private FacesMessage crearMensajeDeError(String mensaje) {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
