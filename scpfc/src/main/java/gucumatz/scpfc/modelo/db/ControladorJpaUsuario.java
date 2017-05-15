@@ -101,7 +101,7 @@ public class ControladorJpaUsuario implements Serializable {
      * hijos (una calificacion o un comentario) en un estado illegar.
      * @throws NonexistentEntityException si no hay un usuario con el mismo ID
      * que {@code usuario}
-     * @throws Exception
+     * @throws Exception si ocurre un error
      */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {

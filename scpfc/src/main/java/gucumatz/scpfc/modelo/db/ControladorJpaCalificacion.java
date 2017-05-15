@@ -78,7 +78,7 @@ public class ControladorJpaCalificacion implements Serializable {
      * @param calificacion la calificación que se quiere editar
      * @throws NonexistentEntityException si no hay una calificación con el
      * mismo ID que {@code calificacion}
-     * @throws Exception
+     * @throws Exception si ocurre un error
      */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(Calificacion calificacion) throws NonexistentEntityException, Exception {

@@ -78,7 +78,7 @@ public class ControladorJpaComentario implements Serializable {
      * @param comentario el comentario que se quiere editar
      * @throws NonexistentEntityException si no hay un comentario con el mismo
      * ID que {@code comentario}
-     * @throws Exception
+     * @throws Exception si ocurre un error
      */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(Comentario comentario) throws NonexistentEntityException, Exception {

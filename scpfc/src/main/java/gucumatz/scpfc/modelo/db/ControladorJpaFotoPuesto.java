@@ -68,7 +68,7 @@ public class ControladorJpaFotoPuesto implements Serializable {
      * @param fotoPuesto el objeto que se quiere editar
      * @throws NonexistentEntityException si no hay una entrada con el mismo
      * ID que {@code comentario}
-     * @throws Exception
+     * @throws Exception si ocurre un error
      */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(FotoPuesto fotoPuesto) throws NonexistentEntityException, Exception {

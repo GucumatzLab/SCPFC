@@ -119,7 +119,7 @@ public class ControladorJpaPuesto implements Serializable {
      * hijos (una calificacion, un comentario o una foto) en un estado illegar.
      * @throws NonexistentEntityException si no hay un puesto con el mismo ID
      * que {@code puesto}
-     * @throws Exception
+     * @throws Exception si ocurre un error
      */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(Puesto puesto) throws IllegalOrphanException, NonexistentEntityException, Exception {
