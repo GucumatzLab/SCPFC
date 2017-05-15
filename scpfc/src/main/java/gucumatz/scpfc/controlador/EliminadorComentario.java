@@ -11,20 +11,27 @@ import javax.faces.context.FacesContext;
 /**
  * @author lchacon
  */
-@ManagedBean(name="eliminadorComentario")
+@ManagedBean(name = "eliminadorComentario")
 @RequestScoped
 public class EliminadorComentario {
 
     private ControladorJpaComentario jpaComentario;
 
     public EliminadorComentario() {
-        jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
+        jpaComentario
+            = new FabricaControladorJpa().obtenerControladorJpaComentario();
     }
 
+    /**
+     * Elimina un comentario. El comentario es identificado mediante un
+     * parámetro en la solicitud llamado "idComentario".
+     */
     public void eliminarComentario() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         try {
-            Long idComentario = Long.parseLong(facesContext.getExternalContext().getRequestParameterMap().get("idComentario"));
+            Long idComentario
+                = Long.parseLong(facesContext.getExternalContext()
+                    .getRequestParameterMap().get("idComentario"));
             jpaComentario.destruir(idComentario);
         } catch (Exception e) {
 
