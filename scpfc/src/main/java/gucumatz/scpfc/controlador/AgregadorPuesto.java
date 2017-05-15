@@ -4,7 +4,6 @@ import gucumatz.scpfc.modelo.*;
 import gucumatz.scpfc.modelo.db.*;
 
 import java.util.LinkedList;
-import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -44,8 +43,6 @@ public class AgregadorPuesto implements java.io.Serializable {
      * Constructor de la clase AgregadorPuesto
      */
     public AgregadorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot()
-            .setLocale(new Locale("es-Mx"));
         FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
         jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
         jpaFotoPuesto = fabricaJpa.obtenerControladorJpaFotoPuesto();

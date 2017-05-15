@@ -4,7 +4,6 @@ import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.db.*;
 
 import java.io.Serializable;
-import java.util.Locale;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -32,8 +31,6 @@ public class VisorPuesto implements Serializable {
      *<code>VisorPuesto</code> Constructor.
      */
     public VisorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot()
-            .setLocale(new Locale("es-Mx"));
         FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
         this.jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
         this.jpaCalificacion = fabricaJpa.obtenerControladorJpaCalificacion();

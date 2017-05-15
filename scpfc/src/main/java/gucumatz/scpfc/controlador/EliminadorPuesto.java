@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -40,8 +39,6 @@ public class EliminadorPuesto implements Serializable {
      */
     @PostConstruct
     public void init() {
-        FacesContext.getCurrentInstance().getViewRoot()
-            .setLocale(new Locale("es-Mx"));
         FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
         jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
         jpaComentario = fabricaJpa.obtenerControladorJpaComentario();

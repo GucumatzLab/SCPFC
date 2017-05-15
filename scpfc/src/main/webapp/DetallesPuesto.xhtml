@@ -142,7 +142,9 @@
                       #{c.usuario.nombre}
                     </b:row>
                     <b:row>
-                      #{c.fecha}
+                      <h:outputText value="#{c.fecha}">
+                        <f:convertDateTime type="both"/>
+                      </h:outputText>
                     </b:row>
                   </center>
                 </b:column>
