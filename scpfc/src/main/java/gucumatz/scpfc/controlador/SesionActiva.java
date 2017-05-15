@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
+
 import java.io.IOException;
 import java.io.Serializable;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
 import org.primefaces.model.StreamedContent;
 
 /**
@@ -65,11 +63,21 @@ public class SesionActiva implements Serializable {
         this.paginaAnteriorId = paginaAnteriorId;
     }
 
+    /**
+     * Cierra la sesión actual.
+     *
+     * @return la página a la que se debe regresar
+     */
     public String cerrarSesion() {
         usuario = null;
         return obtenerPaginaAnterior();
     }
 
+    /**
+     * Obtiene al usuario actual.
+     *
+     * @return el usuario actual o null si no ha iniciado sesión
+     */
     public Usuario obtenerUsuarioActual() {
         return usuario;
     }
@@ -77,6 +85,9 @@ public class SesionActiva implements Serializable {
     /**
      * Regresa la foto del usuario actual, o una imagen por omisión si no tiene
      * o no ha iniciado sesión.
+     *
+     * @return la foto del usuario actual con un tipo adecuado para
+     * {@code p:graphicImage}
      */
     public StreamedContent getFotoUsuarioActual() {
         try {
@@ -88,6 +99,8 @@ public class SesionActiva implements Serializable {
 
     /**
      * Dice si se ha iniciado sesión
+     *
+     * @return true si hay una sesión activa, false en otro caso
      */
     public boolean getHaySesionActiva() {
         return usuario != null;
@@ -95,6 +108,9 @@ public class SesionActiva implements Serializable {
 
     /**
      * Dice si el usuario actual es un administrador.
+     *
+     * @return true si hay una sesión de administrador activa, false si no hay
+     * una sesión activa o el usuario actual no es administrador
      */
     public boolean getEsAdministrador() {
         return usuario != null && usuario.getEsAdministrador();
@@ -102,6 +118,8 @@ public class SesionActiva implements Serializable {
 
     /**
      * Redirige a la página principal.
+     *
+     * @return una cadena que redirige a la página principal
      */
     public String redirigeAPaginaPrincipal() {
         return "index?faces-redirect=true";
@@ -111,6 +129,9 @@ public class SesionActiva implements Serializable {
      * Obtiene la dirección de la página anterior y olvida cuál era
      * (establece el atributo en null). En caso que no haya ninguna
      * registrada, regresa "index".
+     *
+     * @return una cadena que redirige a la página anterior, o a la página
+     * principal si no se registró una página anterior
      */
     public String obtenerPaginaAnterior() {
         String pagina = "index";
@@ -133,6 +154,8 @@ public class SesionActiva implements Serializable {
      * Regresa el identificador de la vista para iniciar sesión. Sólo
      * existe para poder ajustar el valor de la página anterior antes
      * de ir a la página.
+     *
+     * @return una cadena que redirige a la página para iniciar sesión
      */
     public String irAIniciarSesion() {
         return "iniciar-sesion?faces-redirect=true";

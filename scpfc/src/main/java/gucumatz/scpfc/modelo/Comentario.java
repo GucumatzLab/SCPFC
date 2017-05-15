@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,15 +24,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lchacon
  */
 @Entity
-@Table(name = "comentario", catalog = "gucumatz", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "comentario", catalog = "gucumatz", schema = "",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"})
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Comentario.buscarPorPuesto",
-            query = "SELECT c FROM Comentario c WHERE c.puesto = :puesto")
-    , @NamedQuery(name = "Comentario.buscarPorUsuario",
-            query = "SELECT c FROM Comentario c WHERE c.usuario = :usuario")
-})
+            query = "SELECT c FROM Comentario c WHERE c.puesto = :puesto"),
+    @NamedQuery(name = "Comentario.buscarPorUsuario",
+            query = "SELECT c FROM Comentario c WHERE c.usuario = :usuario"),
+    })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Comentario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,10 +51,12 @@ public class Comentario implements Serializable {
     @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "puesto_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Puesto puesto;
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "usuario_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
 
@@ -120,6 +121,7 @@ public class Comentario implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:linelength")
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Comentario)) {

@@ -1,15 +1,22 @@
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+
 import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
+/**
+ * Clase para activar cuentas de usuario.
+ *
+ * @author lchacon
+ */
 @ManagedBean(name = "activador")
 @RequestScoped
 public class ActivacionDeCuenta implements Serializable {
@@ -24,14 +31,23 @@ public class ActivacionDeCuenta implements Serializable {
     public ActivacionDeCuenta() {
     }
 
+    /**
+     * Activa la cuenta de usuario. La cuenta que se activa está dada por la
+     * propiedad {@code idUsuario}
+     *
+     * @return la página que se debe mostrar después
+     */
     public String activarCuenta() {
         if (idUsuario != null && codigoDeActivacion != null) {
+            FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
+
             ControladorJpaUsuario jpaUsuario
-                    = new FabricaControladorJpa().obtenerControladorJpaUsuario();
+                = fabricaJpa.obtenerControladorJpaUsuario();
 
             Usuario usuario = jpaUsuario.buscarPorId(idUsuario);
             if (usuario != null
-                    && codigoDeActivacion.equals(usuario.getCodigoDeActivacion())) {
+                    && codigoDeActivacion
+                        .equals(usuario.getCodigoDeActivacion())) {
                 usuario.setCodigoDeActivacion(null);
                 usuario.setConfirmado(true);
 

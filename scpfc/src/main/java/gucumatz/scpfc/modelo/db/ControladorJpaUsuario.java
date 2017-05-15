@@ -1,26 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo.db;
 
+import gucumatz.scpfc.modelo.Calificacion;
+import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Usuario;
+import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import gucumatz.scpfc.modelo.Calificacion;
-import java.util.ArrayList;
-import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
-import javax.persistence.NoResultException;
 
 /**
  *
@@ -28,15 +25,22 @@ import javax.persistence.NoResultException;
  */
 public class ControladorJpaUsuario implements Serializable {
 
+    private EntityManagerFactory emf = null;
+
     public ControladorJpaUsuario(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
+    /**
+     * Guarda un usuario en la base de datos.
+     *
+     * @param usuario el usuario que se quiere guardar.
+     */
+    @SuppressWarnings("checkstyle:linelength")
     public void crear(Usuario usuario) {
         if (usuario.getCalificaciones() == null) {
             usuario.setCalificaciones(new ArrayList<Calificacion>());
@@ -87,6 +91,19 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Modifica un usuario en la base de datos. El usuario que recibe debe tener
+     * un ID correspondiente a un renglón de la base de datos y debe contener
+     * los nuevos datos que se quieren guardar.
+     *
+     * @param usuario el usuario que se quiere editar
+     * @throws IllegalOrphanException si editar este usuario deja a uno de sus
+     * hijos (una calificacion o un comentario) en un estado illegar.
+     * @throws NonexistentEntityException si no hay un usuario con el mismo ID
+     * que {@code usuario}
+     * @throws Exception si ocurre un error
+     */
+    @SuppressWarnings("checkstyle:linelength")
     public void editar(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -171,6 +188,16 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Elimina un usuario de la base de datos.
+     *
+     * @param id el identificador del usuario que se quiere eliminar.
+     * @throws IllegalOrphanException si hay un hijo del usuario con ID dado (un
+     * comentario o una calificación) que evita que se elimine.
+     * @throws NonexistentEntityException si el id no corresponde a ningun
+     * usuario.
+     */
+    @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -210,14 +237,40 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Busca todos los usuarios registrados en la base de datos.
+     *
+     * @return una lista con todos los usuarios existentes.
+     */
     public List<Usuario> findUsuarioEntities() {
         return findUsuarioEntities(true, -1, -1);
     }
 
+    /**
+     * Busca una cantidad limitada de usuarios en la base de datos.
+     *
+     * @param maxResults la máxima cantidad de usuarios a regresar
+     * @param firstResult la primera posición a regresar
+     * @return una lista con a lo mas {@code maxResults} usuarios iniciando a
+     * partir del número {@code firstResult} de la lista completa.
+     */
+    @SuppressWarnings("checkstyle:linelength")
     public List<Usuario> findUsuarioEntities(int maxResults, int firstResult) {
         return findUsuarioEntities(false, maxResults, firstResult);
     }
 
+    /**
+     * Busca cierta cantidad de usuarios en la base de datos.
+     *
+     * @param all dice si se deben obtener todos los usuarios
+     * @param maxResults si {@code all} es falso, limita cuántos usuarios se
+     * obtienen
+     * @param firstResult si {@code all} es falso, dice cuál es el primer
+     * usuario que se obtiene
+     * @return una lista de usuarios siguiendo las restricciones dadas por los
+     * parámetros
+     */
+    @SuppressWarnings("checkstyle:linelength")
     private List<Usuario> findUsuarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -234,6 +287,12 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Busca un usuario por ID.
+     *
+     * @param id el ID del usuario deseado
+     * @return el usuario con ID igual a {@code id} o null si no existe.
+     */
     public Usuario buscarPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
@@ -243,6 +302,11 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Cuenta cuántos usuarios hay en la base de datos.
+     *
+     * @return el número de usuarios existentes
+     */
     public int getUsuarioCount() {
         EntityManager em = getEntityManager();
         try {
@@ -256,11 +320,18 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Busca un usuario por nombre de usuario.
+     *
+     * @param nombre el nombre de usuario que se quiere buscar
+     * @return el usuario con nombre igual a {@code nombre} o null si no existe.
+     */
     public Usuario buscarPorNombre(String nombre) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.buscarPorNombre", Usuario.class);
+                = em.createNamedQuery("Usuario.buscarPorNombre",
+                    Usuario.class);
             query.setParameter("nombre", nombre);
             try {
                 Usuario result = query.getSingleResult();
@@ -273,11 +344,18 @@ public class ControladorJpaUsuario implements Serializable {
         }
     }
 
+    /**
+     * Busca un usuario por correo electrónico.
+     *
+     * @param correoElectronico  el correo que se quiere buscar
+     * @return el usuario con correo igual a {@code correo} o null si no existe.
+     */
     public Usuario buscarPorCorreoElectronico(String correoElectronico) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.buscarPorCorreoElectronico", Usuario.class);
+                = em.createNamedQuery("Usuario.buscarPorCorreoElectronico",
+                    Usuario.class);
             query.setParameter("correoElectronico", correoElectronico);
             try {
                 Usuario result = query.getSingleResult();
@@ -301,7 +379,8 @@ public class ControladorJpaUsuario implements Serializable {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query
-                    = em.createNamedQuery("Usuario.buscarPorCuenta", Usuario.class);
+                = em.createNamedQuery("Usuario.buscarPorCuenta",
+                    Usuario.class);
             query.setParameter("cuenta", cuenta);
             try {
                 Usuario result = query.getSingleResult();

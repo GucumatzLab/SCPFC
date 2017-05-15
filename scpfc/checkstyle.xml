@@ -11,11 +11,20 @@
   <property name="localeLanguage" value="es"/>
   <property name="localeCountry" value="MX"/>
 
+  <!-- Para poder ignorar pruebas con la anotación
+       @SuppressWarnings(modulo) -->
+  <module name="SuppressWarningsFilter"/>
+
   <module name="TreeWalker">
+    <module name="SuppressWarningsHolder"/>
+
     <property name="tabWidth" value="4"/>
 
     <!-- Evita sentencias import redundantes. -->
     <module name="RedundantImport"/>
+
+    <!-- Verifica que las sentencias import estén ordenadas. -->
+    <module name="ImportOrder"/>
 
     <!-- Requiere que las clases estén documentadas. -->
     <module name="JavadocType"/>
@@ -26,6 +35,8 @@
       <property name="validateThrows" value="true"/>
       <!-- Permite que getters y setters no tengan comentarios. -->
       <property name="allowMissingPropertyJavadoc" value="true"/>
+      <!-- Revisa sólo métodos y no constructores. -->
+      <property name="tokens" value="METHOD_DEF"/>
     </module>
 
     <!-- Verifica el orden de declaración de los miembros de una

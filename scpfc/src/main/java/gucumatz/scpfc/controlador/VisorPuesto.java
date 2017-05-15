@@ -1,16 +1,14 @@
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.Puesto;
-import gucumatz.scpfc.modelo.Calificacion;
-import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.FotoPuesto;
+import gucumatz.scpfc.modelo.db.*;
+
 import java.io.Serializable;
 import java.util.Locale;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.List;
 
 /**
  * Clase controlador de DetallesPuesto.
@@ -21,7 +19,7 @@ import java.util.List;
 @ManagedBean
 //@RequestScoped
 @ViewScoped
-public class VisorPuesto implements Serializable{
+public class VisorPuesto implements Serializable {
 
     private final ControladorJpaPuesto jpaPuesto;
     private final ControladorJpaCalificacion jpaCalificacion;
@@ -34,16 +32,18 @@ public class VisorPuesto implements Serializable{
      *<code>VisorPuesto</code> Constructor.
      */
     public VisorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
-        this.jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
-        this.jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
+        FacesContext.getCurrentInstance().getViewRoot()
+            .setLocale(new Locale("es-Mx"));
+        FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
+        this.jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
+        this.jpaCalificacion = fabricaJpa.obtenerControladorJpaCalificacion();
     }
 
     /**
      *<code>setId</code> Método actualiza el valor del ID del puesto actual.
      *@param l tipo <code>long</code>: ID del puesto.
      */
-    public void setId(Long l){
+    public void setId(Long l) {
         this.id = l;
     }
 
@@ -51,22 +51,24 @@ public class VisorPuesto implements Serializable{
      *<code>getId</code> Método que regresa el ID del puesto actual.
      *@return tipo <code>long</code>: ID del puesto actual.
      */
-    public Long getId(){
+    public Long getId() {
         return this.id;
     }
 
     /**
-     *<code>obtenerPuesto</code> Método inicializa los objetos relacionados con el puesto actual.
+     * <code>obtenerPuesto</code> Método inicializa los objetos relacionados con
+     * el puesto actual.
+     *
      *@return tipo <code>String</code>: Dirección de redireccionamiento.
      */
-    public String obtenerPuesto(){
+    public String obtenerPuesto() {
         if (this.id == null) {
             return "index";
         }
 
         this.puesto = jpaPuesto.buscarPorId(this.id);
         if (this.puesto == null) {
-                return "index";
+            return "index";
         }
 
         return null;
@@ -81,10 +83,13 @@ public class VisorPuesto implements Serializable{
     }
 
     /**
-     *<code>getPromedioCalificacion</code> Método que regresa el promedio de calificaciones del puesto actual.
-     *@return tipo <code>int</code>: Promedio de calificaciones del puesto actual. (Valores entre 0 - 5)
+     * <code>getPromedioCalificacion</code> Método que regresa el promedio de
+     * calificaciones del puesto actual.
+     *
+     * @return tipo <code>int</code>: Promedio de calificaciones del puesto
+     * actual. (Valores entre 0 - 5)
      */
-    public int getPromedioCalificacion(){
+    public int getPromedioCalificacion() {
         return (int) jpaCalificacion.promedioDePuesto(puesto);
     }
 

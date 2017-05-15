@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,13 +21,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lchacon
  */
 @Entity
-@Table(name = "foto_puesto", catalog = "gucumatz", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "foto_puesto", catalog = "gucumatz", schema = "",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"})
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FotoPuesto.buscarPorPuesto",
-            query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puesto")
-})
+        query = "SELECT f FROM FotoPuesto f WHERE f.puesto = :puesto"),
+    })
+@SuppressWarnings("checkstyle:magicnumber")
 public class FotoPuesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,7 +42,8 @@ public class FotoPuesto implements Serializable {
     @Basic(optional = false)
     @Column(name = "url", nullable = false, length = 100)
     private String url;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "puesto_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Puesto puesto;
 
@@ -91,6 +91,7 @@ public class FotoPuesto implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:linelength")
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof FotoPuesto)) {

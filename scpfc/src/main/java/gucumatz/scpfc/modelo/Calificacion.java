@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,17 +21,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lchacon
  */
 @Entity
-@Table(name = "calificacion", catalog = "gucumatz", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "calificacion", catalog = "gucumatz", schema = "",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Calificacion.buscarPorPuesto",
-            query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto")
-    , @NamedQuery(name = "Calificacion.buscarPorUsuarioYPuesto",
-            query = "SELECT c FROM Calificacion c WHERE c.usuario = :usuario AND c.puesto = :puesto")
-    , @NamedQuery(name = "Calificacion.promedioDePuesto",
-            query = "SELECT AVG(c.calificacion) FROM Calificacion c WHERE c.puesto = :puesto")
-})
+        query = "SELECT c FROM Calificacion c WHERE c.puesto = :puesto"),
+    @NamedQuery(name = "Calificacion.buscarPorUsuarioYPuesto",
+        query = "SELECT c FROM Calificacion c"
+            + " WHERE c.usuario = :usuario AND c.puesto = :puesto"),
+    @NamedQuery(name = "Calificacion.promedioDePuesto",
+        query = "SELECT AVG(c.calificacion) FROM Calificacion c"
+            + " WHERE c.puesto = :puesto"),
+    })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Calificacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,10 +47,12 @@ public class Calificacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "calificacion", nullable = false)
     private float calificacion;
-    @JoinColumn(name = "puesto_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "puesto_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Puesto puesto;
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "usuario_id",
+        referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
 
@@ -106,6 +108,7 @@ public class Calificacion implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:linelength")
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Calificacion)) {

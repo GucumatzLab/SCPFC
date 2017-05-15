@@ -1,18 +1,20 @@
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.modelo.db.*;
 import gucumatz.scpfc.modelo.*;
+import gucumatz.scpfc.modelo.db.*;
+
 import java.io.Serializable;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
-import javax.faces.context.FacesContext;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 
 /**
  * Clase para controlar un objeto de la Clase Puesto
@@ -37,11 +39,13 @@ public class EliminadorPuesto implements Serializable {
      */
     @PostConstruct
     public void init() {
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("es-Mx"));
-        jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
-        jpaComentario = new FabricaControladorJpa().obtenerControladorJpaComentario();
-        jpaCalificacion = new FabricaControladorJpa().obtenerControladorJpaCalificacion();
-        jpaFoto = new FabricaControladorJpa().obtenerControladorJpaFotoPuesto();
+        FacesContext.getCurrentInstance().getViewRoot()
+            .setLocale(new Locale("es-Mx"));
+        FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
+        jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
+        jpaComentario = fabricaJpa.obtenerControladorJpaComentario();
+        jpaCalificacion = fabricaJpa.obtenerControladorJpaCalificacion();
+        jpaFoto = fabricaJpa.obtenerControladorJpaFotoPuesto();
         puestos = new LinkedList<Puesto>(jpaPuesto.buscarTodos());
         seleccionado = "";
         puestos2 = new LinkedList<SelectItem>();
@@ -105,13 +109,20 @@ public class EliminadorPuesto implements Serializable {
             }
             Puesto p = jpaPuesto.buscarPorNombre(this.seleccionado);
             if (p == null) {
-                FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Advertencia:\nEl id no esta en la base de datos", null);
-                FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+                FacesMessage facesMessage
+                    = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Advertencia:\nEl id no esta en la base de datos",
+                        null);
+                FacesContext.getCurrentInstance()
+                    .addMessage(null, facesMessage);
                 return;
             }
-            LinkedList<Comentario> com = new LinkedList<Comentario>(jpaComentario.findComentarioEntities());
-            LinkedList<Calificacion> cal = new LinkedList<Calificacion>(jpaCalificacion.buscarTodos());
-            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(jpaFoto.findFotoPuestoEntities());
+            LinkedList<Comentario> com
+                = new LinkedList<>(jpaComentario.findComentarioEntities());
+            LinkedList<Calificacion> cal
+                = new LinkedList<>(jpaCalificacion.buscarTodos());
+            LinkedList<FotoPuesto> ft
+                = new LinkedList<>(jpaFoto.findFotoPuestoEntities());
             //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
@@ -133,12 +144,17 @@ public class EliminadorPuesto implements Serializable {
             }
             jpaPuesto.destruir(p.getId());
 
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Puesto Eliminado con exito", null);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Puesto Eliminado con exito", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            FacesContext.getCurrentInstance().getExternalContext()
+                .getFlash().setKeepMessages(true);
             redirecciona();
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR GRAVE", e.getMessage());
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR GRAVE", e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
     }
@@ -148,9 +164,12 @@ public class EliminadorPuesto implements Serializable {
      */
     public void redirecciona() {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("./Administrar.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext()
+                .redirect("./Administrar.xhtml");
         } catch (Exception e) {
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(), null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
     }

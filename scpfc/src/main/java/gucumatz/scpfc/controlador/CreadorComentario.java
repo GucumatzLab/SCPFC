@@ -1,18 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.controlador.VisorPuesto;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
-import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+
 import java.util.Date;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -25,12 +21,18 @@ import javax.faces.context.FacesContext;
  *
  * @author Jaz
  */
-@ManagedBean(name="comBean")
+@ManagedBean (name = "comBean")
 @RequestScoped
 public class CreadorComentario {
 
+    /**
+     * Longitud máxima de un comenario.
+     */
+    private static final int COMENTARIO_TAM_MAX = 1024;
+
     private String comentario;
-    private final FacesContext faceContext; // Obtiene información de la aplicación
+    // Obtiene información de la aplicación
+    private final FacesContext faceContext;
     private FacesMessage message;
 
     @ManagedProperty("#{sesionActiva}")
@@ -67,7 +69,7 @@ public class CreadorComentario {
 
     /**
      * Obtiene el objeto relacionado a la vista del puesto.
-     * 
+     *
      * @return el <code>VisorPuesto</code> ligado.
      */
     public VisorPuesto getVisorPuesto() {
@@ -76,7 +78,7 @@ public class CreadorComentario {
 
     /**
      * Actualiza el objeto relacionado a la vista del puesto.
-     * 
+     *
      * @param visorPuesto el nuevo <code>VisorPuesto</code>.
      */
     public void setVisorPuesto(VisorPuesto visorPuesto) {
@@ -88,15 +90,17 @@ public class CreadorComentario {
      * @return true si el comentario es válido, false e.o.c.
      */
     private boolean esValido() {
-        
+
         // Validar comentario
-        if(this.comentario.equals("")) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: El comentario debe contener texto.", null);
+        if (this.comentario.equals("")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: El comentario debe contener texto.", null);
             faceContext.addMessage(null, message);
 
             return false;
-        } else if(this.comentario.length() > 1024) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Comentario demasiado largo.", null);
+        } else if (this.comentario.length() > COMENTARIO_TAM_MAX) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: Comentario demasiado largo.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -111,7 +115,8 @@ public class CreadorComentario {
 
         // Validar puesto
         if (p == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: Puesto no registrado.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Error: Puesto no registrado.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -122,7 +127,8 @@ public class CreadorComentario {
 
         // Validar al usuario
         if (u == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debes iniciar sesión para calificar.", null);
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Debes iniciar sesión para calificar.", null);
             faceContext.addMessage(null, message);
 
             return false;
@@ -136,18 +142,21 @@ public class CreadorComentario {
      */
     public void agregarComentario() {
         // Revisar que sea válido el comentario
-        if (!esValido())
+        if (!esValido()) {
             return;
+        }
 
         FabricaControladorJpa fab = new FabricaControladorJpa();
-        ControladorJpaComentario jpaComentario = fab.obtenerControladorJpaComentario();
+        ControladorJpaComentario jpaComentario
+            = fab.obtenerControladorJpaComentario();
 
         // Crear el comentario
         Comentario c = new Comentario();
         c.setComentario(this.comentario);
 
         // Obtener el puesto relacionado al ID
-        ControladorJpaPuesto jpaPuesto = fab.obtenerControladorJpaPuesto();
+        ControladorJpaPuesto jpaPuesto
+            = fab.obtenerControladorJpaPuesto();
         Puesto p = visorPuesto.getPuesto();
         c.setPuesto(p);
         visorPuesto.getPuesto().getComentarios().add(c);
@@ -161,7 +170,8 @@ public class CreadorComentario {
         c.setFecha(fecha);
         jpaComentario.crear(c);
 
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Comentario registrado.", null);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+            "Comentario registrado.", null);
         faceContext.addMessage(null, message);
 
         return;
@@ -169,8 +179,8 @@ public class CreadorComentario {
 
     /**
      * Regresa la sesión activa actual.
-     * 
-     * @return El <code>SesionActiva</code> actual. 
+     *
+     * @return El <code>SesionActiva</code> actual.
      */
     public SesionActiva getSesionActiva() {
         return sesionActiva;
@@ -178,7 +188,7 @@ public class CreadorComentario {
 
     /**
      * Actualiza la sesión activa actual.
-     * 
+     *
      * @param sesionActiva El nuevo objeto <code>SesionActiva</code> actual.
      */
     public void setSesionActiva(SesionActiva sesionActiva) {

@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,19 +23,24 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author lchacon
  */
 @Entity
-@Table(name = "usuario", catalog = "gucumatz", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id"})
-    , @UniqueConstraint(columnNames = {"correoElectronico"})
-    , @UniqueConstraint(columnNames = {"nombre"})})
+@Table(name = "usuario", catalog = "gucumatz", schema = "",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"}),
+        @UniqueConstraint(columnNames = {"correoElectronico"}),
+        @UniqueConstraint(columnNames = {"nombre"}),
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.buscarPorNombre",
-            query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
-    , @NamedQuery(name = "Usuario.buscarPorCorreoElectronico",
-            query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correoElectronico")
-    , @NamedQuery(name = "Usuario.buscarPorCuenta",
-            query = "SELECT u FROM Usuario u WHERE u.nombre = :cuenta OR u.correoElectronico = :cuenta")
-})
+        query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuario.buscarPorCorreoElectronico",
+        query = "SELECT u FROM Usuario u"
+            + " WHERE u.correoElectronico = :correoElectronico"),
+    @NamedQuery(name = "Usuario.buscarPorCuenta",
+        query = "SELECT u FROM Usuario u"
+            + " WHERE u.nombre = :cuenta OR u.correoElectronico = :cuenta"),
+    })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -82,7 +83,10 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Long id, String nombre, String correoElectronico, String contrasena, boolean esAdministrador, boolean confirmado, boolean eliminado) {
+    public Usuario(Long id, String nombre,
+                   String correoElectronico, String contrasena,
+                   boolean esAdministrador, boolean confirmado,
+                   boolean eliminado) {
         this.id = id;
         this.nombre = nombre;
         this.correoElectronico = correoElectronico;
@@ -190,6 +194,7 @@ public class Usuario implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:linelength")
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Usuario)) {

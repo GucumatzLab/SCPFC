@@ -1,27 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.controlador;
+
+import gucumatz.scpfc.modelo.Puesto;
+import gucumatz.scpfc.modelo.db.*;
 
 import java.io.Serializable;
 
-import gucumatz.scpfc.modelo.db.*;
-import gucumatz.scpfc.modelo.Puesto;
-import java.io.IOException;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 
 /**
  * Clase controlador del mapa.
@@ -31,7 +23,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @ViewScoped
-public class Mapa implements Serializable{
+public class Mapa implements Serializable {
 
     private MapModel advancedModel;
     /* El marcador del mapa que esta seleccionado. */
@@ -42,17 +34,23 @@ public class Mapa implements Serializable{
      */
     @PostConstruct
     public void init() {
-        
-        advancedModel = new DefaultMapModel();
-        
-        ControladorJpaPuesto jpaPuesto = new FabricaControladorJpa().obtenerControladorJpaPuesto();
 
-        /* Se obtienen todos los puestos y se agregan los respectivos marcadores. */
+        advancedModel = new DefaultMapModel();
+
+        ControladorJpaPuesto jpaPuesto
+            = new FabricaControladorJpa().obtenerControladorJpaPuesto();
+
+        /*
+         * Se obtienen todos los puestos y se agregan los respectivos
+         * marcadores.
+         */
         for (Puesto p : jpaPuesto.buscarTodos()) {
             Double latitud = p.getLatitud();
             Double longitud = p.getLongitud();
             String nombre = p.getNombre();
-            advancedModel.addOverlay(new Marker(new LatLng(latitud, longitud), nombre, p));
+            Marker marcador
+                = new Marker(new LatLng(latitud, longitud), nombre, p);
+            advancedModel.addOverlay(marcador);
         }
     }
 
@@ -65,9 +63,11 @@ public class Mapa implements Serializable{
     }
 
     /**
-     *<code>onMarkerSelect</code> Método que se invoca cuando se hace click en un marcador del mapa
-     *para mostrar la información del puesto.
-     *@param event tipo <code>OverlaySelectEvent</code>: Evento que invocó al método.
+     * <code>onMarkerSelect</code> Método que se invoca cuando se hace click en
+     * un marcador del mapa para mostrar la información del puesto.
+     *
+     * @param event tipo <code>OverlaySelectEvent</code>: Evento que invocó al
+     * método.
      */
     public void onMarkerSelect(OverlaySelectEvent event) {
         marker = (Marker) event.getOverlay();
@@ -80,5 +80,5 @@ public class Mapa implements Serializable{
     public Marker getMarker() {
         return marker;
     }
-    
+
 }

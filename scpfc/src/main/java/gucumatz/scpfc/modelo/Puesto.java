@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,13 +23,16 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author lchacon
  */
 @Entity
-@Table(name = "puesto", catalog = "gucumatz", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "puesto", catalog = "gucumatz", schema = "",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"})
+    })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Puesto.buscarPorNombre",
-            query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre")
-})
+            query = "SELECT p FROM Puesto p WHERE p.nombre = :nombre"),
+    })
+@SuppressWarnings("checkstyle:magicnumber")
 public class Puesto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,7 +71,8 @@ public class Puesto implements Serializable {
         this.id = id;
     }
 
-    public Puesto(Long id, String nombre, String tipoComida, double latitud, double longitud) {
+    public Puesto(Long id, String nombre, String tipoComida,
+                  double latitud, double longitud) {
         this.id = id;
         this.nombre = nombre;
         this.tipoComida = tipoComida;
@@ -171,6 +171,7 @@ public class Puesto implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:linelength")
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Puesto)) {

@@ -1,19 +1,20 @@
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
-import java.io.InputStream;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -38,6 +39,13 @@ public class CorreoDeActivacion {
     private String nombre;
     private String direccion;
 
+    /**
+     * Construye un nuevo correo de activación para el usuario dado.
+     *
+     * @param usuario el usuario al que se le enviará el correo.
+     * @throws IOException si no se puede leer la configuración de correo del
+     * disco
+     */
     public CorreoDeActivacion(Usuario usuario) throws IOException {
         if (usuario == null
                 || usuario.getConfirmado()
@@ -52,7 +60,10 @@ public class CorreoDeActivacion {
         final String usuarioCorreo;
         final String contrasena;
 
-        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/autenticacion-correo.properties")) {
+        String archivoPropiedadesAutenticacion
+            = "WEB-INF/autenticacion-correo.properties";
+        try (InputStream is = externalContext
+                .getResourceAsStream(archivoPropiedadesAutenticacion)) {
             Properties prop = new Properties();
             prop.load(is);
 
@@ -64,24 +75,29 @@ public class CorreoDeActivacion {
 
         this.usuario = usuario;
 
-        try (InputStream is = externalContext.getResourceAsStream("WEB-INF/correo.properties")) {
+        String archivoPropiedadesCorreo = "WEB-INF/correo.properties";
+        try (InputStream is = externalContext
+                .getResourceAsStream(archivoPropiedadesCorreo)) {
             Properties prop = new Properties();
             prop.load(is);
-            sesionEmail = Session.getInstance(prop,
-                new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(usuarioCorreo, contrasena);
-                    }
-                });
+            Authenticator autenticador = new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    PasswordAuthentication pa
+                        = new PasswordAuthentication(usuarioCorreo, contrasena);
+                    return pa;
+                }
+            };
+            sesionEmail = Session.getInstance(prop, autenticador);
         }
     }
 
     /**
      * Envía el correo de activación al usuario.
+     *
+     * @throws MessagingException si ocurre un error al enviar el correo.
      */
-    public void enviar()
-            throws MessagingException {
+    public void enviar() throws MessagingException {
         MimeMessage mensaje = new MimeMessage(sesionEmail);
 
         String remitente = String.format("%s <%s>", nombre, direccion);
@@ -96,7 +112,8 @@ public class CorreoDeActivacion {
         String urlBase = obtenerDireccionBase();
 
         String textoMensaje = String.format(
-                "Para confirmar tu cuenta ve a %s/activar-cuenta.xhtml?id=%d&codigo=%s",
+                "Para confirmar tu cuenta ve a "
+                    + "%s/activar-cuenta.xhtml?id=%d&codigo=%s",
                 urlBase,
                 usuario.getId(),
                 usuario.getCodigoDeActivacion());
@@ -108,18 +125,22 @@ public class CorreoDeActivacion {
     /**
      * Calcula la dirección base de la aplicación. Se usa para poder enviar una
      * URL completa.
+     *
+     * @return la dirección base de la aplicación.
      */
     private String obtenerDireccionBase() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
-        HttpServletRequest solicitud = (HttpServletRequest) externalContext.getRequest();
+        HttpServletRequest solicitud
+            = (HttpServletRequest) externalContext.getRequest();
 
         String urlSolicitud = solicitud.getRequestURL().toString();
 
         /* Obtiene el dominio donde está la aplicación. Por ejemplo,
          * http://localhost:8080/. Esto no incluye el contexto, por
          * ejemplo scpfc/ */
-        int longitudDominio = urlSolicitud.length() - solicitud.getRequestURI().length();
+        int longitudDominio
+            = urlSolicitud.length() - solicitud.getRequestURI().length();
         String dominio = urlSolicitud.substring(0, longitudDominio);
 
         /* Obtiene la dirección base de la aplicación pegándole el
