@@ -149,11 +149,12 @@
                                        or (c.usuario eq sesionActiva.usuario)}">
                       <h:form>
                         <p:commandButton value="Eliminar comentario"
-                                         actionListener="#{eliminadorComentario.eliminarComentario()}">
+                                         action="#{eliminadorComentario.eliminarComentario()}">
+                          <f:setPropertyActionListener target="#{eliminadorComentario.idComentario}"
+                                                       value="#{c.id}"/>
                           <p:confirm header="Confirmar eliminación"
                                      message="¿Seguro que deseas eliminar este comentario?
                                               &quot;#{c.comentario}&quot;"/>
-                          <f:param name="idComentario" value="#{c.id}"/>
                           <p:ajax process="@form" update=":mensajes :comentarios"/>
                         </p:commandButton>
                       </h:form>
