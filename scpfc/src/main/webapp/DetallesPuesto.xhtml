@@ -147,11 +147,14 @@
 
                     <b:row rendered="#{sesionActiva.esAdministrador}">
                       <h:form>
-                        <b:commandButton value="Eliminar comentario"
-                                         action="#{eliminadorComentario.eliminarComentario()}">
+                        <p:commandButton value="Eliminar comentario"
+                                         actionListener="#{eliminadorComentario.eliminarComentario()}">
+                          <p:confirm header="Confirmar eliminación"
+                                     message="¿Seguro que deseas eliminar este comentario?
+                                              &quot;#{c.comentario}&quot;"/>
                           <f:param name="idComentario" value="#{c.id}"/>
                           <p:ajax process="@form" update=":mensajes :comentarios"/>
-                        </b:commandButton>
+                        </p:commandButton>
                       </h:form>
                     </b:row>
                   </center>
@@ -161,6 +164,12 @@
               </b:row>
             </b:panel>
           </ui:repeat>
+
+          <!-- Confirmación de eliminar comentario -->
+          <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Eliminar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+          </p:confirmDialog>
         </column>
       </b:row>
 
