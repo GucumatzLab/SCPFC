@@ -24,6 +24,10 @@ public class AgregadorPuesto implements java.io.Serializable {
 
     private final ControladorJpaPuesto jpaPuesto;
     private final ControladorJpaFotoPuesto jpaFotoPuesto;
+    private String am1;
+    private String am2;
+    private String pm1;
+    private String pm2;
     private UploadedFile foto1;
     private UploadedFile foto2;
     private UploadedFile foto3;
@@ -111,6 +115,78 @@ public class AgregadorPuesto implements java.io.Serializable {
     }
 
     /**
+     * Hora AM
+     *
+     * @return am1
+     */
+    public String getAm1() {
+        return this.am1;
+    }
+
+    /**
+     * Metodo para cambiar Hora AM
+     *
+     * @param nuevo - nueva hora AM
+     */
+    public void setAm1(String nuevo) {
+        this.am1 = nuevo;
+    }
+
+    /**
+     * Minuto AM
+     *
+     * @return am2
+     */
+    public String getAm2() {
+        return this.am2;
+    }
+
+    /**
+     * Metodo para cambiar Minuto AM
+     *
+     * @param nuevo - nuevo minuto AM
+     */
+    public void setAm2(String nuevo) {
+        this.am2 = nuevo;
+    }
+
+    /**
+     * Hora PM
+     *
+     * @return pm1
+     */
+    public String getPm1() {
+        return this.pm1;
+    }
+
+    /**
+     * Metodo para cambiar Hora PM
+     *
+     * @param nuevo - nueva hora PM
+     */
+    public void setPm1(String nuevo) {
+        this.pm1 = nuevo;
+    }
+
+    /**
+     * Minuto PM
+     *
+     * @return am1
+     */
+    public String getPm2() {
+        return this.pm2;
+    }
+
+    /**
+     * Metodo para cambiar minuto PM
+     *
+     * @param nuevo - nuevo minuto AM
+     */
+    public void setPm2(String nuevo) {
+        this.pm2 = nuevo;
+    }
+
+    /**
      * Metodo con el que se hace la peticion al controlador para agregar un
      * Puesto a la base de datos
      */
@@ -118,7 +194,7 @@ public class AgregadorPuesto implements java.io.Serializable {
         // Hacer el trim
         this.puesto.setNombre(this.puesto.getNombre().trim());
         this.puesto.setTipoComida(this.puesto.getTipoComida().trim());
-        
+
         // Validar
         try {
             if (validaNombre(this.puesto.getNombre(), this.puesto.getTipoComida())) {
@@ -130,7 +206,31 @@ public class AgregadorPuesto implements java.io.Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, facesMessage);
                     return;
                 }
-
+                int a1 = (int) Double.parseDouble(this.am1);
+                int a2 = (int) Double.parseDouble(this.am2);
+                int p1 = (int) Double.parseDouble(this.pm1);
+                int p2 = (int) Double.parseDouble(this.pm2);
+                if (a1 < 10) {
+                    this.am1 = "0" + a1;
+                } else {
+                    this.am1 = Integer.toString(a1);
+                }
+                if (a2 < 10) {
+                    this.am2 = "0" + a2;
+                } else {
+                    this.am2 = Integer.toString(a2);
+                }
+                if (p1 < 10) {
+                    this.pm1 = "0" + p1;
+                } else {
+                    this.pm1 = Integer.toString(p1);
+                }
+                if (p2 < 10) {
+                    this.pm2 = "0" + p2;
+                } else {
+                    this.pm2 = Integer.toString(p2);
+                }
+                this.puesto.setHorario("Abierto desde las " + this.am1 + ":" + this.am2 + " hrs. a las " + this.pm1 + ":" + this.pm2 + " hrs.");
                 this.puesto.setFotosPuesto(new LinkedList<FotoPuesto>());
                 jpaPuesto.crear(this.puesto);
 
@@ -188,19 +288,19 @@ public class AgregadorPuesto implements java.io.Serializable {
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
-        
+
         if (nombrePuesto.equals("")) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un nombre vacío.", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
-        
+
         if (tipoComida.equals("")) {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR\nNo se puede tener un tipo de comida vacío.", null);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return false;
         }
-        
+
         return true;
     }
 
