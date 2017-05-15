@@ -3,6 +3,7 @@ package gucumatz.scpfc.controlador;
 import gucumatz.scpfc.modelo.*;
 import gucumatz.scpfc.modelo.db.*;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -117,30 +118,23 @@ public class EliminadorPuesto implements Serializable {
                     .addMessage(null, facesMessage);
                 return;
             }
-            LinkedList<Comentario> com
-                = new LinkedList<>(jpaComentario.findComentarioEntities());
-            LinkedList<Calificacion> cal
-                = new LinkedList<>(jpaCalificacion.buscarTodos());
-            LinkedList<FotoPuesto> ft
-                = new LinkedList<>(jpaFoto.findFotoPuestoEntities());
+            LinkedList<Comentario> com = new LinkedList<Comentario>(p.getComentarios());
+            LinkedList<Calificacion> cal = new LinkedList<Calificacion>(p.getCalificaciones());
+            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(p.getFotosPuesto());
             //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
-                if (c.getPuesto() == p) {
-                    jpaComentario.destruir(c.getId());
-                }
-
+                jpaComentario.destruir(c.getId());
             }
             for (Calificacion c : cal) {
-                if (c.getPuesto() == p) {
-                    jpaCalificacion.destruir(c.getId());
-                }
+                jpaCalificacion.destruir(c.getId());
             }
-
             for (FotoPuesto f : ft) {
-                if (f.getPuesto().equals(p)) {
-                    jpaFoto.destruir(f.getId());
+                File ff = new File("/tmp/scpfc/imagenes/" +f.getUrl());
+                if(ff.exists()){
+                    ff.delete();
                 }
+                jpaFoto.destruir(f.getId());
             }
             jpaPuesto.destruir(p.getId());
 
