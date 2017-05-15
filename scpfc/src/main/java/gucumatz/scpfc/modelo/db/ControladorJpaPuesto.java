@@ -35,6 +35,11 @@ public class ControladorJpaPuesto implements Serializable {
         return emf.createEntityManager();
     }
 
+    /**
+     * Guarda un puesto en la base de datos.
+     *
+     * @param puesto el puesto que se quiere guardar.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void crear(Puesto puesto) {
         if (puesto.getCalificaciones() == null) {
@@ -104,6 +109,18 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    /**
+     * Modifica un puesto en la base de datos. El puesto que recibe debe tener
+     * un ID correspondiente a un renglón de la base de datos y debe contener
+     * los nuevos datos que se quieren guardar.
+     *
+     * @param puesto el puesto que se quiere editar
+     * @throws IllegalOrphanException si editar este puesto deja a uno de sus
+     * hijos (una calificacion, un comentario o una foto) en un estado illegar.
+     * @throws NonexistentEntityException si no hay un puesto con el mismo ID
+     * que {@code puesto}
+     * @throws Exception
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(Puesto puesto) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
@@ -217,6 +234,15 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    /**
+     * Elimina un puesto de la base de datos.
+     *
+     * @param id el identificador del puesto que se quiere eliminar.
+     * @throws IllegalOrphanException si hay un hijo del puesto con ID dado (un
+     * comentario, una calificación o una foto) que evita que se elimine.
+     * @throws NonexistentEntityException si el id no corresponde a ningun
+     * puesto.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
@@ -264,15 +290,39 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    /**
+     * Busca todos los puestos registrados en la base de datos.
+     *
+     * @return una lista con todos los puestos existentes.
+     */
     public List<Puesto> buscarTodos() {
         return findPuestoEntities(true, -1, -1);
     }
 
+    /**
+     * Busca una cantidad limitada de puestos en la base de datos.
+     *
+     * @param maxResults la máxima cantidad de puestos a regresar
+     * @param firstResult la primera posición a regresar
+     * @return una lista con a lo mas {@code maxResults} puestos iniciando a
+     * partir del número {@code firstResult} de la lista completa.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public List<Puesto> findPuestoEntities(int maxResults, int firstResult) {
         return findPuestoEntities(false, maxResults, firstResult);
     }
 
+    /**
+     * Busca cierta cantidad de puestos en la base de datos.
+     *
+     * @param all dice si se deben obtener todos los puestos
+     * @param maxResults si {@code all} es falso, limita cuántos puestos se
+     * obtienen
+     * @param firstResult si {@code all} es falso, dice cuál es el primer puesto
+     * que se obtiene
+     * @return una lista de puestos siguiendo las restricciones dadas por los
+     * parámetros
+     */
     @SuppressWarnings("checkstyle:linelength")
     private List<Puesto> findPuestoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
@@ -290,6 +340,12 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    /**
+     * Busca un puesto por ID.
+     *
+     * @param id el ID del puesto deseado
+     * @return el puesto con ID igual a {@code id} o null si no existe.
+     */
     public Puesto buscarPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
@@ -299,6 +355,11 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    /**
+     * Cuenta cuántos puestos hay en la base de datos.
+     *
+     * @return el número de puestos existentes
+     */
     public int getPuestoCount() {
         EntityManager em = getEntityManager();
         try {
@@ -312,6 +373,12 @@ public class ControladorJpaPuesto implements Serializable {
         }
     }
 
+    /**
+     * Busca un puesto por nombre.
+     *
+     * @param nombre el nombre del puesto deseado
+     * @return el puesto con nombre igual a {@code nombre} o null si no existe.
+     */
     public Puesto buscarPorNombre(String nombre) {
         EntityManager em = getEntityManager();
         try {

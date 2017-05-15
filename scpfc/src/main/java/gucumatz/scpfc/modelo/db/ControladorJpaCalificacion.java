@@ -33,6 +33,10 @@ public class ControladorJpaCalificacion implements Serializable {
         return emf.createEntityManager();
     }
 
+    /**
+     * Guarda una calificación en la base de datos.
+     * @param calificacion la calificación que se quiere guardar.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void crear(Calificacion calificacion) {
         EntityManager em = null;
@@ -66,6 +70,16 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Modifica una calificación en la base de datos. La calificación que recibe
+     * debe tener un ID correspondiente a un renglón de la base de datos y debe
+     * contener los nuevos datos que se quieren guardar.
+     *
+     * @param calificacion la calificación que se quiere editar
+     * @throws NonexistentEntityException si no hay una calificación con el
+     * mismo ID que {@code calificacion}
+     * @throws Exception
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(Calificacion calificacion) throws NonexistentEntityException, Exception {
         EntityManager em = null;
@@ -119,6 +133,13 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Elimina una calificación de la base de datos.
+     *
+     * @param id el identificador de la calificación que se quiere eliminar.
+     * @throws NonexistentEntityException si el id no corresponde a ninguna
+     * calificación.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
@@ -151,15 +172,39 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Busca todas las calificaciones registradas en la base de datos.
+     *
+     * @return una lista con todas las calificaciones existentes.
+     */
     public List<Calificacion> buscarTodos() {
         return findCalificacionEntities(true, -1, -1);
     }
 
+    /**
+     * Busca una cantidad limitada de calificaciones en la base de datos.
+     *
+     * @param maxResults la máxima cantidad de calificaciones a regresar
+     * @param firstResult la primera posición a regresar
+     * @return una lista con a lo mas {@code maxResults} calificaciones
+     * iniciando a partir del número {@code firstResult} de la lista completa.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public List<Calificacion> findCalificacionEntities(int maxResults, int firstResult) {
         return findCalificacionEntities(false, maxResults, firstResult);
     }
 
+    /**
+     * Busca cierta cantidad de calificaciones en la base de datos.
+     *
+     * @param all dice si se deben obtener todas las calificaciones
+     * @param maxResults si {@code all} es falso, limita cuántas calificaciones
+     * se obtienen
+     * @param firstResult si {@code all} es falso, dice cuál es la primer
+     * calificación que se obtiene
+     * @return una lista de calificaciones siguiendo las restricciones dadas por
+     * los parámetros
+     */
     @SuppressWarnings("checkstyle:linelength")
     private List<Calificacion> findCalificacionEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
@@ -177,6 +222,12 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Busca una calificación por ID.
+     *
+     * @param id el ID de la calificación deseada
+     * @return la calificación con ID igual a {@code id} o null si no existe.
+     */
     public Calificacion buscarPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
@@ -186,6 +237,11 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Cuenta cuántas calificaciones hay en la base de datos.
+     *
+     * @return el número de calificaciones existentes
+     */
     public int getCalificacionCount() {
         EntityManager em = getEntityManager();
         try {
@@ -199,6 +255,14 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Busca la calificación que hizo un usuario sobre un puesto específico.
+     *
+     * @param u el usuario que hizo la calificación
+     * @param p un puesto
+     * @return la calificación que el usuario le dio al puesto, o null si aún no
+     * lo califica.
+     */
     public Calificacion buscarPorUsuarioYPuesto(Usuario u, Puesto p) {
         EntityManager em = getEntityManager();
         try {
@@ -218,6 +282,14 @@ public class ControladorJpaCalificacion implements Serializable {
         }
     }
 
+    /**
+     * Calcula la calificación promedio de un puesto.
+     *
+     * @param puesto el puesto del que se quiere conocer la calificación
+     * promedio.
+     * @return la calificación promedio de {@code puesto}, 0 si aún no tiene
+     * calificaciones.
+     */
     public double promedioDePuesto(Puesto puesto) {
         EntityManager em = getEntityManager();
         try {

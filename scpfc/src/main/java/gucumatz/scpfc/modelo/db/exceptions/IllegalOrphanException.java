@@ -3,6 +3,10 @@ package gucumatz.scpfc.modelo.db.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Excepción que indica que realizar una operación dejaría sin padre a una
+ * entidad en la base.
+ */
 @SuppressWarnings("checkstyle:linelength")
 public class IllegalOrphanException extends Exception {
 

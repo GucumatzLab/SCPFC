@@ -31,6 +31,11 @@ public class ControladorJpaFotoPuesto implements Serializable {
         return emf.createEntityManager();
     }
 
+    /**
+     * Guarda un objeto FotoPuesto en la base de datos.
+     *
+     * @param fotoPuesto el objeto que se quiere guardar.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void crear(FotoPuesto fotoPuesto) {
         EntityManager em = null;
@@ -55,6 +60,16 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    /**
+     * Modifica un FotoPuesto en la base de datos. El objeto que recibe debe
+     * tener un ID correspondiente a un renglón de la base de datos y debe
+     * contener los nuevos datos que se quieren guardar.
+     *
+     * @param fotoPuesto el objeto que se quiere editar
+     * @throws NonexistentEntityException si no hay una entrada con el mismo
+     * ID que {@code comentario}
+     * @throws Exception
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void editar(FotoPuesto fotoPuesto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
@@ -94,6 +109,13 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    /**
+     * Elimina una foto de la base de datos.
+     *
+     * @param id el identificador de la foto que se quiere eliminar.
+     * @throws NonexistentEntityException si el id no corresponde a ninguna
+     * foto.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public void destruir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
@@ -121,16 +143,40 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    /**
+     * Busca todas las fotos de puestos registradas en la base de datos.
+     *
+     * @return una lista con todos los objetos FotoPuesto existentes.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public List<FotoPuesto> findFotoPuestoEntities() {
         return findFotoPuestoEntities(true, -1, -1);
     }
 
+    /**
+     * Busca una cantidad limitada de fotos en la base de datos.
+     *
+     * @param maxResults la máxima cantidad de objetos a regresar
+     * @param firstResult la primera posición a regresar
+     * @return una lista con a lo mas {@code maxResults} fotos iniciando a
+     * partir del número {@code firstResult} de la lista completa.
+     */
     @SuppressWarnings("checkstyle:linelength")
     public List<FotoPuesto> findFotoPuestoEntities(int maxResults, int firstResult) {
         return findFotoPuestoEntities(false, maxResults, firstResult);
     }
 
+    /**
+     * Busca cierta cantidad de fotos en la base de datos.
+     *
+     * @param all dice si se deben obtener todas las fotos
+     * @param maxResults si {@code all} es falso, limita cuántas fotos se
+     * obtienen
+     * @param firstResult si {@code all} es falso, dice cuál es la primer foto
+     * que se obtiene
+     * @return una lista de fotos siguiendo las restricciones dadas por los
+     * parámetros
+     */
     @SuppressWarnings("checkstyle:linelength")
     private List<FotoPuesto> findFotoPuestoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
@@ -148,6 +194,12 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    /**
+     * Busca un FotoPuesto por ID.
+     *
+     * @param id el ID de la foto deseada
+     * @return el FotoPuesto con ID igual a {@code id} o null si no existe.
+     */
     public FotoPuesto findFotoPuesto(Long id) {
         EntityManager em = getEntityManager();
         try {
@@ -157,6 +209,11 @@ public class ControladorJpaFotoPuesto implements Serializable {
         }
     }
 
+    /**
+     * Cuenta cuántas fotos hay en la base de datos.
+     *
+     * @return el número de fotos existentes
+     */
     public int getFotoPuestoCount() {
         EntityManager em = getEntityManager();
         try {
