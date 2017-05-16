@@ -30,9 +30,13 @@ public class Mapa implements Serializable {
     private Marker marker;
 
     /**
+     * Identificador de un puesto que se ignora al poner los marcadores.
+     */
+    private Long idPuestoIgnorado;
+
+    /**
      *<code>init</code> Método inicializa el mapa.
      */
-    @PostConstruct
     public void init() {
 
         advancedModel = new DefaultMapModel();
@@ -45,6 +49,11 @@ public class Mapa implements Serializable {
          * marcadores.
          */
         for (Puesto p : jpaPuesto.buscarTodos()) {
+            /* Omite al puesto ignorado. */
+            if (p.getId().equals(idPuestoIgnorado)) {
+                continue;
+            }
+
             Double latitud = p.getLatitud();
             Double longitud = p.getLongitud();
             String nombre = p.getNombre();
@@ -60,6 +69,14 @@ public class Mapa implements Serializable {
      */
     public MapModel getAdvancedModel() {
         return advancedModel;
+    }
+
+    public Long getIdPuestoIgnorado() {
+        return idPuestoIgnorado;
+    }
+
+    public void setIdPuestoIgnorado(Long idPuestoIgnorado) {
+        this.idPuestoIgnorado = idPuestoIgnorado;
     }
 
     /**

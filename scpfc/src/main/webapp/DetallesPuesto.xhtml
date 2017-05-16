@@ -12,8 +12,10 @@
 
     <ui:define name="contenido">
         <f:metadata>
-            <f:viewParam id="id" name="id" value="#{visorPuesto.id}"/>
-            <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
+            <f:viewParam name="id" value="#{mapa.idPuestoIgnorado}"/>
+            <f:viewAction action="#{mapa.init}"/>
+            <f:viewParam name="id" value="#{visorPuesto.id}"/>
+            <f:viewAction action="#{visorPuesto.obtenerPuesto}"/>
         </f:metadata>
       <style>
         #gmap {

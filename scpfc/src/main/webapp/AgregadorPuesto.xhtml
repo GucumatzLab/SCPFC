@@ -9,6 +9,7 @@
     <f:metadata>
         <f:viewAction if="#{not sesionActiva.esAdministrador}"
                       action="#{sesionActiva.redirigeAPaginaPrincipal}" />
+        <f:viewAction action="#{mapa.init}"/>
     </f:metadata>
 
     <ui:composition template="WEB-INF/plantilla.xhtml">
