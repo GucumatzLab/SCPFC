@@ -61,7 +61,12 @@
           </b:row>
           <b:row>
             <center>
-              <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
+              <h1 style="display: inline">
+                <h:outputText value="#{visorPuesto.puesto.nombre}"/>
+              </h1>
+              <h:link value="[Editar]" outcome="editar-puesto">
+                <f:param name="id" value="#{visorPuesto.puesto.id}"/>
+              </h:link>
             </center>
             <p><b>Ubicación: </b> <h:outputText value="#{visorPuesto.puesto.ubicacion}"/></p>
             <p><b>Tipo de comida: </b> <h:outputText value="#{visorPuesto.puesto.tipoComida}"/></p>
