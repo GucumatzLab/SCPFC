@@ -15,7 +15,7 @@
     <ui:define name="contenido">
       <f:metadata>
         <f:viewAction if="#{not sesionActiva.esAdministrador}"
-                      action="#{sesionActiva.redirigeAPaginaPrincipal}" />
+                      action="#{sesionActiva.redirigeAPaginaPrincipal}"/>
         <f:viewParam name="id" value="#{mapa.idPuestoIgnorado}"/>
         <f:viewAction action="#{mapa.init}"/>
         <f:viewParam name="id" value="#{editorPuesto.idPuesto}"/>
@@ -44,7 +44,9 @@
                              value="#{editorPuesto.puesto.nombre}"
                              label="Nombre del puesto"
                              required="true"
+                             validator="#{editorPuesto.validarNombre}"
                              >
+                  <f:validateLength maximum="100"/>
                   <p:ajax event="blur" update="msgNombre"/>
                 </b:inputText>
 
@@ -54,6 +56,7 @@
                              label="Tipo de comida"
                              required="true"
                              >
+                  <f:validateLength maximum="200"/>
                   <p:ajax event="blur" update="msgTipoComida"/>
                 </b:inputText>
 
@@ -63,6 +66,7 @@
                              label="Horario"
                              required="false"
                              >
+                  <f:validateLength maximum="100"/>
                   <p:ajax event="blur" update="msgHorario"/>
                 </b:inputText>
 
@@ -72,6 +76,7 @@
                              label="Referencias de ubicación"
                              required="false"
                              >
+                  <f:validateLength maximum="100"/>
                   <p:ajax event="blur" update="msgUbicacion"/>
                 </b:inputText>
 

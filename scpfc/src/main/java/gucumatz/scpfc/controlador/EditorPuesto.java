@@ -7,8 +7,12 @@ import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 
 /**
  *
@@ -17,6 +21,9 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class EditorPuesto implements Serializable {
+
+    private static final String MENSAJE_NOMBRE_NO_DISPONIBLE
+        = "Ya existe un puesto con este nombre";
 
     private final ControladorJpaPuesto jpaPuesto;
     private final ControladorJpaFotoPuesto jpaFotoPuesto;
@@ -77,12 +84,59 @@ public class EditorPuesto implements Serializable {
      * @return la página a la que redirige
      */
     public String actualizar() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
         try {
             jpaPuesto.editar(puesto);
         } catch (Exception e) {
+            /* Esto no debería ocurrir. */
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Ocurrió un error al intentar actualizar el puesto", null);
+            facesContext.addMessage(null, facesMessage);
 
+            return null;
         }
         return "DetallesPuesto?faces-redirect=true&includeViewParams=true";
+    }
+
+    /**
+     * Comprueba que el nombre del puesto sea único.
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
+     */
+    public void validarNombre(FacesContext context,
+                              UIComponent component,
+                              Object value)
+        throws ValidatorException {
+        String nombrePorValidar = (String) value;
+
+        /* Si es vacío, el atributo required lo rechaza. */
+        if (nombrePorValidar == null || nombrePorValidar.isEmpty()) {
+            return;
+        }
+
+        /* Verifica que no exista otro puesto con el mismo nombre. */
+        Puesto puesto2 = jpaPuesto.buscarPorNombre(nombrePorValidar);
+        if (puesto2 != null && puesto2.getId() != puesto.getId()) {
+            FacesMessage mensajeDeError
+                = crearMensajeDeError(MENSAJE_NOMBRE_NO_DISPONIBLE);
+            throw new ValidatorException(mensajeDeError);
+        }
+    }
+
+    /**
+     * Crea un nuevo mensaje de error. El mensaje no contiene detalles y tiene
+     * severidad de error.
+     *
+     * @param mensaje el mensaje de error
+     * @return un FacesMessage con severidad error y el mensaje dado
+     */
+    private FacesMessage crearMensajeDeError(String mensaje) {
+        return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
     }
 
 }
