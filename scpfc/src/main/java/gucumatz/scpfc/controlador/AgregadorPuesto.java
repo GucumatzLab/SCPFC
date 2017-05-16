@@ -221,27 +221,15 @@ public class AgregadorPuesto implements java.io.Serializable {
                 int a2 = (int) Double.parseDouble(this.am2);
                 int p1 = (int) Double.parseDouble(this.pm1);
                 int p2 = (int) Double.parseDouble(this.pm2);
-                if (a1 < 10) {
-                    this.am1 = "0" + a1;
-                } else {
-                    this.am1 = Integer.toString(a1);
-                }
-                if (a2 < 10) {
-                    this.am2 = "0" + a2;
-                } else {
-                    this.am2 = Integer.toString(a2);
-                }
-                if (p1 < 10) {
-                    this.pm1 = "0" + p1;
-                } else {
-                    this.pm1 = Integer.toString(p1);
-                }
-                if (p2 < 10) {
-                    this.pm2 = "0" + p2;
-                } else {
-                    this.pm2 = Integer.toString(p2);
-                }
-                this.puesto.setHorario("Abierto desde las " + this.am1 + ":" + this.am2 + " hrs. a las " + this.pm1 + ":" + this.pm2 + " hrs.");
+
+                am1 = String.format("%02d", a1);
+                am2 = String.format("%02d", a2);
+                pm1 = String.format("%02d", p1);
+                pm2 = String.format("%02d", p2);
+
+                this.puesto.setHorario("Abierto desde las "
+                    + this.am1 + ":" + this.am2 + " hrs. a las "
+                    + this.pm1 + ":" + this.pm2 + " hrs.");
                 this.puesto.setFotosPuesto(new LinkedList<FotoPuesto>());
                 jpaPuesto.crear(this.puesto);
 

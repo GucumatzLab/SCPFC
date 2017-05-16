@@ -115,9 +115,9 @@ public class EliminadorPuesto implements Serializable {
                     .addMessage(null, facesMessage);
                 return;
             }
-            LinkedList<Comentario> com = new LinkedList<Comentario>(p.getComentarios());
-            LinkedList<Calificacion> cal = new LinkedList<Calificacion>(p.getCalificaciones());
-            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(p.getFotosPuesto());
+            List<Comentario> com = p.getComentarios();
+            List<Calificacion> cal = p.getCalificaciones();
+            List<FotoPuesto> ft = p.getFotosPuesto();
             //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
@@ -127,8 +127,8 @@ public class EliminadorPuesto implements Serializable {
                 jpaCalificacion.destruir(c.getId());
             }
             for (FotoPuesto f : ft) {
-                File ff = new File("/tmp/scpfc/imagenes/" +f.getUrl());
-                if(ff.exists()){
+                File ff = new File("/tmp/scpfc/imagenes/" + f.getUrl());
+                if (ff.exists()) {
                     ff.delete();
                 }
                 jpaFoto.destruir(f.getId());
