@@ -64,7 +64,8 @@
               <h1 style="display: inline">
                 <h:outputText value="#{visorPuesto.puesto.nombre}"/>
               </h1>
-              <h:link value="[Editar]" outcome="editar-puesto">
+              <h:link value="[Editar]" outcome="editar-puesto"
+                      rendered="#{sesionActiva.esAdministrador}">
                 <f:param name="id" value="#{visorPuesto.puesto.id}"/>
               </h:link>
             </center>
