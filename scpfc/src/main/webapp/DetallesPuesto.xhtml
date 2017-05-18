@@ -23,10 +23,11 @@
         }
       </style>
 
+      <b:panel>
       <b:row>
         <b:column span="6">
-          <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
-                  type="HYBRID" model="#{mapa.advancedModel}"
+          <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="19"
+                  type="ROADMAP" model="#{mapa.advancedModel}"
                   widgetVar="map">
             <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
             <p:gmapInfoWindow id="infoWindow">
@@ -118,8 +119,11 @@
 
         </b:column>
       </b:row>
+      </b:panel>
+
 
       <b:row id="comentarios">
+        <b:panel>
         <column span="8" offset="2">
           <h2>Comentarios</h2>
 
@@ -154,6 +158,7 @@
             </b:panel>
           </ui:repeat>
         </column>
+        </b:panel>
       </b:row>
 
     <script type="text/javascript">
