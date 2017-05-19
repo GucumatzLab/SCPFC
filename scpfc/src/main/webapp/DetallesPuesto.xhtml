@@ -75,7 +75,7 @@
               <b:row>
                 <!-- Botón para el overlay de comentar -->
                 <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
-                <p:dialog header="Comentar" widgetVar="comOverlay" height="250" width="400">
+                <p:dialog header="Comentar" widgetVar="comOverlay" height="50%" width="70%">
                   <b:row>
                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
                       <br/>
@@ -94,7 +94,7 @@
 
                 <!-- Botón para el overlay de calificar -->
                 <p:commandButton value="Calificar" type="button" onclick="PF('calOverlay').show();"/>
-                <p:dialog header="Calificar" widgetVar="calOverlay" height="200" width="400">
+                <p:dialog header="Calificar" widgetVar="calOverlay" height="50%" width="50%">
                   <b:row>
                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
                       <div align="center" draggable="false">
@@ -128,7 +128,9 @@
           <h2>Comentarios</h2>
 
           <b:row rendered="#{empty visorPuesto.puesto.comentarios}">
-            <p>No hay comentarios sobre este puesto.</p>
+              <center>
+                <p>No hay comentarios sobre este puesto.</p>
+              </center>
           </b:row>
 
           <ui:repeat value="#{visorPuesto.puesto.comentarios}" var="c">
