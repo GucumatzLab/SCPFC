@@ -120,9 +120,9 @@
       </b:row>
 
       <b:row id="comentarios">
-        <column span="8" offset="2">
+        <b:column span="8" offset="2">
           <h2>Comentarios</h2>
-
+          <h:form>
           <b:row rendered="#{empty visorPuesto.puesto.comentarios}">
             <p>No hay comentarios sobre este puesto.</p>
           </b:row>
@@ -150,10 +150,12 @@
                 </b:column>
 
                 <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
+                <b:column span="1" rendered="#{sesionActiva.haySesionActiva}"><b:commandButton action="#{visorPuesto.enviaMensaje(sesionActiva.obtenerUsuarioActual(),c.usuario,c,visorPuesto.puesto)}" iconAwesome="fa-bell-o" tooltip="Reportar este comentario como ofensivo o inapropiado" look="warning"/></b:column>
               </b:row>
             </b:panel>
           </ui:repeat>
-        </column>
+          </h:form>
+        </b:column>
       </b:row>
 
     <script type="text/javascript">
