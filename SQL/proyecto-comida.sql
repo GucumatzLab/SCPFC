@@ -5,6 +5,7 @@ drop table if exists calificacion;
 drop table if exists foto_puesto;
 drop table if exists usuario;
 drop table if exists puesto;
+drop table if exists reaccion;
 
 create table usuario (
   id serial primary key,
@@ -55,4 +56,14 @@ create table foto_puesto (
   url varchar(100) not null,
 
   foreign key (puesto_id) references puesto(id)
+);
+
+create table reaccion (
+  id serial primary key,
+  comentario_id bigint unsigned not null,
+  usuario_id bigint unsigned not null,
+  reaccion int unsigned not null,
+
+  foreign key (comentario_id) references comentario(id),
+  foreign key (usuario_id) references usuario(id)
 );
