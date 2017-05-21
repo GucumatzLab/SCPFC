@@ -75,6 +75,8 @@ public class Usuario implements Serializable {
     private List<Calificacion> calificaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<Comentario> comentarios;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
+    private List<Reaccion> reacciones;
 
     public Usuario() {
     }
@@ -186,6 +188,15 @@ public class Usuario implements Serializable {
         this.comentarios = comentarios;
     }
 
+    @XmlTransient
+    public List<Reaccion> getReaccionCollection() {
+        return reacciones;
+    }
+
+    public void setReaccionCollection(List<Reaccion> reacciones) {
+        this.reacciones = reacciones;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

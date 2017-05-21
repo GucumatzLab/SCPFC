@@ -2,8 +2,10 @@ package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,11 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -59,7 +63,9 @@ public class Comentario implements Serializable {
         referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comentarioId")
+    private List<Reaccion> reacciones;
+    
     public Comentario() {
     }
 
@@ -113,6 +119,15 @@ public class Comentario implements Serializable {
         this.usuario = usuario;
     }
 
+    @XmlTransient
+    public List<Reaccion> getReacciones() {
+        return reacciones;
+    }
+
+    public void setReacciones(List<Reaccion> reacciones) {
+        this.reacciones = reacciones;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

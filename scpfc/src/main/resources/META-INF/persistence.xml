@@ -7,6 +7,7 @@
     <class>gucumatz.scpfc.modelo.Puesto</class>
     <class>gucumatz.scpfc.modelo.Usuario</class>
     <class>gucumatz.scpfc.modelo.FotoPuesto</class>
+    <class>gucumatz.scpfc.modelo.Reaccion</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gucumatz?zeroDateTimeBehavior=convertToNull"/>

@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/scpfc"/>
+<Context antiJARLocking="true" path="/scpfc">
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="g" password="1234" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/gucumatz?zeroDateTimeBehavior=convertToNull" username="gucumatz"/>
+</Context>
