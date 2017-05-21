@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">SCPFC | <h:outputText value="#{visorUsuario.usuario.nombre}"/></ui:define>
+
+    <ui:define name="contenido">
+      <f:metadata>
+        <f:viewParam id="id" name="id" value="#{visorUsuario.id}"/>
+        <f:viewAction action="#{visorUsuario.obtenerUsuario}" />
+      </f:metadata>
+        
+      <div id="infoUsuario" style="width: 100%">
+        <div id="info" style="float: left; width: 30%">
+          <p:graphicImage styleClass="imgCirculo"
+                          value="#{manejadorDeImagenes.fotoDeUsuario}">
+            <f:param name="rutaImagen" value="#{visorUsuario.usuario.rutaImagen}"/>
+          </p:graphicImage>
+          <br />
+          <h:outputText value="#{visorUsuario.usuario.nombre}" />
+          <br />
+          <h:outputText value="#{visorUsuario.usuario.correoElectronico}" />
+        </div>
+        <div id="estadisticas" style="float: left; width: 30%">
+            Calificaciones: <h:outputText value="#{visorUsuario.sizeCalificaciones()}" />.
+            <br />
+            Comentarios: <h:outputText value="#{visorUsuario.sizeComentarios()}" />.
+        </div>
+        <div style="float: left; width: 40%">
+          <p:chart type="donut" model="#{visorUsuario.estadistica}"/>    
+        </div>
+      </div>
+      <div>
+        <h2>Comentarios</h2>
+        <ui:repeat value="#{visorUsuario.usuario.comentarios}" var="c">
+          <b:panel collapsible="true">
+            <b:row>
+              <b:column span="3">
+                <center>
+                  <b:row>
+                    #{c.puesto.nombre}
+                  </b:row>
+                  <b:row>
+                    <h:outputText value="#{c.fecha}">
+                      <f:convertDateTime type="both"/>
+                    </h:outputText>
+                  </b:row>
+                </center>
+              </b:column>
+               <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
+            </b:row>
+          </b:panel>
+        </ui:repeat>
+      </div>
+    </ui:define>
+  </ui:composition>
+</html>
