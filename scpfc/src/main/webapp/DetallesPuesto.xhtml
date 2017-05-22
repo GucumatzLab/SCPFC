@@ -151,9 +151,23 @@
 
                 <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
               </b:row>
-              <div style="float: right">
-                <div id="like" style="float: left">👍 <h:outputText value="#{c.getReaccionSize(1)}"></h:outputText></div>
-                <div id="dislike" style="float: left">👎 <h:outputText value="#{c.getReaccionSize(2)}"></h:outputText></div>
+              <div style="float: right" onmouseover="document.getElementById('reaccion#{c.id}').style.display = 'block';"
+                                        onMouseOut="document.getElementById('reaccion#{c.id}').style.display = 'none';">
+                <div style="width: 100%">
+                  <div id="like" style="float: left">👍 <h:outputText value="#{c.getReaccionSize(1)}"></h:outputText></div>
+                  <div id="dislike" style="float: left">👎 <h:outputText value="#{c.getReaccionSize(2)}"></h:outputText></div>
+                </div>
+                <p:outputPanel rendered="#{sesionActiva.haySesionActiva}">
+                  <div id="reaccion#{c.id}" style="width: 100%; display: none">
+                    <h:form>
+                      <h:selectOneRadio id="reaccionUsuario" value="#{0}">
+                          <f:selectItem id="like" itemLabel="👍" itemValue="1" />
+                          <f:selectItem id="dislike" itemLabel="👎" itemValue="2" />
+                      </h:selectOneRadio>
+                      <p:commandButton value="Listo" icon="ui-icon-check"/>
+                    </h:form>      
+                  </div>
+                </p:outputPanel>
               </div>
             </b:panel>
           </ui:repeat>
