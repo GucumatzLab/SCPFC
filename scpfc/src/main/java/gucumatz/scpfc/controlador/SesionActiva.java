@@ -125,6 +125,11 @@ public class SesionActiva implements Serializable {
         return "index?faces-redirect=true";
     }
 
+    /**
+     * Devuelve la URL del perfil del usuario actual.
+     *
+     * @return una cadena que redirige al perfil del usuario actual
+     */
     public String getPerfil(){
         return "VerPerfil.xhtml?id=" + usuario.getId();
     }
