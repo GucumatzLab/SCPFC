@@ -132,15 +132,17 @@
               <b:row>
                 <b:column span="3">
                   <center>
+                      <b:navLink href="VerPerfil.xhtml?id=#{c.usuario.id}">
                     <b:row>
-                      <p:graphicImage styleClass="imgCirculo"
-                                      value="#{manejadorDeImagenes.fotoDeUsuario}">
-                        <f:param name="rutaImagen" value="#{c.usuario.rutaImagen}"/>
-                      </p:graphicImage>
-                    </b:row>
-                    <b:row>
-                      #{c.usuario.nombre}
-                    </b:row>
+                        <p:graphicImage styleClass="imgCirculo"
+                                        value="#{manejadorDeImagenes.fotoDeUsuario}">
+                          <f:param name="rutaImagen" value="#{c.usuario.rutaImagen}"/>
+                        </p:graphicImage>
+                      </b:row>
+                      <b:row>
+                        #{c.usuario.nombre}
+                      </b:row>
+                    </b:navLink>
                     <b:row>
                       <h:outputText value="#{c.fecha}">
                         <f:convertDateTime type="both"/>

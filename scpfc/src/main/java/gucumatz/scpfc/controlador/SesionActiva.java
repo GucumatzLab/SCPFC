@@ -125,6 +125,10 @@ public class SesionActiva implements Serializable {
         return "index?faces-redirect=true";
     }
 
+    public String getPerfil(){
+        return "VerPerfil.xhtml?id=" + usuario.getId();
+    }
+
     /**
      * Obtiene la dirección de la página anterior y olvida cuál era
      * (establece el atributo en null). En caso que no haya ninguna

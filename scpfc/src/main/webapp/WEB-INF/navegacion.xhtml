@@ -26,7 +26,7 @@
         <b:navLink icon-align="right" rendered="#{sesionActiva.esAdministrador}"
                    value="Administrar" outcome="Administrar"></b:navLink>
 
-        <b:navLink icon-align="right" rendered="#{sesionActiva.haySesionActiva}"
+        <b:navLink href="#{sesionActiva.perfil}" icon-align="right" rendered="#{sesionActiva.haySesionActiva}"
                    value="#{sesionActiva.usuario.nombre} (#{sesionActiva.usuario.correoElectronico})">
           <p:graphicImage
             styleClass="imgCirculo" rendered="#{sesionActiva.haySesionActiva}"
