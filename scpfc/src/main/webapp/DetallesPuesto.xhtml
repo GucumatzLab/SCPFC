@@ -151,6 +151,10 @@
 
                 <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
               </b:row>
+              <div style="float: right">
+                <div id="like" style="float: left">👍 <h:outputText value="#{c.getReaccionSize(1)}"></h:outputText></div>
+                <div id="dislike" style="float: left">👎 <h:outputText value="#{c.getReaccionSize(2)}"></h:outputText></div>
+              </div>
             </b:panel>
           </ui:repeat>
         </column>

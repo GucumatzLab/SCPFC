@@ -2,6 +2,7 @@ package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -126,6 +127,17 @@ public class Comentario implements Serializable {
 
     public void setReacciones(List<Reaccion> reacciones) {
         this.reacciones = reacciones;
+    }
+
+    public int getReaccionSize(int reaccion){
+        int c = 0;
+        for(Reaccion r : reacciones){
+            if (r.getReaccion() == reaccion) {
+                c++;
+            }
+        }
+
+        return c;
     }
     
     @Override
