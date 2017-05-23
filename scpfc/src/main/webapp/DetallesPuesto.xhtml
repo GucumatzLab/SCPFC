@@ -157,10 +157,10 @@
                   <div id="reaccion#{c.id}" style="width: 100%; display: none">
                     <h:form>
                       <b:commandButton look="primary btn-block" value="👍" size="xs" action="#{sesionActiva.reacciona(c.id, 1)}">
-                        <p:ajax process="@form" update=":comentario"/>
+                        <p:ajax process="@form" update=":comentarios"/>
                       </b:commandButton>
                       <b:commandButton look="primary btn-block" value="👎" size="xs" action="#{sesionActiva.reacciona(c.id, 2)}">
-                        <p:ajax process="@form" update=":comentario"/>
+                        <p:ajax process="@form" update=":comentarios"/>
                       </b:commandButton>
                     </h:form>      
                   </div>
