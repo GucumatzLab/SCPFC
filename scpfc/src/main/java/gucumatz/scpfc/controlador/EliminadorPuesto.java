@@ -30,6 +30,7 @@ public class EliminadorPuesto implements Serializable {
     private ControladorJpaComentario jpaComentario;
     private ControladorJpaCalificacion jpaCalificacion;
     private ControladorJpaFotoPuesto jpaFoto;
+    private ControladorJpaReaccion jpaReaccion;
     private List<Puesto> puestos;
     private List<SelectItem> puestos2;
     private String seleccionado;
@@ -44,6 +45,7 @@ public class EliminadorPuesto implements Serializable {
         jpaComentario = fabricaJpa.obtenerControladorJpaComentario();
         jpaCalificacion = fabricaJpa.obtenerControladorJpaCalificacion();
         jpaFoto = fabricaJpa.obtenerControladorJpaFotoPuesto();
+        jpaReaccion = fabricaJpa.obtenerControladorJpaReaccion();
         puestos = new LinkedList<Puesto>(jpaPuesto.buscarTodos());
         seleccionado = "";
         puestos2 = new LinkedList<SelectItem>();
@@ -121,6 +123,10 @@ public class EliminadorPuesto implements Serializable {
             //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
+                for (Reaccion r : c.getReacciones()) {
+                    jpaReaccion.destruir(r.getId());
+                }
+
                 jpaComentario.destruir(c.getId());
             }
             for (Calificacion c : cal) {
