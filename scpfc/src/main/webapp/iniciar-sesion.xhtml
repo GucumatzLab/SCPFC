@@ -15,6 +15,7 @@
     <ui:define name="titulo">Iniciar Sesión</ui:define>
 
     <ui:define name="contenido">
+    <b:panel>
       <b:column span="4" offset="4">
         <h:form id="reenviarCorreo">
           <b:commandButton rendered="#{inicioDeSesion.sinConfirmar}"
@@ -53,6 +54,7 @@
                            action="#{inicioDeSesion.iniciarSesion()}"/>
         </h:form>
       </b:column>
+    </b:panel>
     </ui:define>
   </ui:composition>
 </html>

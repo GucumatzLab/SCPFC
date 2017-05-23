@@ -14,6 +14,7 @@
     <ui:define name="titulo">Administrar</ui:define>
 
     <ui:define name="contenido">
+    <b:panel>
       <b:column span="6" offset="3">
         <center>
           <b:row>
@@ -21,7 +22,7 @@
           </b:row>
 
           <b:row>
-            <b:button look="primary" size="lg" outcome="AgregadorPuesto" value="Agregar Puesto" span="12"/>
+            <b:button look="warning" size="lg" outcome="AgregadorPuesto" value="Agregar Puesto" span="12"/>
           </b:row>
 
           <b:row>
@@ -29,7 +30,7 @@
           </b:row>
 
           <b:row>
-            <b:button look="primary" size="lg" outcome="#" value="Modificar Puesto" span="12"/>
+            <b:button look="warning" size="lg" outcome="#" value="Modificar Puesto" span="12"/>
           </b:row>
 
           <b:row>
@@ -37,10 +38,11 @@
           </b:row>
 
           <b:row>
-            <b:button look="primary" size="lg" outcome="EliminadorPuesto" value="Eliminar Puesto" span="12"/>
+            <b:button look="warning" size="lg" outcome="EliminadorPuesto" value="Eliminar Puesto" span="12"/>
           </b:row>
         </center>
       </b:column>
+    </b:panel>
     </ui:define>
   </ui:composition>
 </html>
