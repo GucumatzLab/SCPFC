@@ -153,21 +153,22 @@
               </b:row>
               <div style="float: right" onmouseover="document.getElementById('reaccion#{c.id}').style.display = 'block';"
                                         onMouseOut="document.getElementById('reaccion#{c.id}').style.display = 'none';">
+                <p:outputPanel rendered="#{sesionActiva.haySesionActiva}">
+                  <div id="reaccion#{c.id}" style="width: 100%; display: none">
+                    <h:form>
+                      <b:commandButton look="primary btn-block" value="👍" size="xs" action="#{sesionActiva.reacciona(c.id, 1)}">
+                        <p:ajax process="@form" update=":comentario"/>
+                      </b:commandButton>
+                      <b:commandButton look="primary btn-block" value="👎" size="xs" action="#{sesionActiva.reacciona(c.id, 2)}">
+                        <p:ajax process="@form" update=":comentario"/>
+                      </b:commandButton>
+                    </h:form>      
+                  </div>
+                </p:outputPanel>
                 <div style="width: 100%">
                   <div id="like" style="float: left">👍 <h:outputText value="#{c.getReaccionSize(1)}"></h:outputText></div>
                   <div id="dislike" style="float: left">👎 <h:outputText value="#{c.getReaccionSize(2)}"></h:outputText></div>
                 </div>
-                <p:outputPanel rendered="#{sesionActiva.haySesionActiva}">
-                  <div id="reaccion#{c.id}" style="width: 100%; display: none">
-                    <h:form>
-                      <h:selectOneRadio id="reaccionUsuario" value="#{0}">
-                          <f:selectItem id="like" itemLabel="👍" itemValue="1" />
-                          <f:selectItem id="dislike" itemLabel="👎" itemValue="2" />
-                      </h:selectOneRadio>
-                      <p:commandButton value="Listo" icon="ui-icon-check"/>
-                    </h:form>      
-                  </div>
-                </p:outputPanel>
               </div>
             </b:panel>
           </ui:repeat>

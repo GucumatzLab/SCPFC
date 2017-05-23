@@ -189,11 +189,11 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Reaccion> getReaccionCollection() {
+    public List<Reaccion> getReacciones() {
         return reacciones;
     }
 
-    public void setReaccionCollection(List<Reaccion> reacciones) {
+    public void setReacciones(List<Reaccion> reacciones) {
         this.reacciones = reacciones;
     }
     

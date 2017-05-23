@@ -1,9 +1,17 @@
 package gucumatz.scpfc.controlador;
 
+import gucumatz.scpfc.modelo.Comentario;
+import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.Usuario;
+import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
+import gucumatz.scpfc.modelo.db.ControladorJpaReaccion;
+import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -161,4 +169,77 @@ public class SesionActiva implements Serializable {
         return "iniciar-sesion?faces-redirect=true";
     }
 
+    /**
+     * <code>reacciona</code> Método que dado un comentario y una reaccion:
+     * Si ya hay una reaccion a ese comentario y es la misma que la que llamó
+     * a este método, se elimina, si es diferente se actualiza.
+     * Si no hay una reaccion se crea una nueva,
+     *
+     * @param id_comentario tipo <code>long</code>: id del comentario
+     * @param reaccion tipo <code>int</code>: reaccion
+*/
+    public void reacciona(long id_comentario, int reaccion) {
+        Reaccion r = null;
+        
+        for(Reaccion rr : usuario.getReacciones()){
+            if (rr.getComentarioId().getId() == id_comentario) {
+                r = rr;
+                break;
+            }
+        }
+
+        FabricaControladorJpa fab = new FabricaControladorJpa();
+        ControladorJpaReaccion jpaReaccion
+            = fab.obtenerControladorJpaReaccion();
+        if (r == null) {
+            r = new Reaccion();
+            
+            ControladorJpaComentario jpaComentario
+                = fab.obtenerControladorJpaComentario();
+            Comentario c = jpaComentario.findComentario(id_comentario);
+            r.setComentarioId(c);
+            c.getReacciones().add(r);
+            
+            r.setUsuarioId(usuario);
+            usuario.getReacciones().add(r);
+            
+            r.setReaccion(reaccion);
+
+            jpaReaccion.crear(r);
+
+            return;
+        } else {
+            if (r.getReaccion() == reaccion) {
+                try {
+                    usuario.getReacciones().remove(r);
+
+                    ControladorJpaComentario jpaComentario
+                        = fab.obtenerControladorJpaComentario();
+                    Comentario c = jpaComentario.findComentario(id_comentario);
+                    c.getReacciones().remove(r);
+                    
+                    jpaReaccion.destruir(r.getId());
+
+                    return;
+                } catch (NonexistentEntityException e) {
+                    System.out.println(e);
+                    // Inalcanzable
+                    return;
+                }
+            } else {
+                r.setReaccion(reaccion);
+                
+                try {
+                    jpaReaccion.editar(r);
+
+                    return;
+                } catch (Exception e) {
+                    // Inalcanzable
+                    System.out.println(e);
+                    return;
+                }
+            }
+        }
+    }
+    
 }
