@@ -177,7 +177,7 @@ public class SesionActiva implements Serializable {
      *
      * @param id_comentario tipo <code>long</code>: id del comentario
      * @param reaccion tipo <code>int</code>: reaccion
-*/
+     */
     public void reacciona(long id_comentario, int reaccion) {
         Reaccion r = null;
         
@@ -241,5 +241,28 @@ public class SesionActiva implements Serializable {
             }
         }
     }
-    
+ 
+    /**
+     * <code>reaccion</code> Método que checa si un usuario tiene una reaccion
+     * con los parametros dados.
+     *
+     * @param id_comentario tipo <code>long</code>: id del comentario
+     * @param reaccion tipo <code>int</code>: reaccion
+     */
+    public boolean reaccion(long id_comentario, int reaccion) {
+        Reaccion r = null;
+        
+        for(Reaccion rr : usuario.getReacciones()){
+            if (rr.getComentarioId().getId() == id_comentario) {
+                r = rr;
+                break;
+            }
+        }
+        
+        if (r != null) {
+            return r.getReaccion() == reaccion;
+        }
+        
+        return false;
+    }
 }
