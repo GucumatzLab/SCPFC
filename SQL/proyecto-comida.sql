@@ -1,11 +1,11 @@
 use gucumatz;
 
+drop table if exists reaccion;
 drop table if exists comentario;
 drop table if exists calificacion;
 drop table if exists foto_puesto;
 drop table if exists usuario;
 drop table if exists puesto;
-drop table if exists reaccion;
 
 create table usuario (
   id serial primary key,
