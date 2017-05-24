@@ -149,8 +149,7 @@
                   </center>
                 </b:column>
 
-                <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
-                <b:column span="1" rendered="#{sesionActiva.haySesionActiva}"><b:commandButton action="#{visorPuesto.enviaMensaje(sesionActiva.obtenerUsuarioActual(),c.usuario,c,visorPuesto.puesto)}" iconAwesome="fa-bell-o" tooltip="Reportar este comentario como ofensivo o inapropiado" look="warning"/></b:column>
+                <b:column span="9" style="white-space: pre">#{c.comentario}<b:commandButton style="float:right" rendered="#{sesionActiva.haySesionActiva}" action="#{visorPuesto.enviaMensaje(sesionActiva.obtenerUsuarioActual(),c.usuario,c,visorPuesto.puesto)}" iconAwesome="fa-bell-o" tooltip="Reportar este comentario como ofensivo o inapropiado" look="warning"/></b:column>
               </b:row>
             </b:panel>
           </ui:repeat>

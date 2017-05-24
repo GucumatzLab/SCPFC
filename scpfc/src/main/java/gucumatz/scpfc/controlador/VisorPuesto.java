@@ -188,7 +188,7 @@ public class VisorPuesto implements Serializable {
             String uri = ((HttpServletRequest) externalContext.getRequest())
                    .getRequestURI();
             mensaje.setText(textoMensaje
-                                + "http://localhost:8080"
+                                + obtenerDireccionBase()
                                 + uri
                                 + "?id="
                                 + pst.getId());
@@ -208,6 +208,34 @@ public class VisorPuesto implements Serializable {
                     "ERROR GRAVE", k.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
+    }
+
+    /**
+     * Calcula la dirección base de la aplicación. Se usa para poder enviar una
+     * URL completa.
+     *
+     * @return la dirección base de la aplicación.
+     */
+    private String obtenerDireccionBase() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletRequest solicitud
+            = (HttpServletRequest) externalContext.getRequest();
+
+        String urlSolicitud = solicitud.getRequestURL().toString();
+
+        /* Obtiene el dominio donde está la aplicación. Por ejemplo,
+         * http://localhost:8080/. Esto no incluye el contexto, por
+         * ejemplo scpfc/ */
+        int longitudDominio
+            = urlSolicitud.length() - solicitud.getRequestURI().length();
+        String dominio = urlSolicitud.substring(0, longitudDominio);
+
+        /* Obtiene la dirección base de la aplicación pegándole el
+         * contexto al dominio. */
+        String baseAplicacion = dominio + solicitud.getContextPath();
+
+        return baseAplicacion;
     }
 
 }
