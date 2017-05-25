@@ -8,7 +8,9 @@
       xmlns:b="http://bootsfaces.net/ui">
   <ui:composition template="WEB-INF/plantilla.xhtml">
     <ui:define name="titulo">SCPFC | Mapa</ui:define>
-
+    <f:metadata>
+        <f:viewAction action="#{mapa.init}"/>
+    </f:metadata>
     <ui:define name="contenido">
       <b:thumbnail>
         <style>      
