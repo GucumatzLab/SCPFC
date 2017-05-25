@@ -115,9 +115,9 @@ public class EliminadorPuesto implements Serializable {
                     .addMessage(null, facesMessage);
                 return;
             }
-            LinkedList<Comentario> com = new LinkedList<Comentario>(p.getComentarios());
-            LinkedList<Calificacion> cal = new LinkedList<Calificacion>(p.getCalificaciones());
-            LinkedList<FotoPuesto> ft = new LinkedList<FotoPuesto>(p.getFotosPuesto());
+            List<Comentario> com = p.getComentarios();
+            List<Calificacion> cal = p.getCalificaciones();
+            List<FotoPuesto> ft = p.getFotosPuesto();
             //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
@@ -127,8 +127,8 @@ public class EliminadorPuesto implements Serializable {
                 jpaCalificacion.destruir(c.getId());
             }
             for (FotoPuesto f : ft) {
-                File ff = new File("/tmp/scpfc/imagenes/" +f.getUrl());
-                if(ff.exists()){
+                File ff = new File("/tmp/scpfc/imagenes/" + f.getUrl());
+                if (ff.exists()) {
                     ff.delete();
                 }
                 jpaFoto.destruir(f.getId());
@@ -141,7 +141,7 @@ public class EliminadorPuesto implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             FacesContext.getCurrentInstance().getExternalContext()
                 .getFlash().setKeepMessages(true);
-            redirecciona();
+            actualizarLista(p);
         } catch (Exception e) {
             FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -151,17 +151,20 @@ public class EliminadorPuesto implements Serializable {
     }
 
     /**
-     * Metodo para redireccionar la pagina actual a Administrar.xhtml.
-     */
-    public void redirecciona() {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext()
-                .redirect("./Administrar.xhtml");
-        } catch (Exception e) {
-            FacesMessage facesMessage
-                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    e.getMessage(), null);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+    * Metodo que actualiza la lista de eliminados
+    * @param pu - Puesto que se quita de la lista.
+    */
+    private void actualizarLista(Puesto pu) {
+        this.puestos.remove(pu);
+        SelectItemGroup g = new SelectItemGroup();
+        SelectItem[] si = new SelectItem[puestos.size()];
+        int i = 0;
+        for (Puesto p : puestos) {
+            si[i] = new SelectItem(p.getNombre(), p.getNombre());
+            i++;
         }
+        g.setSelectItems(si);
+        puestos2.clear();
+        puestos2.add(g);
     }
 }

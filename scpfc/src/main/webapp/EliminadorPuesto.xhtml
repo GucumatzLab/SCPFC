@@ -16,6 +16,7 @@
 
     <ui:define name="contenido">
       <center>
+      <b:panel>
         <b:column span="6" offset="3">
           <h1>Elimina puesto</h1>
 
@@ -28,15 +29,18 @@
               </b:column>
 
               <b:column span="4">
-                <b:commandButton class="btn btn-primary" size="lg" value="Eliminar" action="#{eliminadorPuesto.elimina()}" span="12"/>
+                <b:button value="Eliminar" onclick="PF('dlg2').show();" look="primary" size="lg"/>
+                <p:dialog header="Confirmar eliminación" widgetVar="dlg2" modal="true" height="50">
+                  <h:outputText value="¿Seguro que deseas eliminar el puesto?"/>
+                  <br/>
+                  <b:commandButton class="btn btn-primary" value="Si" action="#{eliminadorPuesto.elimina()}"/>
+                  <b:commandButton class="btn btn-primary" type="button" value="No" onclick="PF('dlg2').hide();"/>
+                </p:dialog>
               </b:column>
             </h:form>
           </b:row>
-
-          <!--b:row span="6" offset="3">
-            <p:messages id="messages" autoUpdate="true" closable="true" />
-          </b:row-->
         </b:column>
+      </b:panel>
       </center>
     </ui:define>
   </ui:composition>

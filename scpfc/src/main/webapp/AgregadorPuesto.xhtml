@@ -17,8 +17,8 @@
 
         <ui:define name="contenido">
             <center>
-                <!--h1>Registro de nuevo Puesto</h1--> 
-                <b:panel title="REGISTRO DE NUEVO PUESTO" look="info" collapsible="false">
+                <h1>Registro de nuevo Puesto</h1> 
+                <b:panel title="Registro" look="info" collapsible="false">
                     <h:form id="myForm" enctype="multipart/form-data">
                         <table>
                             <tr>
@@ -74,9 +74,9 @@
                             <tr>
                                 <td style="padding-top:10px">
                                     <p:commandButton value="Localizar" class="btn btn-default" onclick="PF('dlg1').show();"/>
-                                    <p:dialog header="Localizando" widgetVar="dlg1" height="430px" width="400">
+                                    <p:dialog header="Localizando" widgetVar="dlg1" height="70%" width="50%">
                                         <p:gmap id="gmap" center="19.324328359583355,-99.17934268712997" zoom="18"
-                                                type="HYBRID" model="#{mapa.advancedModel}" onPointClick="handlePointClick(event)"
+                                                type="ROADMAP" model="#{mapa.advancedModel}" onPointClick="handlePointClick(event)"
                                                 style="width:100%;height:400px;"
                                                 widgetVar="map">
                                         </p:gmap>
