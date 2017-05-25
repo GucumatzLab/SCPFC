@@ -1,16 +1,19 @@
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Comentario;
+import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+
 
 /**
  * @author lchacon
@@ -26,9 +29,13 @@ public class EliminadorComentario {
      */
     private Long idComentario;
 
+    /**
+    * Puesto al que pertenece el comentario
+    */
+    private List<Comentario> comentarios;
+
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
-
     public EliminadorComentario() {
         jpaComentario
             = new FabricaControladorJpa().obtenerControladorJpaComentario();
@@ -42,6 +49,14 @@ public class EliminadorComentario {
         this.sesionActiva = sesionActiva;
     }
 
+    public void setComentarios(List<Comentario> nuevo) {
+        this.comentarios = nuevo;
+    }
+    /*
+    public void setPuesto(Puesto nuevo){
+        this.puesto = nuevo;
+    }*/
+
     /**
      * Elimina un comentario. El comentario es identificado mediante un
      * parámetro en la solicitud llamado "idComentario".
@@ -54,13 +69,13 @@ public class EliminadorComentario {
          * comentario.
          */
         boolean tienePermisos = false;
+        Comentario comentario = jpaComentario.findComentario(idComentario);
         if (sesionActiva.getEsAdministrador()) {
             /* Un administrador puede eliminar cualquier comentario. */
             tienePermisos = true;
         } else {
             /* Si no es administrador, debe ser quien hizo el comentario. */
             Usuario usuarioActual = sesionActiva.getUsuario();
-            Comentario comentario = jpaComentario.findComentario(idComentario);
 
             if (usuarioActual != null && comentario != null
                     && usuarioActual.equals(comentario.getUsuario())) {
@@ -74,6 +89,7 @@ public class EliminadorComentario {
         }
 
         try {
+            comentarios.remove(comentario);
             jpaComentario.destruir(idComentario);
 
             FacesMessage facesMessage
