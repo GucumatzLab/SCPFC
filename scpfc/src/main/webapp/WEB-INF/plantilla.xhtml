@@ -12,7 +12,29 @@
 
   <h:body>
     <div id="top">
-      <b:navBar brand="SCPCF" brandHref="index.xhtml" position="top" sticky="false">
+      <style>
+        body {
+            background-color: #ededed;
+        }
+        
+        h1 {
+            font-family: 'Lobster';
+            font-size: 55px;
+            color: orange;
+        }
+        
+        h2 {
+            font-family: 'Lobster';
+            font-size: 50px;
+            color: orange;
+        }
+
+        .navbar-default {
+            background-color: orange;
+            color: black;
+        }
+      </style>
+        <b:navBar brand="SCPCF" brandHref="index.xhtml" position="top" sticky="false">
         <ui:include src="/WEB-INF/navegacion.xhtml"/>
       </b:navBar>
     </div>
