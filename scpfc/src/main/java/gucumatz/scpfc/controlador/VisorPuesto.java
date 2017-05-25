@@ -1,17 +1,30 @@
 package gucumatz.scpfc.controlador;
 
+import gucumatz.scpfc.modelo.*;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.db.*;
 
+import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Locale;
+import java.util.LinkedList;
+import java.util.Properties;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-/**
- * Clase controlador de DetallesPuesto.
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+
+/** Clase controlador de DetallesPuesto.
  *
  * @author Pablo Gerardo Gonzalez Lopez
  * @version 1.0
@@ -32,8 +45,6 @@ public class VisorPuesto implements Serializable {
      *<code>VisorPuesto</code> Constructor.
      */
     public VisorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot()
-            .setLocale(new Locale("es-Mx"));
         FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
         this.jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
         this.jpaCalificacion = fabricaJpa.obtenerControladorJpaCalificacion();
@@ -91,6 +102,140 @@ public class VisorPuesto implements Serializable {
      */
     public int getPromedioCalificacion() {
         return (int) jpaCalificacion.promedioDePuesto(puesto);
+    }
+
+
+    /**
+    * Metodo que envia mensaje al Administrador
+    * @param usuario - usuario que emitio la alerta
+    * @param acusado - usuario acusado
+    * @param c - comentario del usuario acusado
+    * @param pst - puesto
+    */
+    public void enviaMensaje(Usuario usuario, Usuario acusado,
+                                         Comentario c, Puesto pst) {
+        /* La cuenta que se usa para autenticarse en el servidor de correo. */
+        try {
+            LinkedList<Usuario> us = new LinkedList<Usuario>(
+                new FabricaControladorJpa().obtenerControladorJpaUsuario()
+                .findUsuarioEntities());
+            Usuario admin = null;
+            for (Usuario u : us) {
+                if (u.getEsAdministrador()) {
+                    admin = u;
+                    break;
+                }
+            }
+            final String usuarioCorreo;
+            final String contrasena;
+            String direccion;
+            Session sesionEmail;
+            String nombre;
+            String archivoPropiedadesAutenticacion =
+                   "WEB-INF/autenticacion-correo.properties";
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesContext.getExternalContext();
+            try (InputStream is = externalContext
+                .getResourceAsStream(archivoPropiedadesAutenticacion)) {
+                Properties prop = new Properties();
+                prop.load(is);
+
+                usuarioCorreo = prop.getProperty("usuario");
+                contrasena = prop.getProperty("contrasena");
+                nombre = prop.getProperty("nombre");
+                direccion = prop.getProperty("correo");
+            }
+
+            String archivoPropiedadesCorreo = "WEB-INF/correo.properties";
+            try (InputStream is = externalContext
+                .getResourceAsStream(archivoPropiedadesCorreo)) {
+                Properties prop = new Properties();
+                prop.load(is);
+                Authenticator autenticador =
+                    new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication
+                        getPasswordAuthentication() {
+                        PasswordAuthentication pa
+                            = new PasswordAuthentication(usuarioCorreo,
+                                contrasena);
+                        return pa;
+                    }
+                };
+                sesionEmail = Session.getInstance(prop, autenticador);
+            }
+
+            MimeMessage mensaje = new MimeMessage(sesionEmail);
+
+            String remitente = String.format("%s <%s>",
+                "Administracion-auto", direccion);
+            String recipiente = String.format("%s <%s>",
+                "Administracion-auto",
+                admin.getCorreoElectronico() + "ciencias.unam.mx");
+            mensaje.setFrom(remitente);
+            mensaje.addRecipients(Message.RecipientType.TO, recipiente);
+            mensaje.setSubject("SCPFC - Comentario inapropiado u ofensivo");
+
+            String textoMensaje = "El mensaje con id <"
+                + c.getId()
+                + "> de fecha <"
+                + c.getFecha()
+                + "> del usuario <"
+                + acusado.getNombre()
+                + "> ha sido considerado ofensivo por el usuario <"
+                + usuario.getNombre()
+                + ">\n\nREVISA EL COMENTARIO\n";
+            String uri = ((HttpServletRequest) externalContext.getRequest())
+                   .getRequestURI();
+            mensaje.setText(textoMensaje
+                                + obtenerDireccionBase()
+                                + uri
+                                + "?id="
+                                + pst.getId());
+            Transport.send(mensaje);
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "REPORTE ENVIADO", "");
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        } catch (MessagingException e) {
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR GRAVE", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        } catch (Exception k) {
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR GRAVE", k.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        }
+    }
+
+    /**
+     * Calcula la dirección base de la aplicación. Se usa para poder enviar una
+     * URL completa.
+     *
+     * @return la dirección base de la aplicación.
+     */
+    private String obtenerDireccionBase() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletRequest solicitud
+            = (HttpServletRequest) externalContext.getRequest();
+
+        String urlSolicitud = solicitud.getRequestURL().toString();
+
+        /* Obtiene el dominio donde está la aplicación. Por ejemplo,
+         * http://localhost:8080/. Esto no incluye el contexto, por
+         * ejemplo scpfc/ */
+        int longitudDominio
+            = urlSolicitud.length() - solicitud.getRequestURI().length();
+        String dominio = urlSolicitud.substring(0, longitudDominio);
+
+        /* Obtiene la dirección base de la aplicación pegándole el
+         * contexto al dominio. */
+        String baseAplicacion = dominio + solicitud.getContextPath();
+
+        return baseAplicacion;
     }
 
 }

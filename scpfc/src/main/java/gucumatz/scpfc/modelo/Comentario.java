@@ -49,7 +49,7 @@ public class Comentario implements Serializable {
     private String comentario;
     @Basic(optional = false)
     @Column(name = "fecha", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @JoinColumn(name = "puesto_id",
         referencedColumnName = "id", nullable = false)

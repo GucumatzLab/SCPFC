@@ -2,23 +2,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui">
   <ui:composition template="WEB-INF/plantilla.xhtml">
     <ui:define name="titulo">SCPFC | Mapa</ui:define>
-
+    <f:metadata>
+        <f:viewAction action="#{mapa.init}"/>
+    </f:metadata>
     <ui:define name="contenido">
-      <h1>Bienvenido :)</h1>
-      <h2>Sistema de Calificación de Puestos de la Facultad de Ciencias</h2>
-      <style>
-        #gmap {
-          width: 100%;
-          height: 400px;
-        }
-      </style>
-      <div>            
-        <p:gmap id="gmap" center="19.3239779, -99.1796188" zoom="19"
-                type="HYBRID" model="#{mapa.advancedModel}"
+      <b:thumbnail>
+        <style>      
+            #gmap {
+                width: 100%;
+                height: 400px;
+            }
+        </style>
+        <center>
+            <h2>Sistema de Calificación de Puestos de la</h2>
+            <h2>Facultad de Ciencias</h2>
+        </center>
+            
+        <p:gmap id="gmap" center="19.3239779, -99.1796188" zoom="18"
+                type="ROADMAP" model="#{mapa.advancedModel}"
                 onPointClick="handlePoinDEtClick(event);"
                 widgetVar="map">
           <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
@@ -30,7 +37,7 @@
             </p:outputPanel>
           </p:gmapInfoWindow>
         </p:gmap>
-      </div>
+      </b:thumbnail>
     </ui:define>
   </ui:composition>
 </html>

@@ -12,8 +12,10 @@
 
     <ui:define name="contenido">
         <f:metadata>
-            <f:viewParam id="id" name="id" value="#{visorPuesto.id}"/>
-            <f:viewAction action="#{visorPuesto.obtenerPuesto}" />
+            <f:viewParam name="id" value="#{mapa.idPuestoIgnorado}"/>
+            <f:viewAction action="#{mapa.init}"/>
+            <f:viewParam name="id" value="#{visorPuesto.id}"/>
+            <f:viewAction action="#{visorPuesto.obtenerPuesto}"/>
         </f:metadata>
       <style>
         #gmap {
@@ -23,10 +25,11 @@
         }
       </style>
 
+      <b:panel>
       <b:row>
         <b:column span="6">
-          <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="20"
-                  type="HYBRID" model="#{mapa.advancedModel}"
+          <p:gmap id="gmap" center="#{visorPuesto.puesto.latitud}, #{visorPuesto.puesto.longitud}" zoom="19"
+                  type="ROADMAP" model="#{mapa.advancedModel}"
                   widgetVar="map">
             <p:ajax event="overlaySelect" listener="#{mapa.onMarkerSelect}"/>
             <p:gmapInfoWindow id="infoWindow">
@@ -59,7 +62,13 @@
           </b:row>
           <b:row>
             <center>
-              <h1><h:outputText value="#{visorPuesto.puesto.nombre}"/></h1>
+              <h1 style="display: inline">
+                <h:outputText value="#{visorPuesto.puesto.nombre}"/>
+              </h1>
+              <h:link value="[Editar]" outcome="editar-puesto"
+                      rendered="#{sesionActiva.esAdministrador}">
+                <f:param name="id" value="#{visorPuesto.puesto.id}"/>
+              </h:link>
             </center>
             <p><b>Ubicación: </b> <h:outputText value="#{visorPuesto.puesto.ubicacion}"/></p>
             <p><b>Tipo de comida: </b> <h:outputText value="#{visorPuesto.puesto.tipoComida}"/></p>
@@ -74,7 +83,7 @@
               <b:row>
                 <!-- Botón para el overlay de comentar -->
                 <p:commandButton value="Comentar" type="button" onclick="PF('comOverlay').show();"/>
-                <p:dialog header="Comentar" widgetVar="comOverlay" height="250" width="400">
+                <p:dialog header="Comentar" widgetVar="comOverlay" height="50%" width="70%">
                   <b:row>
                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
                       <br/>
@@ -93,7 +102,7 @@
 
                 <!-- Botón para el overlay de calificar -->
                 <p:commandButton value="Calificar" type="button" onclick="PF('calOverlay').show();"/>
-                <p:dialog header="Calificar" widgetVar="calOverlay" height="200" width="400">
+                <p:dialog header="Calificar" widgetVar="calOverlay" height="50%" width="50%">
                   <b:row>
                     <b:column col-xs="12" col-sm="12" col-md="12" col-lg="12">
                       <div align="center" draggable="false">
@@ -118,13 +127,19 @@
 
         </b:column>
       </b:row>
+      </b:panel>
+
 
       <b:row id="comentarios">
-        <column span="8" offset="2">
-          <h2>Comentarios</h2>
+        <b:panel>
+        <b:column span="8" offset="2">
 
+          <h2>Comentarios</h2>
+          <h:form>
           <b:row rendered="#{empty visorPuesto.puesto.comentarios}">
-            <p>No hay comentarios sobre este puesto.</p>
+              <center>
+                <p>No hay comentarios sobre este puesto.</p>
+              </center>
           </b:row>
 
           <ui:repeat value="#{visorPuesto.puesto.comentarios}" var="c">
@@ -142,37 +157,41 @@
                       #{c.usuario.nombre}
                     </b:row>
                     <b:row>
-                      #{c.fecha}
+                      <h:outputText value="#{c.fecha}">
+                        <f:convertDateTime type="both"/>
+                      </h:outputText>
                     </b:row>
 
                     <b:row rendered="#{sesionActiva.esAdministrador
                                        or (c.usuario eq sesionActiva.usuario)}">
                       <h:form>
-                        <p:commandButton value="Eliminar comentario"
-                                         action="#{eliminadorComentario.eliminarComentario()}">
-                          <f:setPropertyActionListener target="#{eliminadorComentario.idComentario}"
+                       <p:commandButton value="Eliminar Comentario" type="button" onclick="PF('dlg2').show();" />
+                        <p:dialog header="Confirmar eliminación" widgetVar="dlg2" modal="true" height="100">
+                          <h:outputText value="¿Seguro que deseas eliminar este comentario?" />
+                          <br/>
+                          <h:outputText value="&quot;#{c.comentario}&quot;"/>
+                          <br/>
+                          <b:commandButton value="Cancelar" type="button" onclick="PF('dlg2').hide()" look="primary"/>
+                          <b:commandButton value="Eliminar"
+                                         action="#{eliminadorComentario.eliminarComentario()}" look="primary">
+                            <f:setPropertyActionListener target="#{eliminadorComentario.idComentario}"
                                                        value="#{c.id}"/>
-                          <p:confirm header="Confirmar eliminación"
-                                     message="¿Seguro que deseas eliminar este comentario?
-                                              &quot;#{c.comentario}&quot;"/>
-                          <p:ajax process="@form" update=":mensajes :comentarios"/>
-                        </p:commandButton>
+                            <f:setPropertyActionListener target="#{eliminadorComentario.comentarios}"
+                                                        value="#{visorPuesto.puesto.comentarios}"/>
+                          </b:commandButton>
+                        </p:dialog>
                       </h:form>
                     </b:row>
                   </center>
                 </b:column>
 
-                <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
+                <b:column span="9" style="white-space: pre">#{c.comentario}<b:commandButton style="float:right" rendered="#{sesionActiva.haySesionActiva}" action="#{visorPuesto.enviaMensaje(sesionActiva.obtenerUsuarioActual(),c.usuario,c,visorPuesto.puesto)}" iconAwesome="fa-bell-o" tooltip="Reportar este comentario como ofensivo o inapropiado" look="warning"/></b:column>
               </b:row>
             </b:panel>
           </ui:repeat>
-
-          <!-- Confirmación de eliminar comentario -->
-          <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-            <p:commandButton value="Eliminar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-          </p:confirmDialog>
-        </column>
+          </h:form>
+        </b:column>
+        </b:panel>
       </b:row>
 
     <script type="text/javascript">

@@ -3,10 +3,10 @@ package gucumatz.scpfc.controlador;
 import gucumatz.scpfc.modelo.*;
 import gucumatz.scpfc.modelo.db.*;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -39,8 +39,6 @@ public class EliminadorPuesto implements Serializable {
      */
     @PostConstruct
     public void init() {
-        FacesContext.getCurrentInstance().getViewRoot()
-            .setLocale(new Locale("es-Mx"));
         FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
         jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
         jpaComentario = fabricaJpa.obtenerControladorJpaComentario();
@@ -117,30 +115,23 @@ public class EliminadorPuesto implements Serializable {
                     .addMessage(null, facesMessage);
                 return;
             }
-            LinkedList<Comentario> com
-                = new LinkedList<>(jpaComentario.findComentarioEntities());
-            LinkedList<Calificacion> cal
-                = new LinkedList<>(jpaCalificacion.buscarTodos());
-            LinkedList<FotoPuesto> ft
-                = new LinkedList<>(jpaFoto.findFotoPuestoEntities());
+            List<Comentario> com = p.getComentarios();
+            List<Calificacion> cal = p.getCalificaciones();
+            List<FotoPuesto> ft = p.getFotosPuesto();
             //Puesto p = jpaPuesto.buscarPorId(Long.parseLong(this.id));
 
             for (Comentario c : com) {
-                if (c.getPuesto() == p) {
-                    jpaComentario.destruir(c.getId());
-                }
-
+                jpaComentario.destruir(c.getId());
             }
             for (Calificacion c : cal) {
-                if (c.getPuesto() == p) {
-                    jpaCalificacion.destruir(c.getId());
-                }
+                jpaCalificacion.destruir(c.getId());
             }
-
             for (FotoPuesto f : ft) {
-                if (f.getPuesto().equals(p)) {
-                    jpaFoto.destruir(f.getId());
+                File ff = new File("/tmp/scpfc/imagenes/" + f.getUrl());
+                if (ff.exists()) {
+                    ff.delete();
                 }
+                jpaFoto.destruir(f.getId());
             }
             jpaPuesto.destruir(p.getId());
 
@@ -150,7 +141,7 @@ public class EliminadorPuesto implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             FacesContext.getCurrentInstance().getExternalContext()
                 .getFlash().setKeepMessages(true);
-            redirecciona();
+            actualizarLista(p);
         } catch (Exception e) {
             FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -160,17 +151,20 @@ public class EliminadorPuesto implements Serializable {
     }
 
     /**
-     * Metodo para redireccionar la pagina actual a Administrar.xhtml.
-     */
-    public void redirecciona() {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext()
-                .redirect("./Administrar.xhtml");
-        } catch (Exception e) {
-            FacesMessage facesMessage
-                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    e.getMessage(), null);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+    * Metodo que actualiza la lista de eliminados
+    * @param pu - Puesto que se quita de la lista.
+    */
+    private void actualizarLista(Puesto pu) {
+        this.puestos.remove(pu);
+        SelectItemGroup g = new SelectItemGroup();
+        SelectItem[] si = new SelectItem[puestos.size()];
+        int i = 0;
+        for (Puesto p : puestos) {
+            si[i] = new SelectItem(p.getNombre(), p.getNombre());
+            i++;
         }
+        g.setSelectItems(si);
+        puestos2.clear();
+        puestos2.add(g);
     }
 }

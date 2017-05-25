@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <ui:composition template="WEB-INF/plantilla.xhtml">
+    <ui:define name="titulo">
+      Editar puesto #{editorPuesto.puesto.nombre}
+    </ui:define>
+
+    <ui:define name="contenido">
+      <f:metadata>
+        <f:viewAction if="#{not sesionActiva.esAdministrador}"
+                      action="#{sesionActiva.redirigeAPaginaPrincipal}"/>
+        <f:viewParam name="id" value="#{mapa.idPuestoIgnorado}"/>
+        <f:viewAction action="#{mapa.init}"/>
+        <f:viewParam name="id" value="#{editorPuesto.idPuesto}"/>
+        <f:viewAction action="#{editorPuesto.preparar()}"/>
+      </f:metadata>
+
+      <style>
+        #gmap {
+          width: 100%;
+          height: 400px;
+        }
+      </style>
+
+      <b:column span="8" offset="2">
+        <b:row>
+          <h1>Editar puesto "#{editorPuesto.puesto.nombre}"</h1>
+        </b:row>
+
+        <b:row>
+          <h:form enctype="multipart/form-data" prependId="false">
+            <b:row>
+              <b:column span="6">
+
+                <b:message id="msgNombre" for="nombre"/>
+                <b:inputText id="nombre"
+                             value="#{editorPuesto.puesto.nombre}"
+                             label="Nombre del puesto"
+                             required="true"
+                             validator="#{editorPuesto.validarNombre}"
+                             >
+                  <f:validateLength maximum="100"/>
+                  <p:ajax event="blur" update="msgNombre"/>
+                </b:inputText>
+
+                <b:message id="msgTipoComida" for="tipoComida"/>
+                <b:inputText id="tipoComida"
+                             value="#{editorPuesto.puesto.tipoComida}"
+                             label="Tipo de comida"
+                             required="true"
+                             >
+                  <f:validateLength maximum="200"/>
+                  <p:ajax event="blur" update="msgTipoComida"/>
+                </b:inputText>
+
+                <b:message id="msgHorario" for="horario"/>
+                <b:inputText id="horario"
+                             value="#{editorPuesto.puesto.horario}"
+                             label="Horario"
+                             required="false"
+                             >
+                  <f:validateLength maximum="100"/>
+                  <p:ajax event="blur" update="msgHorario"/>
+                </b:inputText>
+
+                <b:message id="msgUbicacion" for="ubicacion"/>
+                <b:inputText id="ubicacion"
+                             value="#{editorPuesto.puesto.ubicacion}"
+                             label="Referencias de ubicación"
+                             required="false"
+                             >
+                  <f:validateLength maximum="100"/>
+                  <p:ajax event="blur" update="msgUbicacion"/>
+                </b:inputText>
+
+                <!--
+                <p:fileUpload value="#{agregadorPuesto.foto1}" skinSimple="true" label="Foto 1" mode="simple"/>
+                <p:fileUpload value="#{agregadorPuesto.foto2}" skinSimple="true" label="Foto 2" mode="simple"/>
+                <p:fileUpload value="#{agregadorPuesto.foto3}" skinSimple="true" label="Foto 3" mode="simple"/>
+                -->
+              </b:column>
+
+              <b:column span="6">
+                <p:gmap id="gmap"
+                        center="19.324175, -99.179942" zoom="18"
+                        type="HYBRID" model="#{mapa.advancedModel}"
+                        onPointClick="handlePointClick(event);"
+                        widgetVar="map"
+                        >
+
+                </p:gmap>
+
+                <h:inputHidden id="longitud"
+                               value="#{editorPuesto.puesto.longitud}"
+                               required="true"/>
+                <h:inputHidden id="latitud"
+                               value="#{editorPuesto.puesto.latitud}"
+                               required="true"/>
+              </b:column>
+            </b:row>
+
+            <b:row>
+              <b:column span="4" offset="4">
+                <b:commandButton value="Actualizar"
+                                 action="#{editorPuesto.actualizar()}"
+                                 look="primary btn-block"
+                                 size="lg"
+                                 ajax="true"
+                                 />
+              </b:column>
+            </b:row>
+          </h:form>
+        </b:row>
+      </b:column>
+
+      <script type="text/javascript">
+        var currentMarker = null;
+
+        function mueveMarcador(lat, lng) {
+          if (currentMarker != null) {
+            currentMarker.setMap(null);
+          }
+
+          currentMarker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat, lng),
+            icon: 'http://maps.google.com/mapfiles/kml/paddle/red-stars.png'
+          });
+
+          PF('map').addOverlay(currentMarker);
+        }
+
+        function handlePointClick(event) {
+          var elemLat = document.getElementById("latitud");
+          var elemLng = document.getElementById("longitud");
+
+          var lat = event.latLng.lat();
+          var lng = event.latLng.lng();
+
+          elemLat.value = lat;
+          elemLng.value = lng;
+
+          mueveMarcador(lat, lng);
+        }
+
+        $( document ).ready(function() {
+          var lat = document.getElementById("latitud").value;
+          var lng = document.getElementById("longitud").value;
+
+          mueveMarcador(lat, lng);
+        });
+      </script>
+    </ui:define>
+  </ui:composition>
+</html>

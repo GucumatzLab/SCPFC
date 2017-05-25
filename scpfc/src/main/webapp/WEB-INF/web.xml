@@ -7,6 +7,12 @@
       <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <!-- Utiliza la zona horaria del sistema para mostrar fechas. -->
+    <context-param>
+      <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+      <param-value>true</param-value>
+    </context-param>
+
     <!-- Utiliza JavaServer Faces para servir archivos .xhtml -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>

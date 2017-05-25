@@ -4,7 +4,6 @@ import gucumatz.scpfc.modelo.*;
 import gucumatz.scpfc.modelo.db.*;
 
 import java.util.LinkedList;
-import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -31,6 +30,10 @@ public class AgregadorPuesto implements java.io.Serializable {
 
     private final ControladorJpaPuesto jpaPuesto;
     private final ControladorJpaFotoPuesto jpaFotoPuesto;
+    private String am1;
+    private String am2;
+    private String pm1;
+    private String pm2;
     private UploadedFile foto1;
     private UploadedFile foto2;
     private UploadedFile foto3;
@@ -40,8 +43,6 @@ public class AgregadorPuesto implements java.io.Serializable {
      * Constructor de la clase AgregadorPuesto
      */
     public AgregadorPuesto() {
-        FacesContext.getCurrentInstance().getViewRoot()
-            .setLocale(new Locale("es-Mx"));
         FabricaControladorJpa fabricaJpa = new FabricaControladorJpa();
         jpaPuesto = fabricaJpa.obtenerControladorJpaPuesto();
         jpaFotoPuesto = fabricaJpa.obtenerControladorJpaFotoPuesto();
@@ -120,6 +121,78 @@ public class AgregadorPuesto implements java.io.Serializable {
     }
 
     /**
+     * Hora AM
+     *
+     * @return am1
+     */
+    public String getAm1() {
+        return this.am1;
+    }
+
+    /**
+     * Metodo para cambiar Hora AM
+     *
+     * @param nuevo - nueva hora AM
+     */
+    public void setAm1(String nuevo) {
+        this.am1 = nuevo;
+    }
+
+    /**
+     * Minuto AM
+     *
+     * @return am2
+     */
+    public String getAm2() {
+        return this.am2;
+    }
+
+    /**
+     * Metodo para cambiar Minuto AM
+     *
+     * @param nuevo - nuevo minuto AM
+     */
+    public void setAm2(String nuevo) {
+        this.am2 = nuevo;
+    }
+
+    /**
+     * Hora PM
+     *
+     * @return pm1
+     */
+    public String getPm1() {
+        return this.pm1;
+    }
+
+    /**
+     * Metodo para cambiar Hora PM
+     *
+     * @param nuevo - nueva hora PM
+     */
+    public void setPm1(String nuevo) {
+        this.pm1 = nuevo;
+    }
+
+    /**
+     * Minuto PM
+     *
+     * @return am1
+     */
+    public String getPm2() {
+        return this.pm2;
+    }
+
+    /**
+     * Metodo para cambiar minuto PM
+     *
+     * @param nuevo - nuevo minuto AM
+     */
+    public void setPm2(String nuevo) {
+        this.pm2 = nuevo;
+    }
+
+    /**
      * Metodo con el que se hace la peticion al controlador para agregar un
      * Puesto a la base de datos
      */
@@ -144,7 +217,19 @@ public class AgregadorPuesto implements java.io.Serializable {
                     facesContext.addMessage(null, facesMessage);
                     return;
                 }
+                int a1 = (int) Double.parseDouble(this.am1);
+                int a2 = (int) Double.parseDouble(this.am2);
+                int p1 = (int) Double.parseDouble(this.pm1);
+                int p2 = (int) Double.parseDouble(this.pm2);
 
+                am1 = String.format("%02d", a1);
+                am2 = String.format("%02d", a2);
+                pm1 = String.format("%02d", p1);
+                pm2 = String.format("%02d", p2);
+
+                this.puesto.setHorario("Abierto desde las "
+                    + this.am1 + ":" + this.am2 + " hrs. a las "
+                    + this.pm1 + ":" + this.pm2 + " hrs.");
                 this.puesto.setFotosPuesto(new LinkedList<FotoPuesto>());
                 jpaPuesto.crear(this.puesto);
 

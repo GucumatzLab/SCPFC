@@ -31,7 +31,7 @@ create table puesto (
 create table comentario (
   id serial primary key,
   comentario varchar(1024) not null,
-  fecha date not null,
+  fecha datetime not null,
   puesto_id bigint unsigned not null,
   usuario_id bigint unsigned not null,
 
