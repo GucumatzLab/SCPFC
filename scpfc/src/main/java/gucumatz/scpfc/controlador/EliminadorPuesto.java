@@ -147,7 +147,7 @@ public class EliminadorPuesto implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             FacesContext.getCurrentInstance().getExternalContext()
                 .getFlash().setKeepMessages(true);
-            redirecciona();
+            actualizarLista(p);
         } catch (Exception e) {
             FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -157,17 +157,20 @@ public class EliminadorPuesto implements Serializable {
     }
 
     /**
-     * Metodo para redireccionar la pagina actual a Administrar.xhtml.
-     */
-    public void redirecciona() {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext()
-                .redirect("./Administrar.xhtml");
-        } catch (Exception e) {
-            FacesMessage facesMessage
-                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    e.getMessage(), null);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+    * Metodo que actualiza la lista de eliminados
+    * @param pu - Puesto que se quita de la lista.
+    */
+    private void actualizarLista(Puesto pu) {
+        this.puestos.remove(pu);
+        SelectItemGroup g = new SelectItemGroup();
+        SelectItem[] si = new SelectItem[puestos.size()];
+        int i = 0;
+        for (Puesto p : puestos) {
+            si[i] = new SelectItem(p.getNombre(), p.getNombre());
+            i++;
         }
+        g.setSelectItems(si);
+        puestos2.clear();
+        puestos2.add(g);
     }
 }
