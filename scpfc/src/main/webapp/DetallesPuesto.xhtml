@@ -156,11 +156,9 @@
                 <p:outputPanel rendered="#{sesionActiva.haySesionActiva}">
                   <div id="reaccion#{c.id}" style="width: 100%; display: none">
                     <h:form>
-                        <b:commandButton look="#{sesionActiva.reaccion(c.id, 1)?'info':'default'}" value="👍" size="xs" action="#{sesionActiva.reacciona(c.id, 1)}">
-                        <p:ajax process="@form" update=":comentarios"/>
+                      <b:commandButton look="#{sesionActiva.reaccion(c.id, 1)?'info':'default'}" value="👍" size="xs" action="#{sesionActiva.reacciona(c.id, 1)}">
                       </b:commandButton>
                       <b:commandButton look="#{sesionActiva.reaccion(c.id, 2)?'info':'default'}" value="👎" size="xs" action="#{sesionActiva.reacciona(c.id, 2)}">
-                        <p:ajax process="@form" update=":comentarios"/>
                       </b:commandButton>
                     </h:form>      
                   </div>

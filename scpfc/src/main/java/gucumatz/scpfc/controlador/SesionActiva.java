@@ -15,6 +15,9 @@ import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.model.StreamedContent;
 
@@ -178,7 +181,7 @@ public class SesionActiva implements Serializable {
      * @param id_comentario tipo <code>long</code>: id del comentario
      * @param reaccion tipo <code>int</code>: reaccion
      */
-    public void reacciona(long id_comentario, int reaccion) {
+    public void reacciona(long id_comentario, int reaccion) throws IOException {
         Reaccion r = null;
         
         for(Reaccion rr : usuario.getReacciones()){
@@ -207,7 +210,6 @@ public class SesionActiva implements Serializable {
 
             jpaReaccion.crear(r);
 
-            return;
         } else {
             if (r.getReaccion() == reaccion) {
                 try {
@@ -220,11 +222,7 @@ public class SesionActiva implements Serializable {
                     
                     jpaReaccion.destruir(r.getId());
 
-                    return;
                 } catch (NonexistentEntityException e) {
-                    System.out.println(e);
-                    // Inalcanzable
-                    return;
                 }
             } else {
                 r.setReaccion(reaccion);
@@ -232,16 +230,15 @@ public class SesionActiva implements Serializable {
                 try {
                     jpaReaccion.editar(r);
 
-                    return;
                 } catch (Exception e) {
-                    // Inalcanzable
-                    System.out.println(e);
-                    return;
                 }
             }
         }
+
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect("DetallesPuesto.xhtml?id=" + r.getComentarioId().getPuesto().getId());
     }
- 
+
     /**
      * <code>reaccion</code> Método que checa si un usuario tiene una reaccion
      * con los parametros dados.
