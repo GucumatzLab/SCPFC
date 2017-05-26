@@ -1,12 +1,23 @@
 package gucumatz.scpfc.controlador;
 
+import gucumatz.scpfc.modelo.Comentario;
+import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.Usuario;
+import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
+import gucumatz.scpfc.modelo.db.ControladorJpaReaccion;
+import gucumatz.scpfc.modelo.db.ControladorJpaUsuario;
+import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.model.StreamedContent;
 
@@ -170,4 +181,94 @@ public class SesionActiva implements Serializable {
         return "iniciar-sesion?faces-redirect=true";
     }
 
+    /**
+     * <code>reacciona</code> Método que dado un comentario y una reaccion:
+     * Si ya hay una reaccion a ese comentario y es la misma que la que llamó
+     * a este método, se elimina, si es diferente se actualiza.
+     * Si no hay una reaccion se crea una nueva,
+     *
+     * @param id_comentario tipo <code>long</code>: id del comentario
+     * @param reaccion tipo <code>int</code>: reaccion
+     */
+    public void reacciona(long id_comentario, int reaccion) throws IOException {
+        Reaccion r = null;
+        
+        for(Reaccion rr : usuario.getReacciones()){
+            if (rr.getComentarioId().getId() == id_comentario) {
+                r = rr;
+                break;
+            }
+        }
+
+        FabricaControladorJpa fab = new FabricaControladorJpa();
+        ControladorJpaReaccion jpaReaccion
+            = fab.obtenerControladorJpaReaccion();
+        if (r == null) {
+            r = new Reaccion();
+            
+            ControladorJpaComentario jpaComentario
+                = fab.obtenerControladorJpaComentario();
+            Comentario c = jpaComentario.findComentario(id_comentario);
+            r.setComentarioId(c);
+            c.getReacciones().add(r);
+            
+            r.setUsuarioId(usuario);
+            usuario.getReacciones().add(r);
+            
+            r.setReaccion(reaccion);
+
+            jpaReaccion.crear(r);
+
+        } else {
+            if (r.getReaccion() == reaccion) {
+                try {
+                    usuario.getReacciones().remove(r);
+
+                    ControladorJpaComentario jpaComentario
+                        = fab.obtenerControladorJpaComentario();
+                    Comentario c = jpaComentario.findComentario(id_comentario);
+                    c.getReacciones().remove(r);
+                    
+                    jpaReaccion.destruir(r.getId());
+
+                } catch (NonexistentEntityException e) {
+                }
+            } else {
+                r.setReaccion(reaccion);
+                
+                try {
+                    jpaReaccion.editar(r);
+
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect("DetallesPuesto.xhtml?id=" + r.getComentarioId().getPuesto().getId());
+    }
+
+    /**
+     * <code>reaccion</code> Método que checa si un usuario tiene una reaccion
+     * con los parametros dados.
+     *
+     * @param id_comentario tipo <code>long</code>: id del comentario
+     * @param reaccion tipo <code>int</code>: reaccion
+     */
+    public boolean reaccion(long id_comentario, int reaccion) {
+        Reaccion r = null;
+        
+        for(Reaccion rr : usuario.getReacciones()){
+            if (rr.getComentarioId().getId() == id_comentario) {
+                r = rr;
+                break;
+            }
+        }
+        
+        if (r != null) {
+            return r.getReaccion() == reaccion;
+        }
+        
+        return false;
+    }
 }

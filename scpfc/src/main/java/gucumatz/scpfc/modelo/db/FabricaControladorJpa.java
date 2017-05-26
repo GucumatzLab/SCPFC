@@ -61,4 +61,13 @@ public class FabricaControladorJpa implements Serializable {
     public ControladorJpaFotoPuesto obtenerControladorJpaFotoPuesto() {
         return new ControladorJpaFotoPuesto(emf);
     }
+
+    /**
+     * Genera un controlador JPA para la entidad Reaccion.
+     *
+     * @return un controlador JPA para Reaccion.
+     */
+    public ControladorJpaReaccion obtenerControladorJpaReaccion() {
+        return new ControladorJpaReaccion(emf);
+    }
 }

@@ -2,6 +2,7 @@ package gucumatz.scpfc.modelo.db;
 
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
+import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
@@ -48,6 +49,9 @@ public class ControladorJpaUsuario implements Serializable {
         if (usuario.getComentarios() == null) {
             usuario.setComentarios(new ArrayList<Comentario>());
         }
+        if (usuario.getReacciones() == null) {
+            usuario.setReacciones(new ArrayList<Reaccion>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -64,6 +68,12 @@ public class ControladorJpaUsuario implements Serializable {
                 attachedComentarios.add(comentariosComentarioToAttach);
             }
             usuario.setComentarios(attachedComentarios);
+            List<Reaccion> attachedReacciones = new ArrayList<Reaccion>();
+            for (Reaccion reaccionesReaccionToAttach : usuario.getReacciones()) {
+                reaccionesReaccionToAttach = em.getReference(reaccionesReaccionToAttach.getClass(), reaccionesReaccionToAttach.getId());
+                attachedReacciones.add(reaccionesReaccionToAttach);
+            }
+            usuario.setReacciones(attachedReacciones);
             em.persist(usuario);
             for (Calificacion calificacionesCalificacion : usuario.getCalificaciones()) {
                 Usuario oldUsuarioOfCalificacionesCalificacion = calificacionesCalificacion.getUsuario();
@@ -81,6 +91,15 @@ public class ControladorJpaUsuario implements Serializable {
                 if (oldUsuarioOfComentariosComentario != null) {
                     oldUsuarioOfComentariosComentario.getComentarios().remove(comentariosComentario);
                     oldUsuarioOfComentariosComentario = em.merge(oldUsuarioOfComentariosComentario);
+                }
+            }
+            for (Reaccion reaccionesReaccion : usuario.getReacciones()) {
+                Usuario oldUsuarioIdOfReaccionesReaccion = reaccionesReaccion.getUsuarioId();
+                reaccionesReaccion.setUsuarioId(usuario);
+                reaccionesReaccion = em.merge(reaccionesReaccion);
+                if (oldUsuarioIdOfReaccionesReaccion != null) {
+                    oldUsuarioIdOfReaccionesReaccion.getReacciones().remove(reaccionesReaccion);
+                    oldUsuarioIdOfReaccionesReaccion = em.merge(oldUsuarioIdOfReaccionesReaccion);
                 }
             }
             em.getTransaction().commit();
@@ -114,6 +133,8 @@ public class ControladorJpaUsuario implements Serializable {
             List<Calificacion> calificacionesNew = usuario.getCalificaciones();
             List<Comentario> comentariosOld = persistentUsuario.getComentarios();
             List<Comentario> comentariosNew = usuario.getComentarios();
+            List<Reaccion> reaccionesOld = persistentUsuario.getReacciones();
+            List<Reaccion> reaccionesNew = usuario.getReacciones();
             List<String> illegalOrphanMessages = null;
             for (Calificacion calificacionesOldCalificacion : calificacionesOld) {
                 if (!calificacionesNew.contains(calificacionesOldCalificacion)) {
@@ -129,6 +150,14 @@ public class ControladorJpaUsuario implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Comentario " + comentariosOldComentario + " since its usuario field is not nullable.");
+                }
+            }
+            for (Reaccion reaccionesOldReaccion : reaccionesOld) {
+                if (!reaccionesNew.contains(reaccionesOldReaccion)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Reaccion " + reaccionesOldReaccion + " since its usuarioId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -148,6 +177,13 @@ public class ControladorJpaUsuario implements Serializable {
             }
             comentariosNew = attachedComentariosNew;
             usuario.setComentarios(comentariosNew);
+            List<Reaccion> attachedReaccionesNew = new ArrayList<Reaccion>();
+            for (Reaccion reaccionesNewReaccionToAttach : reaccionesNew) {
+                reaccionesNewReaccionToAttach = em.getReference(reaccionesNewReaccionToAttach.getClass(), reaccionesNewReaccionToAttach.getId());
+                attachedReaccionesNew.add(reaccionesNewReaccionToAttach);
+            }
+            reaccionesNew = attachedReaccionesNew;
+            usuario.setReacciones(reaccionesNew);
             usuario = em.merge(usuario);
             for (Calificacion calificacionesNewCalificacion : calificacionesNew) {
                 if (!calificacionesOld.contains(calificacionesNewCalificacion)) {
@@ -168,6 +204,17 @@ public class ControladorJpaUsuario implements Serializable {
                     if (oldUsuarioOfComentariosNewComentario != null && !oldUsuarioOfComentariosNewComentario.equals(usuario)) {
                         oldUsuarioOfComentariosNewComentario.getComentarios().remove(comentariosNewComentario);
                         oldUsuarioOfComentariosNewComentario = em.merge(oldUsuarioOfComentariosNewComentario);
+                    }
+                }
+            }
+            for (Reaccion reaccionesNewReaccion : reaccionesNew) {
+                if (!reaccionesOld.contains(reaccionesNewReaccion)) {
+                    Usuario oldUsuarioIdOfReaccionesNewReaccion = reaccionesNewReaccion.getUsuarioId();
+                    reaccionesNewReaccion.setUsuarioId(usuario);
+                    reaccionesNewReaccion = em.merge(reaccionesNewReaccion);
+                    if (oldUsuarioIdOfReaccionesNewReaccion != null && !oldUsuarioIdOfReaccionesNewReaccion.equals(usuario)) {
+                        oldUsuarioIdOfReaccionesNewReaccion.getReacciones().remove(reaccionesNewReaccion);
+                        oldUsuarioIdOfReaccionesNewReaccion = em.merge(oldUsuarioIdOfReaccionesNewReaccion);
                     }
                 }
             }
@@ -224,6 +271,13 @@ public class ControladorJpaUsuario implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Comentario " + comentariosOrphanCheckComentario + " in its comentarios field has a non-nullable usuario field.");
+            }
+            List<Reaccion> reaccionesOrphanCheck = usuario.getReacciones();
+            for (Reaccion reaccionesOrphanCheckReaccion : reaccionesOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Reaccion " + reaccionesOrphanCheckReaccion + " in its reacciones field has a non-nullable usuarioId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -2,10 +2,13 @@ package gucumatz.scpfc.modelo.db;
 
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Puesto;
+import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.Usuario;
+import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -39,6 +42,9 @@ public class ControladorJpaComentario implements Serializable {
      */
     @SuppressWarnings("checkstyle:linelength")
     public void crear(Comentario comentario) {
+        if (comentario.getReacciones() == null) {
+            comentario.setReacciones(new ArrayList<Reaccion>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -53,6 +59,12 @@ public class ControladorJpaComentario implements Serializable {
                 usuario = em.getReference(usuario.getClass(), usuario.getId());
                 comentario.setUsuario(usuario);
             }
+            List<Reaccion> attachedReacciones = new ArrayList<Reaccion>();
+            for (Reaccion reaccionesReaccionToAttach : comentario.getReacciones()) {
+                reaccionesReaccionToAttach = em.getReference(reaccionesReaccionToAttach.getClass(), reaccionesReaccionToAttach.getId());
+                attachedReacciones.add(reaccionesReaccionToAttach);
+            }
+            comentario.setReacciones(attachedReacciones);
             em.persist(comentario);
             if (puesto != null) {
                 puesto.getComentarios().add(comentario);
@@ -61,6 +73,15 @@ public class ControladorJpaComentario implements Serializable {
             if (usuario != null) {
                 usuario.getComentarios().add(comentario);
                 usuario = em.merge(usuario);
+            }
+            for (Reaccion reaccionesReaccion : comentario.getReacciones()) {
+                Comentario oldComentarioIdOfReaccionesReaccion = reaccionesReaccion.getComentarioId();
+                reaccionesReaccion.setComentarioId(comentario);
+                reaccionesReaccion = em.merge(reaccionesReaccion);
+                if (oldComentarioIdOfReaccionesReaccion != null) {
+                    oldComentarioIdOfReaccionesReaccion.getReacciones().remove(reaccionesReaccion);
+                    oldComentarioIdOfReaccionesReaccion = em.merge(oldComentarioIdOfReaccionesReaccion);
+                }
             }
             em.getTransaction().commit();
         } finally {
@@ -91,6 +112,20 @@ public class ControladorJpaComentario implements Serializable {
             Puesto puestoNew = comentario.getPuesto();
             Usuario usuarioOld = persistentComentario.getUsuario();
             Usuario usuarioNew = comentario.getUsuario();
+            List<Reaccion> reaccionesOld = persistentComentario.getReacciones();
+            List<Reaccion> reaccionesNew = comentario.getReacciones();
+            List<String> illegalOrphanMessages = null;
+            for (Reaccion reaccionesOldReaccion : reaccionesOld) {
+                if (!reaccionesNew.contains(reaccionesOldReaccion)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Reaccion " + reaccionesOldReaccion + " since its comentarioId field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (puestoNew != null) {
                 puestoNew = em.getReference(puestoNew.getClass(), puestoNew.getId());
                 comentario.setPuesto(puestoNew);
@@ -99,6 +134,13 @@ public class ControladorJpaComentario implements Serializable {
                 usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
                 comentario.setUsuario(usuarioNew);
             }
+            List<Reaccion> attachedReaccionesNew = new ArrayList<Reaccion>();
+            for (Reaccion reaccionesNewReaccionToAttach : reaccionesNew) {
+                reaccionesNewReaccionToAttach = em.getReference(reaccionesNewReaccionToAttach.getClass(), reaccionesNewReaccionToAttach.getId());
+                attachedReaccionesNew.add(reaccionesNewReaccionToAttach);
+            }
+            reaccionesNew = attachedReaccionesNew;
+            comentario.setReacciones(reaccionesNew);
             comentario = em.merge(comentario);
             if (puestoOld != null && !puestoOld.equals(puestoNew)) {
                 puestoOld.getComentarios().remove(comentario);
@@ -115,6 +157,17 @@ public class ControladorJpaComentario implements Serializable {
             if (usuarioNew != null && !usuarioNew.equals(usuarioOld)) {
                 usuarioNew.getComentarios().add(comentario);
                 usuarioNew = em.merge(usuarioNew);
+            }
+            for (Reaccion reaccionesNewReaccion : reaccionesNew) {
+                if (!reaccionesOld.contains(reaccionesNewReaccion)) {
+                    Comentario oldComentarioIdOfReaccionesNewReaccion = reaccionesNewReaccion.getComentarioId();
+                    reaccionesNewReaccion.setComentarioId(comentario);
+                    reaccionesNewReaccion = em.merge(reaccionesNewReaccion);
+                    if (oldComentarioIdOfReaccionesNewReaccion != null && !oldComentarioIdOfReaccionesNewReaccion.equals(comentario)) {
+                        oldComentarioIdOfReaccionesNewReaccion.getReacciones().remove(reaccionesNewReaccion);
+                        oldComentarioIdOfReaccionesNewReaccion = em.merge(oldComentarioIdOfReaccionesNewReaccion);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -141,7 +194,7 @@ public class ControladorJpaComentario implements Serializable {
      * comentario.
      */
     @SuppressWarnings("checkstyle:linelength")
-    public void destruir(Long id) throws NonexistentEntityException {
+    public void destruir(Long id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -152,6 +205,17 @@ public class ControladorJpaComentario implements Serializable {
                 comentario.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The comentario with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Reaccion> reaccionesOrphanCheck = comentario.getReacciones();
+            for (Reaccion reaccionesOrphanCheckReaccion : reaccionesOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Comentario (" + comentario + ") cannot be destroyed since the Reaccion " + reaccionesOrphanCheckReaccion + " in its reacciones field has a non-nullable comentarioId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Puesto puesto = comentario.getPuesto();
             if (puesto != null) {

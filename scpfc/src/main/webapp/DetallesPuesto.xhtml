@@ -153,6 +153,23 @@
 
                 <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
               </b:row>
+              <div style="float: right" onmouseover="document.getElementById('reaccion#{c.id}').style.display = 'block';"
+                                        onMouseOut="document.getElementById('reaccion#{c.id}').style.display = 'none';">
+                <p:outputPanel rendered="#{sesionActiva.haySesionActiva}">
+                  <div id="reaccion#{c.id}" style="width: 100%; display: none">
+                    <h:form>
+                      <b:commandButton look="#{sesionActiva.reaccion(c.id, 1)?'info':'default'}" value="👍" size="xs" action="#{sesionActiva.reacciona(c.id, 1)}">
+                      </b:commandButton>
+                      <b:commandButton look="#{sesionActiva.reaccion(c.id, 2)?'info':'default'}" value="👎" size="xs" action="#{sesionActiva.reacciona(c.id, 2)}">
+                      </b:commandButton>
+                    </h:form>      
+                  </div>
+                </p:outputPanel>
+                <div style="width: 100%">
+                  <div id="like" style="float: left">👍 <h:outputText value="#{c.getReaccionSize(1)}"></h:outputText></div>
+                  <div id="dislike" style="float: left">👎 <h:outputText value="#{c.getReaccionSize(2)}"></h:outputText></div>
+                </div>
+              </div>
             </b:panel>
           </ui:repeat>
         </column>
