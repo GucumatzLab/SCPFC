@@ -2,6 +2,8 @@ package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.Calificacion;
+import gucumatz.scpfc.modelo.Comentario;
+import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.db.*;
 
 import java.io.Serializable;
@@ -149,5 +151,28 @@ public class VisorUsuario implements Serializable {
         calificacionesC.put("4", calificaciones.get("4"));
         calificacionesC.put("5", calificaciones.get("5"));
         estadistica.addCircle(calificacionesC);
+
+        Map<String, Integer> reacciones = new LinkedHashMap<String, Integer>();
+        reacciones.put("1", 0);
+        reacciones.put("2", 0);
+        for(Comentario c : this.usuario.getComentarios()){
+            for(Reaccion r : c.getReacciones()){
+                switch(r.getReaccion()){
+                    case 1: {
+                        reacciones.put("1", reacciones.get("1") + 1);
+                        break;
+                    }
+                    case 2: {
+                        reacciones.put("2", reacciones.get("2") + 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        Map<String, Number> reaccionesC = new LinkedHashMap<String, Number>();
+        reaccionesC.put("👍", reacciones.get("1"));
+        reaccionesC.put("👎", reacciones.get("2"));
+        estadistica.addCircle(reaccionesC);
     }
 }
