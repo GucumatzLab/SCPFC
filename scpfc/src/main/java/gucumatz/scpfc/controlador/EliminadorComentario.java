@@ -39,7 +39,6 @@ public class EliminadorComentario {
 
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
-
     public EliminadorComentario() {
         jpaComentario
             = new FabricaControladorJpa().obtenerControladorJpaComentario();
@@ -66,7 +65,7 @@ public class EliminadorComentario {
     /**
      * Elimina un comentario. El comentario es identificado mediante un
      * parámetro en la solicitud llamado "idComentario".
-     * @throws gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException
+     * @throws IllegalOrphanException --
      */
     public void eliminarComentario() throws IllegalOrphanException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -110,7 +109,10 @@ public class EliminadorComentario {
                     "Comentario eliminado.", null);
             facesContext.addMessage(null, facesMessage);
         } catch (Exception e) {
-            /* El comentario no existe. */
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Error grave.", e.getMessage());
+            facesContext.addMessage(null, facesMessage);
         }
     }
 
