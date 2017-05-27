@@ -1,10 +1,12 @@
 package gucumatz.scpfc.controlador;
 
 import gucumatz.scpfc.modelo.Comentario;
-import gucumatz.scpfc.modelo.Puesto;
+import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.ControladorJpaComentario;
+import gucumatz.scpfc.modelo.db.ControladorJpaReaccion;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
+import gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import javax.faces.context.FacesContext;
 public class EliminadorComentario {
 
     private ControladorJpaComentario jpaComentario;
+    private ControladorJpaReaccion jpaReaccion;
 
     /**
      * El ID del comentario que se quiere eliminar.
@@ -39,6 +42,8 @@ public class EliminadorComentario {
     public EliminadorComentario() {
         jpaComentario
             = new FabricaControladorJpa().obtenerControladorJpaComentario();
+        jpaReaccion
+            = new FabricaControladorJpa().obtenerControladorJpaReaccion();
     }
 
     public void setIdComentario(Long idComentario) {
@@ -61,7 +66,7 @@ public class EliminadorComentario {
      * Elimina un comentario. El comentario es identificado mediante un
      * parámetro en la solicitud llamado "idComentario".
      */
-    public void eliminarComentario() {
+    public void eliminarComentario() throws IllegalOrphanException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         /*
@@ -89,6 +94,12 @@ public class EliminadorComentario {
         }
 
         try {
+
+            for(Reaccion r : comentario.getReacciones()){
+                r.getUsuarioId().getReacciones().remove(r);
+                jpaReaccion.destruir(r.getId());
+            }
+
             comentarios.remove(comentario);
             jpaComentario.destruir(idComentario);
 

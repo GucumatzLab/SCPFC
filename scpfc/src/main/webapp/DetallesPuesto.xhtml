@@ -131,11 +131,9 @@
 
 
       <b:row id="comentarios">
-        <b:panel>
         <b:column span="8" offset="2">
 
           <h2>Comentarios</h2>
-          <h:form>
           <b:row rendered="#{empty visorPuesto.puesto.comentarios}">
               <center>
                 <p>No hay comentarios sobre este puesto.</p>
@@ -147,15 +145,15 @@
               <b:row>
                 <b:column span="3">
                   <center>
-                      <b:navLink href="VerPerfil.xhtml?id=#{c.usuario.id}">
-                    <b:row>
-                        <p:graphicImage styleClass="imgCirculo"
-                                        value="#{manejadorDeImagenes.fotoDeUsuario}">
-                          <f:param name="rutaImagen" value="#{c.usuario.rutaImagen}"/>
-                        </p:graphicImage>
+                    <b:navLink href="VerPerfil.xhtml?id=#{c.usuario.id}">
+                      <b:row>
+                          <p:graphicImage styleClass="imgCirculo"
+                                          value="#{manejadorDeImagenes.fotoDeUsuario}">
+                            <f:param name="rutaImagen" value="#{c.usuario.rutaImagen}"/>
+                          </p:graphicImage>
                       </b:row>
                       <b:row>
-                        #{c.usuario.nombre}
+                          #{c.usuario.nombre}
                       </b:row>
                     </b:navLink>
                     <b:row>
@@ -187,7 +185,12 @@
                   </center>
                 </b:column>
 
-                <b:column span="9" style="white-space: pre">#{c.comentario}<b:commandButton style="float:right" rendered="#{sesionActiva.haySesionActiva}" action="#{visorPuesto.enviaMensaje(sesionActiva.obtenerUsuarioActual(),c.usuario,c,visorPuesto.puesto)}" iconAwesome="fa-bell-o" tooltip="Reportar este comentario como ofensivo o inapropiado" look="warning"/></b:column>
+                <b:column span="9" style="white-space: pre">
+                  #{c.comentario}
+                  <h:form>
+                    <b:commandButton style="float: right" rendered="#{sesionActiva.haySesionActiva}" action="#{visorPuesto.enviaMensaje(sesionActiva.obtenerUsuarioActual(), c.usuario, c,visorPuesto.puesto)}" iconAwesome="fa-bell-o" tooltip="Reportar este comentario como ofensivo o inapropiado" look="warning"/>
+                  </h:form>
+                </b:column>
               </b:row>
               <div style="float: right" onmouseover="document.getElementById('reaccion#{c.id}').style.display = 'block';"
                                         onMouseOut="document.getElementById('reaccion#{c.id}').style.display = 'none';">
@@ -208,9 +211,7 @@
               </div>
             </b:panel>
           </ui:repeat>
-          </h:form>
         </b:column>
-        </b:panel>
       </b:row>
 
     <script type="text/javascript">
