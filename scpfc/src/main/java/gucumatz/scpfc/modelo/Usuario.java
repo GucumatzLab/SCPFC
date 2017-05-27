@@ -196,7 +196,7 @@ public class Usuario implements Serializable {
     public void setReacciones(List<Reaccion> reacciones) {
         this.reacciones = reacciones;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

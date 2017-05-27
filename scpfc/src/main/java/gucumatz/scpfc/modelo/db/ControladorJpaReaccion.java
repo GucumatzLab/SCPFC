@@ -3,21 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package gucumatz.scpfc.modelo.db;
 
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Reaccion;
 import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.exceptions.NonexistentEntityException;
+
+import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 /**
  *
  * @author pablog
@@ -25,7 +27,7 @@ import javax.persistence.EntityManagerFactory;
 public class ControladorJpaReaccion implements Serializable {
 
     private EntityManagerFactory emf = null;
-    
+
     public ControladorJpaReaccion(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -174,7 +176,6 @@ public class ControladorJpaReaccion implements Serializable {
         }
     }
 
-    
     /**
      * Busca todas las reacciones registrados en la base de datos.
      *
@@ -258,5 +259,5 @@ public class ControladorJpaReaccion implements Serializable {
             em.close();
         }
     }
-    
+
 }

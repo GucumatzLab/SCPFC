@@ -66,7 +66,7 @@ public class Comentario implements Serializable {
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comentarioId")
     private List<Reaccion> reacciones;
-    
+
     public Comentario() {
     }
 
@@ -129,9 +129,16 @@ public class Comentario implements Serializable {
         this.reacciones = reacciones;
     }
 
-    public int getReaccionSize(int reaccion){
+    /**
+     *<code>getReaccionSize</code> Método que regresa el numero de reacciones
+     *del tipo reaccino que tiene el comentario.
+     *@param reaccion tipo <code>int</code>: Reaccion a verificar.
+     *@return tipo <code>int</code>: Numero de ocurrencias de esa reaccion en el
+     *comentario.
+     */
+    public int getReaccionSize(int reaccion) {
         int c = 0;
-        for(Reaccion r : reacciones){
+        for (Reaccion r : reacciones) {
             if (r.getReaccion() == reaccion) {
                 c++;
             }
@@ -139,7 +146,7 @@ public class Comentario implements Serializable {
 
         return c;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

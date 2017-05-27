@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package gucumatz.scpfc.modelo;
 
 import java.io.Serializable;
@@ -27,9 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "reaccion")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Reaccion.findAll", query = "SELECT r FROM Reaccion r")
-    , @NamedQuery(name = "Reaccion.findById", query = "SELECT r FROM Reaccion r WHERE r.id = :id")
-    , @NamedQuery(name = "Reaccion.findByReaccion", query = "SELECT r FROM Reaccion r WHERE r.reaccion = :reaccion")})
+    @NamedQuery(name = "Reaccion.findAll", query = "SELECT r FROM Reaccion r"),
+    @NamedQuery(name = "Reaccion.findById", query = "SELECT r"
+            + "FROM Reaccion r WHERE r.id = :id"),
+    @NamedQuery(name = "Reaccion.findByReaccion", query = "SELECT r"
+            + "FROM Reaccion r WHERE r.reaccion = :reaccion")})
 public class Reaccion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -101,12 +104,12 @@ public class Reaccion implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Reaccion)) {
             return false;
         }
         Reaccion other = (Reaccion) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null)
+            || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -116,5 +119,5 @@ public class Reaccion implements Serializable {
     public String toString() {
         return "gucumatz.scpfc.modelo.Reaccion[ id=" + id + " ]";
     }
-    
+
 }

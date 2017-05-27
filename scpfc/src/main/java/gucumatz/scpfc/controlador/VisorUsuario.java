@@ -1,19 +1,19 @@
 package gucumatz.scpfc.controlador;
 
-import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.Calificacion;
 import gucumatz.scpfc.modelo.Comentario;
 import gucumatz.scpfc.modelo.Reaccion;
+import gucumatz.scpfc.modelo.Usuario;
 import gucumatz.scpfc.modelo.db.*;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.primefaces.model.chart.DonutChartModel;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.model.chart.DonutChartModel;
 /**
  * Clase controlador de VerPerfil.
  *
@@ -58,8 +58,8 @@ public class VisorUsuario implements Serializable {
     }
 
     /**
-     * <code>obtenerUsuario</code> Método inicializa los objetos relacionados con
-     * el usuario actual.
+     * <code>obtenerUsuario</code> Método inicializa los objetos relacionados
+     * con el usuario actual.
      *
      *@return tipo <code>String</code>: Dirección de redireccionamiento.
      */
@@ -85,18 +85,39 @@ public class VisorUsuario implements Serializable {
         return this.usuario;
     }
 
+    /**
+     *<code>sizeCalificaciones</code> Método que regresa el numero de
+     *calificaciones del usuario actual.
+     *@return tipo <code>int</code>: Numero de calificaciones del usuario actual
+     *.
+     */
     public int sizeCalificaciones() {
         return usuario.getCalificaciones().size();
     }
-    
+
+    /**
+     *<code>sizeComentarios</code> Método que regresa el numero de comentarios
+     *del usuario actual.
+     *@return tipo <code>int</code>: Numero de comentarios del usuario actual.
+     */
     public int sizeComentarios() {
         return usuario.getComentarios().size();
     }
 
-    public DonutChartModel getEstadistica(){
+    /**
+     *<code>getEstadistica</code> Método que regresa el objeto con la grafica de
+     *estadisticas.
+     *@return tipo <code>DonutChartModel</code>: Objeto con la grafica de
+     *estadisticas.
+     */
+    public DonutChartModel getEstadistica() {
         return this.estadistica;
     }
-    
+
+    /**
+     *<code>inicializaEstadistica</code> Método que inicializa la grafica de
+     *estadisticas.
+     */
     private void inicializaEstadistica() {
         this.estadistica = new DonutChartModel();
         this.estadistica.setTitle("Informacion:");
@@ -105,23 +126,23 @@ public class VisorUsuario implements Serializable {
         this.estadistica.setShowDataLabels(true);
         this.estadistica.setDataFormat("value");
         this.estadistica.setShadow(false);
-        
-        
-        Map<String, Integer> calificaciones = new LinkedHashMap<String, Integer>();
+
+        Map<String, Integer> calificaciones
+            = new LinkedHashMap<String, Integer>();
         calificaciones.put("0", 0);
         calificaciones.put("1", 0);
         calificaciones.put("2", 0);
         calificaciones.put("3", 0);
         calificaciones.put("4", 0);
         calificaciones.put("5", 0);
-        for(Calificacion c : this.usuario.getCalificaciones()){
-            switch((int)c.getCalificacion()){
+        for (Calificacion c : this.usuario.getCalificaciones()) {
+            switch ((int) c.getCalificacion()) {
                 case 0: {
                     calificaciones.put("0", calificaciones.get("0") + 1);
                     break;
                 }
                 case 1: {
-                    calificaciones.put("1", calificaciones.get("1") + 1);                    
+                    calificaciones.put("1", calificaciones.get("1") + 1);
                     break;
                 }
                 case 2: {
@@ -137,13 +158,14 @@ public class VisorUsuario implements Serializable {
                     break;
                 }
                 case 5: {
-                    calificaciones.put("5", calificaciones.get("5") + 1);                    
+                    calificaciones.put("5", calificaciones.get("5") + 1);
                     break;
                 }
             }
         }
 
-        Map<String, Number> calificacionesC = new LinkedHashMap<String, Number>();
+        Map<String, Number> calificacionesC
+            = new LinkedHashMap<String, Number>();
         calificacionesC.put("0", calificaciones.get("0"));
         calificacionesC.put("1", calificaciones.get("1"));
         calificacionesC.put("2", calificaciones.get("2"));
@@ -155,9 +177,9 @@ public class VisorUsuario implements Serializable {
         Map<String, Integer> reacciones = new LinkedHashMap<String, Integer>();
         reacciones.put("1", 0);
         reacciones.put("2", 0);
-        for(Comentario c : this.usuario.getComentarios()){
-            for(Reaccion r : c.getReacciones()){
-                switch(r.getReaccion()){
+        for (Comentario c : this.usuario.getComentarios()) {
+            for (Reaccion r : c.getReacciones()) {
+                switch (r.getReaccion()) {
                     case 1: {
                         reacciones.put("1", reacciones.get("1") + 1);
                         break;

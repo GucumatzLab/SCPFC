@@ -141,7 +141,7 @@ public class SesionActiva implements Serializable {
      *
      * @return una cadena que redirige al perfil del usuario actual
      */
-    public String getPerfil(){
+    public String getPerfil() {
         return "VerPerfil.xhtml?id=" + usuario.getId();
     }
 
@@ -189,11 +189,12 @@ public class SesionActiva implements Serializable {
      *
      * @param id_comentario tipo <code>long</code>: id del comentario
      * @param reaccion tipo <code>int</code>: reaccion
+     * @throws IOException
      */
     public void reacciona(long id_comentario, int reaccion) throws IOException {
         Reaccion r = null;
-        
-        for(Reaccion rr : usuario.getReacciones()){
+
+        for (Reaccion rr : usuario.getReacciones()) {
             if (rr.getComentarioId().getId() == id_comentario) {
                 r = rr;
                 break;
@@ -205,16 +206,16 @@ public class SesionActiva implements Serializable {
             = fab.obtenerControladorJpaReaccion();
         if (r == null) {
             r = new Reaccion();
-            
+
             ControladorJpaComentario jpaComentario
                 = fab.obtenerControladorJpaComentario();
             Comentario c = jpaComentario.findComentario(id_comentario);
             r.setComentarioId(c);
             c.getReacciones().add(r);
-            
+
             r.setUsuarioId(usuario);
             usuario.getReacciones().add(r);
-            
+
             r.setReaccion(reaccion);
 
             jpaReaccion.crear(r);
@@ -228,14 +229,14 @@ public class SesionActiva implements Serializable {
                         = fab.obtenerControladorJpaComentario();
                     Comentario c = jpaComentario.findComentario(id_comentario);
                     c.getReacciones().remove(r);
-                    
+
                     jpaReaccion.destruir(r.getId());
 
                 } catch (NonexistentEntityException e) {
                 }
             } else {
                 r.setReaccion(reaccion);
-                
+
                 try {
                     jpaReaccion.editar(r);
 
@@ -244,8 +245,10 @@ public class SesionActiva implements Serializable {
             }
         }
 
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect("DetallesPuesto.xhtml?id=" + r.getComentarioId().getPuesto().getId());
+        ExternalContext ec = FacesContext.getCurrentInstance()
+            .getExternalContext();
+        ec.redirect("DetallesPuesto.xhtml?id=" + r.getComentarioId().getPuesto()
+            .getId());
     }
 
     /**
@@ -254,21 +257,23 @@ public class SesionActiva implements Serializable {
      *
      * @param id_comentario tipo <code>long</code>: id del comentario
      * @param reaccion tipo <code>int</code>: reaccion
+     * @return tipo <code>boolean</code>: El usuario tiene una reaccion con los
+     * parametros dados.
      */
     public boolean reaccion(long id_comentario, int reaccion) {
         Reaccion r = null;
-        
-        for(Reaccion rr : usuario.getReacciones()){
+
+        for (Reaccion rr : usuario.getReacciones()) {
             if (rr.getComentarioId().getId() == id_comentario) {
                 r = rr;
                 break;
             }
         }
-        
+
         if (r != null) {
             return r.getReaccion() == reaccion;
         }
-        
+
         return false;
     }
 }

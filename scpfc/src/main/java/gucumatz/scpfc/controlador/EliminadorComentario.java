@@ -39,6 +39,7 @@ public class EliminadorComentario {
 
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
+
     public EliminadorComentario() {
         jpaComentario
             = new FabricaControladorJpa().obtenerControladorJpaComentario();
@@ -65,6 +66,7 @@ public class EliminadorComentario {
     /**
      * Elimina un comentario. El comentario es identificado mediante un
      * parámetro en la solicitud llamado "idComentario".
+     * @throws gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException
      */
     public void eliminarComentario() throws IllegalOrphanException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -95,7 +97,7 @@ public class EliminadorComentario {
 
         try {
 
-            for(Reaccion r : comentario.getReacciones()){
+            for (Reaccion r : comentario.getReacciones()) {
                 r.getUsuarioId().getReacciones().remove(r);
                 jpaReaccion.destruir(r.getId());
             }

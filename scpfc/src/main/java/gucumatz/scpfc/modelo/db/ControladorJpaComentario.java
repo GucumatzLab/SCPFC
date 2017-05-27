@@ -190,6 +190,7 @@ public class ControladorJpaComentario implements Serializable {
      * Elimina un comentario de la base de datos.
      *
      * @param id el identificador del comentario que se quiere eliminar.
+     * @throws gucumatz.scpfc.modelo.db.exceptions.IllegalOrphanException
      * @throws NonexistentEntityException si el id no corresponde a ningun
      * comentario.
      */
