@@ -6,6 +6,8 @@ import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -13,7 +15,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-
 /**
  *
  * @author lchacon
@@ -137,6 +138,43 @@ public class EditorPuesto implements Serializable {
      */
     private FacesMessage crearMensajeDeError(String mensaje) {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null);
+    }
+
+    /**
+     * Comprueba que el horario tenga el formato correcto
+     *
+     * @param context FacesContext para la solicitud que se está procesando
+     * @param component el componente que se está revisando
+     * @param value el valor que se quiere validar
+     * @throws ValidatorException si el valor dado no es válido
+     */
+    public void validarHorario(FacesContext context,
+                               UIComponent component,
+                               Object value)
+                                throws ValidatorException {
+        String horario = (String) value;
+        String hora1 = "2[0-3]";
+        String hora2 = "1[0-9]";
+        String hora3 = "0[0-9]";
+        String hora = "(" + hora1 + "|" + hora2 + "|" + hora3 + ")";
+        String minuto = "[0-5][0-9]";
+        String regex = "Abierto\\sdesde\\slas\\s"
+                        + hora
+                        + ":"
+                        + minuto
+                        + "\\shrs\\.\\sa\\slas\\s"
+                        + hora
+                        + ":"
+                        + minuto
+                        + "\\shrs\\.";
+        Pattern patron = Pattern.compile(regex);
+        Matcher match = patron.matcher(horario);
+        if (!match.matches()) {
+            FacesMessage mensajeDeError = crearMensajeDeError(
+                "Error de Formato <Abierto desde las HH:MM hrs."
+                + " a las HH:MM hrs.>");
+            throw new ValidatorException(mensajeDeError);
+        }
     }
 
 }

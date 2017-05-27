@@ -28,10 +28,12 @@
           height: 400px;
         }
       </style>
-
+      <b:panel>
       <b:column span="8" offset="2">
         <b:row>
+        <center>
           <h1>Editar puesto "#{editorPuesto.puesto.nombre}"</h1>
+        </center>
         </b:row>
 
         <b:row>
@@ -65,6 +67,7 @@
                              value="#{editorPuesto.puesto.horario}"
                              label="Horario"
                              required="false"
+                             validator="#{editorPuesto.validarHorario}"
                              >
                   <f:validateLength maximum="100"/>
                   <p:ajax event="blur" update="msgHorario"/>
@@ -119,6 +122,7 @@
           </h:form>
         </b:row>
       </b:column>
+      </b:panel>
 
       <script type="text/javascript">
         var currentMarker = null;
