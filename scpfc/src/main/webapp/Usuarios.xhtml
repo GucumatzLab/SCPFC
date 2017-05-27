@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:b="http://bootsfaces.net/ui"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core">
+  <f:metadata>
+    <f:viewAction if="#{not sesionActiva.esAdministrador}"
+      action="#{sesionActiva.redirigeAPaginaPrincipal}" />
+    </f:metadata>
+    <ui:composition template="WEB-INF/plantilla.xhtml">
+      <ui:define name="titulo">SCPFC | Usuarios </ui:define>
+
+      <ui:define name="contenido">
+        <b:panel>
+          <h2>Usuarios</h2>
+          <ui:repeat value="#{eliminadorUsuario.usuarios}" var="c">
+            <b:panel collapsible="true" rendered="#{not c.esAdministrador}">
+              <b:row>
+                <b:column span="3">
+                  <center>
+                    <b:navLink href="VerPerfil.xhtml?id=#{c.id}">
+                      <b:row>
+                        <p:graphicImage styleClass="imgCirculo"
+                          value="#{manejadorDeImagenes.fotoDeUsuario}">
+                          <f:param name="rutaImagen" value="#{c.rutaImagen}"/>
+                        </p:graphicImage>
+                      </b:row>
+                      <b:row>
+                        #{c.nombre}
+                      </b:row>
+                    </b:navLink>
+                    <!--<b:row rendered="#{not c.esAdministrador}"-->
+                    <b:row>
+                      <h:form>
+                       <p:commandButton value="Eliminar usuario" type="button" onclick="PF('dlg2').show();" />
+                       <p:dialog header="Confirmar eliminación" widgetVar="dlg2" modal="true" height="100">
+                        <h:outputText value="¿Seguro que deseas eliminar este Usuario?" />
+                        <br/>
+                        <h:outputText value="&quot;#{c.nombre}&quot;"/>
+                        <br/>
+                        <b:commandButton value="No" type="button" onclick="PF('dlg2').hide()" look="primary"/>
+                        <b:commandButton value="Si"
+                         action="#{eliminadorUsuario.eliminarUsuario()}" look="primary">
+                         <f:setPropertyActionListener target="#{eliminadorUsuario.usuarioId}"
+                           value="#{c.id}"/>
+                         </b:commandButton>
+                       </p:dialog>
+                     </h:form>
+                   </b:row> 
+                   <b:column>
+                    Numero de comentarios : #{c.comentarios.size()}
+                  </b:column>                
+                </center>
+              </b:column>
+            </b:row>
+          </b:panel>
+        </ui:repeat>
+      </b:panel>
+    </ui:define>
+  </ui:composition>
+</html>
