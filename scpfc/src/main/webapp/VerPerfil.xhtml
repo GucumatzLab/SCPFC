@@ -26,6 +26,22 @@
           <h:outputText value="#{visorUsuario.usuario.nombre}" />
           <br />
           <h:outputText value="#{visorUsuario.usuario.correoElectronico}" />
+          <br />
+          <h:form rendered="#{(not visorUsuario.usuario.esAdministrador) and sesionActiva.haySesionActiva and sesionActiva.esAdministrador}">
+            <p:commandButton value="Eliminar usuario" type="button" onclick="PF('dlg3').show();" />
+            <p:dialog header="Confirmar eliminación" widgetVar="dlg3" modal="true" height="100">
+                <h:outputText value="¿Seguro que deseas eliminar este Usuario?" />
+                <br/>
+                <h:outputText value="&quot;#{visorUsuario.usuario.nombre}&quot;"/>
+                <br/>
+                <b:commandButton value="Cancelar" type="button" onclick="PF('dlg3').hide()" look="primary"/>
+                <b:commandButton value="Eliminar"
+                         action="#{eliminadorUsuario.eliminarUsuario()}" look="primary">
+                <f:setPropertyActionListener target="#{eliminadorUsuario.usuarioId}"
+                           value="#{visorUsuario.usuario.id}"/>
+                </b:commandButton>
+            </p:dialog>
+          </h:form>
         </div>
         <div id="estadisticas" style="float: left; width: 30%">
             Calificaciones: <h:outputText value="#{visorUsuario.sizeCalificaciones()}" />.
@@ -38,6 +54,7 @@
       </div>
       <div>
         <h2>Comentarios</h2>
+        <h:outputText value = "No hay comentarios" rendered="#{empty visorUsuario.usuario.comentarios}"/>
         <ui:repeat value="#{visorUsuario.usuario.comentarios}" var="c">
           <b:panel collapsible="true">
             <b:row>
@@ -51,6 +68,26 @@
                       <f:convertDateTime type="both"/>
                     </h:outputText>
                   </b:row>
+                    <b:row rendered="#{sesionActiva.esAdministrador
+                                       or (c.usuario eq sesionActiva.usuario)}">
+                      <h:form>
+                       <p:commandButton value="Eliminar Comentario" type="button" onclick="PF('dlg2').show();" />
+                        <p:dialog header="Confirmar eliminación" widgetVar="dlg2" modal="true" height="100">
+                          <h:outputText value="¿Seguro que deseas eliminar este comentario?" />
+                          <br/>
+                          <h:outputText value="&quot;#{c.comentario}&quot;"/>
+                          <br/>
+                          <b:commandButton value="Cancelar" type="button" onclick="PF('dlg2').hide()" look="primary"/>
+                          <b:commandButton value="Eliminar"
+                                         action="#{eliminadorComentario.eliminarComentario()}" look="primary">
+                            <f:setPropertyActionListener target="#{eliminadorComentario.idComentario}"
+                                                       value="#{c.id}"/>
+                            <f:setPropertyActionListener target="#{eliminadorComentario.comentarios}"
+                                                        value="#{visorPuesto.puesto.comentarios}"/>
+                          </b:commandButton>
+                        </p:dialog>
+                      </h:form>
+                    </b:row>                  
                 </center>
               </b:column>
                <b:column span="9" style="white-space: pre">#{c.comentario}</b:column>
