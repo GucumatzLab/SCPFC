@@ -107,7 +107,7 @@ public class EliminadorComentario {
                 = new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Comentario eliminado.", null);
             facesContext.addMessage(null, facesMessage);
-        } catch (NonexistentEntityException e) {
+        } catch (Exception e) {
             /* El comentario no existe. */
         }
     }
