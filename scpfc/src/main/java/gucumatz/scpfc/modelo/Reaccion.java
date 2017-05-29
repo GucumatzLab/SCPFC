@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Reaccion.findAll", query = "SELECT r FROM Reaccion r"),
     @NamedQuery(name = "Reaccion.findById", query = "SELECT r"
-            + "FROM Reaccion r WHERE r.id = :id"),
+            + " FROM Reaccion r WHERE r.id = :id"),
     @NamedQuery(name = "Reaccion.findByReaccion", query = "SELECT r"
-            + "FROM Reaccion r WHERE r.reaccion = :reaccion")})
+            + " FROM Reaccion r WHERE r.reaccion = :reaccion")})
 public class Reaccion implements Serializable {
 
     private static final long serialVersionUID = 1L;
