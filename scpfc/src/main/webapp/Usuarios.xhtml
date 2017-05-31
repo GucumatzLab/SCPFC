@@ -36,13 +36,13 @@
                     <!--<b:row rendered="#{not c.esAdministrador}"-->
                     <b:row>
                       <h:form>
-                       <p:commandButton value="Eliminar usuario" type="button" onclick="PF('dlg2').show();" />
-                       <p:dialog header="Confirmar eliminación" widgetVar="dlg2" modal="true" height="100">
+                       <p:commandButton value="Eliminar usuario" type="button" onclick="PF('dlg2#{c.id}').show();" />
+                       <p:dialog header="Confirmar eliminación" widgetVar="dlg2#{c.id}" modal="true" height="100">
                         <h:outputText value="¿Seguro que deseas eliminar este Usuario?" />
                         <br/>
                         <h:outputText value="&quot;#{c.nombre}&quot;"/>
                         <br/>
-                        <b:commandButton value="No" type="button" onclick="PF('dlg2').hide()" look="primary"/>
+                        <b:commandButton value="No" type="button" onclick="PF('dlg2#{c.id}').hide()" look="primary"/>
                         <b:commandButton value="Si"
                          action="#{eliminadorUsuario.eliminarUsuario()}" look="primary">
                          <f:setPropertyActionListener target="#{eliminadorUsuario.usuarioId}"
