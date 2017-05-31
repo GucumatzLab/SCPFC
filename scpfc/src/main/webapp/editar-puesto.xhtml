@@ -83,11 +83,26 @@
                   <p:ajax event="blur" update="msgUbicacion"/>
                 </b:inputText>
 
-                <!--
-                <p:fileUpload value="#{agregadorPuesto.foto1}" skinSimple="true" label="Foto 1" mode="simple"/>
-                <p:fileUpload value="#{agregadorPuesto.foto2}" skinSimple="true" label="Foto 2" mode="simple"/>
-                <p:fileUpload value="#{agregadorPuesto.foto3}" skinSimple="true" label="Foto 3" mode="simple"/>
-                -->
+                
+                <p:commandButton value="imágenes actuales" onclick="PF('images').show();"/>
+                <p:dialog  header="Imágenes" widgetVar="images" modal="false" height="320">
+                  <strong>El número de imagen de foto es el orden de aparición</strong>
+                  <b:carousel id="cfotos">
+                    <c:forEach items="#{editorPuesto.puesto.fotosPuesto}" var="fppk">
+                      <b:carouselItem>
+                        <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 300px">
+                          <f:param name="ruta" value="#{fppk.url}"/>
+                        </p:graphicImage>
+                      </b:carouselItem>
+                    </c:forEach>
+                  </b:carousel>
+                </p:dialog>
+                <br/>
+                <br/>
+                <p:fileUpload value="#{editorPuesto.foto1}" skinSimple="true" label="Foto 1" mode="simple"/>
+                <p:fileUpload value="#{editorPuesto.foto2}" skinSimple="true" label="Foto 2" mode="simple"/>
+                <p:fileUpload value="#{editorPuesto.foto3}" skinSimple="true" label="Foto 3" mode="simple"/>
+                
               </b:column>
 
               <b:column span="6">

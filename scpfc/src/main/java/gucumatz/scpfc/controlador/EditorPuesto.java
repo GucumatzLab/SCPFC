@@ -1,11 +1,13 @@
 package gucumatz.scpfc.controlador;
 
+import gucumatz.scpfc.modelo.FotoPuesto;
 import gucumatz.scpfc.modelo.Puesto;
 import gucumatz.scpfc.modelo.db.ControladorJpaFotoPuesto;
 import gucumatz.scpfc.modelo.db.ControladorJpaPuesto;
 import gucumatz.scpfc.modelo.db.FabricaControladorJpa;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+
+import org.primefaces.model.UploadedFile;
 /**
  *
  * @author lchacon
@@ -22,6 +26,10 @@ import javax.faces.validator.ValidatorException;
 @ManagedBean
 @ViewScoped
 public class EditorPuesto implements Serializable {
+    /**
+     * Tamaño máximo para cada foto. El máximo es 4MB.
+     */
+    private static final int FOTO_TAM_MAX = 4 * 1024 * 1024;
 
     private static final String MENSAJE_NOMBRE_NO_DISPONIBLE
         = "Ya existe un puesto con este nombre";
@@ -38,7 +46,9 @@ public class EditorPuesto implements Serializable {
      * Puesto a editar.
      */
     private Puesto puesto;
-
+    private UploadedFile foto1;
+    private UploadedFile foto2;
+    private UploadedFile foto3;
     /**
      * Crea una nueva instancia de EditorPuesto
      */
@@ -61,6 +71,59 @@ public class EditorPuesto implements Serializable {
     }
 
     /**
+     * Metodo para obtener la foto 1.
+     *
+     * @return foto 1.
+     */
+    public UploadedFile getFoto1() {
+        return this.foto1;
+    }
+
+    /**
+     * Metodo para cambiar la foto 1.
+     *
+     * @param nuevo - nueva foto.
+     */
+    public void setFoto1(UploadedFile nuevo) {
+        this.foto1 = nuevo;
+    }
+
+    /**
+     * Metodo para obtener la foto 2.
+     *
+     * @return foto 2.
+     */
+    public UploadedFile getFoto2() {
+        return this.foto2;
+    }
+
+    /**
+     * Metodo para cambiar la foto 2.
+     *
+     * @param nuevo - nueva foto.
+     */
+    public void setFoto2(UploadedFile nuevo) {
+        this.foto2 = nuevo;
+    }
+
+    /**
+     * Metodo para obtener la foto 3.
+     *
+     * @return foto 3.
+     */
+    public UploadedFile getFoto3() {
+        return this.foto3;
+    }
+
+    /**
+     * Metodo para cambiar la foto 3.
+     *
+     * @param nuevo - nueva foto.
+     */
+    public void setFoto3(UploadedFile nuevo) {
+        this.foto3 = nuevo;
+    }
+    /**
      * Inicializa el Bean buscando el puesto con el ID recibido. Si no se
      * recibió un ID o el puesto no existe, redirige a la página principal.
      *
@@ -82,23 +145,40 @@ public class EditorPuesto implements Serializable {
     /**
      * Actualiza los datos del puesto.
      *
-     * @return la página a la que redirige
      */
-    public String actualizar() {
+    public void actualizar() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         try {
+            List<FotoPuesto> fp = this.puesto.getFotosPuesto();
+            if (!(validaFormato(foto1)
+                && validaFormato(foto2) && validaFormato(foto3))) {
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Ocurrió un error al intentar actualizar el puesto", null);
+            facesContext.addMessage(null, facesMessage);
+                return;
+            }
+
+            if (foto1 != null  && !guardaImagen(foto1, 1, fp)) {
+                return;
+            }
+            if (foto2 != null && !guardaImagen(foto2, 2, fp)) {
+                return;
+            }
+            if (foto3 != null && !guardaImagen(foto3, 3, fp)) {
+                return;
+            }
+            puesto.setFotosPuesto(fp);
             jpaPuesto.editar(puesto);
+            redirecciona();
         } catch (Exception e) {
             /* Esto no debería ocurrir. */
             FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Ocurrió un error al intentar actualizar el puesto", null);
             facesContext.addMessage(null, facesMessage);
-
-            return null;
         }
-        return "DetallesPuesto?faces-redirect=true&includeViewParams=true";
     }
 
     /**
@@ -177,4 +257,117 @@ public class EditorPuesto implements Serializable {
         }
     }
 
+    /**
+     * Metodo que guarda una imagen en la memoria del equipo y la base de datos.
+     *
+     * @param up - archivo a guardar.
+     * @param id - numero de archivo.
+     * @param fp - lista de fotos
+     * @return Devuelve true si no hubo problemas al guardar los datos.
+     */
+    public boolean guardaImagen(UploadedFile up, int id, List<FotoPuesto> fp) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (up == null) {
+            return true;
+        }
+        try {
+            String nombreDeArchivo;
+            String extensionFoto;
+            String nombreDeArchivo2 = up.getFileName();
+            if (nombreDeArchivo2.endsWith(".jpg")
+                || nombreDeArchivo2.endsWith(".jpeg")) {
+                extensionFoto = ".jpg";
+            } else {
+                extensionFoto = ".png";
+            }
+            ManejadorDeImagenes mdi = new ManejadorDeImagenes();
+            FotoPuesto f = new FotoPuesto();
+            FotoPuesto existente = buscaImagen(id);
+            if (existente == null) {
+                nombreDeArchivo
+                    = "puesto/" + puesto.getId() + "-" + id + extensionFoto;
+                mdi.escribirImagen(up, nombreDeArchivo);
+                f.setUrl(nombreDeArchivo);
+                f.setPuesto(puesto);
+                jpaFotoPuesto.crear(f);
+                fp.add(f);
+                return true;
+            }
+
+            mdi.escribirImagen(up, existente.getUrl());
+            f.setUrl(existente.getUrl());
+            f.setPuesto(puesto);
+            fp.remove(existente);
+            fp.add(f);
+            return true;
+        } catch (Exception e) {
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR Al tratar de subir la foto "
+                    + id + " " + e.getMessage(), null);
+            facesContext.addMessage(null, facesMessage);
+        }
+        return false;
+    }
+
+    /**
+    * Metodo para saber si una imagen ya existia en la base de datos
+    * @param id de imagen
+    * @return Devuelve la foto si existe
+    */
+    private FotoPuesto buscaImagen(int id) {
+        for (FotoPuesto fp: puesto.getFotosPuesto()) {
+            if (fp.getUrl().contains("-" + Integer.toString(id))) {
+                return fp;
+            }
+        }
+        return null;
+    }
+    /**
+    * Metodo que valida el formato de una imagen
+    * @param up - archivo
+    * @return Devuelve true si el formato es correcto.
+    */
+    private boolean validaFormato(UploadedFile up) {
+        if (up == null) {
+            return true;
+        }
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String nombreDeArchivo = up.getFileName();
+        if (up.getSize() > FOTO_TAM_MAX) {
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "ERROR de formato, tamaño excedido", null);
+            facesContext.addMessage(null, facesMessage);
+            return false;
+        }
+
+
+        if (nombreDeArchivo.endsWith(".jpg")
+            || nombreDeArchivo.endsWith(".jpeg")
+            || nombreDeArchivo.endsWith(".png")) {
+            return true;
+        }
+
+        FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "ERROR de formato, solo png o jpg", null);
+        facesContext.addMessage(null, facesMessage);
+        return false;
+    }
+
+    /**
+     * Metodo que redirecciona la página actual a DetallesPuesto.xhtml.
+     */
+    public void redirecciona() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext()
+                .redirect("./DetallesPuesto.xhtml?id=" + idPuesto);
+        } catch (Exception e) {
+            FacesMessage facesMessage
+                = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "ERROR 01" + e.toString(), null);
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        }
+    }
 }
