@@ -93,7 +93,7 @@
               <b:column span="6">
                 <p:gmap id="gmap"
                         center="19.324175, -99.179942" zoom="18"
-                        type="HYBRID" model="#{mapa.advancedModel}"
+                        type="ROADMAP" model="#{mapa.advancedModel}"
                         onPointClick="handlePointClick(event);"
                         widgetVar="map"
                         >
@@ -110,6 +110,8 @@
             </b:row>
 
             <b:row>
+              <br />
+              <br />
               <b:column span="4" offset="4">
                 <b:commandButton value="Actualizar"
                                  action="#{editorPuesto.actualizar()}"
