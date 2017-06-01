@@ -100,7 +100,7 @@ public class EliminadorUsuario implements java.io.Serializable {
             }
 
             usuarios.remove(usuario);
-            usuario.setEliminado(true):
+            usuario.setEliminado(true);
             jpaUsuario.editar(usuarioId);
             //jpaUsuario.destruir(usuarioId);
 
