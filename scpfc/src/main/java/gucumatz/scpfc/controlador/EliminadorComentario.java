@@ -39,6 +39,7 @@ public class EliminadorComentario {
 
     @ManagedProperty("#{sesionActiva}")
     private SesionActiva sesionActiva;
+
     public EliminadorComentario() {
         jpaComentario
             = new FabricaControladorJpa().obtenerControladorJpaComentario();
