@@ -18,7 +18,7 @@
         <b:panel>
           <h2>Usuarios</h2>
           <ui:repeat value="#{eliminadorUsuario.usuarios}" var="c">
-            <b:panel collapsible="true" rendered="#{not c.esAdministrador}">
+            <b:panel collapsible="true" rendered="#{(not c.esAdministrador) and (not c.eliminado)}">
               <b:row>
                 <b:column span="3">
                   <center>

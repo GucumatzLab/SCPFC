@@ -100,7 +100,9 @@ public class EliminadorUsuario implements java.io.Serializable {
             }
 
             usuarios.remove(usuario);
-            jpaUsuario.destruir(usuarioId);
+            usuario.setEliminado(true):
+            jpaUsuario.editar(usuarioId);
+            //jpaUsuario.destruir(usuarioId);
 
             FacesMessage facesMessage
                 = new FacesMessage(FacesMessage.SEVERITY_INFO,
