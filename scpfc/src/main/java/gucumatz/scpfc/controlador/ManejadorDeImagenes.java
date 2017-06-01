@@ -170,4 +170,17 @@ public class ManejadorDeImagenes {
         }
         return obtenerImagenDeArchivo(rutaImagen);
     }
+
+    /**
+     * Elimina una foto dado su nombre. No hace nada si la foto no
+     * existe.
+     *
+     * @param nombre el nombre de la foto a eliminar
+     */
+    public void eliminarImagen(String nombre) {
+        File archivoAEliminar = new File(directorio, nombre);
+        if (archivoAEliminar.exists()) {
+            archivoAEliminar.delete();
+        }
+    }
 }

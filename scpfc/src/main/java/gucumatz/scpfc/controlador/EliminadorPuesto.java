@@ -133,10 +133,7 @@ public class EliminadorPuesto implements Serializable {
                 jpaCalificacion.destruir(c.getId());
             }
             for (FotoPuesto f : ft) {
-                File ff = new File("/tmp/scpfc/imagenes/" + f.getUrl());
-                if (ff.exists()) {
-                    ff.delete();
-                }
+                new ManejadorDeImagenes().eliminarImagen(f.getUrl());
                 jpaFoto.destruir(f.getId());
             }
             jpaPuesto.destruir(p.getId());

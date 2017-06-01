@@ -94,7 +94,10 @@ public class EliminadorUsuario implements java.io.Serializable {
                 jpaCalificacion.destruir(cal.getId());
             }
 
-            // destruir foto
+            if (usuario.getRutaImagen() != null) {
+                ManejadorDeImagenes mdi = new ManejadorDeImagenes();
+                mdi.eliminarImagen(usuario.getRutaImagen());
+            }
 
             usuarios.remove(usuario);
             jpaUsuario.destruir(usuarioId);
