@@ -30,6 +30,8 @@ public class InicioDeSesion implements Serializable {
             = "El usuario no existe";
     private static final String MENSAJE_CUENTA_NO_CONFIRMADA
             = "Esta cuenta no ha sido confirmada";
+    private static final String MENSAJE_CUENTA_ELIMINADA
+            = "Esta cuenta desactivada por el administrador";
     private static final String MENSAJE_CONTRASENA_INCORRECTA
             = "Contraseña incorrecta";
 
@@ -95,6 +97,13 @@ public class InicioDeSesion implements Serializable {
         Usuario usuario = jpaUsuario.buscarUsuario(cuenta);
         /* No hace nada si no está confirmada. */
         if (!usuario.getConfirmado()) {
+            return null;
+        }
+
+        if (usuario.getEliminado()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null,
+                    crearMensajeDeError(MENSAJE_CUENTA_ELIMINADA));
             return null;
         }
 
