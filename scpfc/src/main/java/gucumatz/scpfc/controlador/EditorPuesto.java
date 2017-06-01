@@ -268,8 +268,9 @@ public class EditorPuesto implements Serializable {
             }
             ManejadorDeImagenes mdi = new ManejadorDeImagenes();
             FotoPuesto f = new FotoPuesto();
-            mdi.escribirImagen(up, up.getFileName());
-            f.setUrl("puesto/" + up.getFileName());
+            mdi.escribirImagen(up, "puesto/" + up.getFileName()
+                    + extensionFoto);
+            f.setUrl("puesto/" + up.getFileName() + extensionFoto);
             f.setPuesto(puesto);
             jpaFotoPuesto.crear(f);
             fp.add(f);

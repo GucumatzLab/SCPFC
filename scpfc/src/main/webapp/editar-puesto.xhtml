@@ -133,9 +133,9 @@
 
              <div>
                 <h4>Subir imágenes</h4>
-                <h:form> 
+                <h:form enctype="multipart/form-data"> 
                     <p:fileUpload value="#{editorPuesto.foto}" mode="simple" skinSimple="true" />
-                    <b:commandButton value="Subir Imagen" action="#{editorPuesto.subeImagen()}"/>
+                    <b:commandButton value="Subir Imagen" ajax="false" action="#{editorPuesto.subeImagen()}"/>
                 </h:form>
              </div>                
           </b:column>
