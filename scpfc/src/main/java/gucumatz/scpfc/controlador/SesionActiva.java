@@ -189,7 +189,7 @@ public class SesionActiva implements Serializable {
      *
      * @param id_comentario tipo <code>long</code>: id del comentario
      * @param reaccion tipo <code>int</code>: reaccion
-     * @throws IOException
+     * @throws IOException En caso de no poder redireccionar
      */
     public void reacciona(long id_comentario, int reaccion) throws IOException {
         Reaccion r = null;

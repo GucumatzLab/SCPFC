@@ -37,7 +37,7 @@
         </b:row>
 
         <b:row>
-          <h:form enctype="multipart/form-data" prependId="false">
+            <h:form enctype="multipart/form-data" prependId="false">
             <b:row>
               <b:column span="6">
 
@@ -83,26 +83,6 @@
                   <p:ajax event="blur" update="msgUbicacion"/>
                 </b:inputText>
 
-                
-                <p:commandButton value="imágenes actuales" onclick="PF('images').show();"/>
-                <p:dialog  header="Imágenes" widgetVar="images" modal="false" height="320">
-                  <strong>El número de imagen de foto es el orden de aparición</strong>
-                  <b:carousel id="cfotos">
-                    <c:forEach items="#{editorPuesto.puesto.fotosPuesto}" var="fppk">
-                      <b:carouselItem>
-                        <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="height: 300px">
-                          <f:param name="ruta" value="#{fppk.url}"/>
-                        </p:graphicImage>
-                      </b:carouselItem>
-                    </c:forEach>
-                  </b:carousel>
-                </p:dialog>
-                <br/>
-                <br/>
-                <p:fileUpload value="#{editorPuesto.foto1}" skinSimple="true" label="Foto 1" mode="simple"/>
-                <p:fileUpload value="#{editorPuesto.foto2}" skinSimple="true" label="Foto 2" mode="simple"/>
-                <p:fileUpload value="#{editorPuesto.foto3}" skinSimple="true" label="Foto 3" mode="simple"/>
-                
               </b:column>
 
               <b:column span="6">
@@ -136,6 +116,29 @@
             </b:row>
           </h:form>
         </b:row>
+          <b:column>
+              <h3>Imágenes</h3>
+              <div style="height: 300px; overflow: auto">
+                <h:form> 
+                   <c:forEach items="#{editorPuesto.puesto.fotosPuesto}" var="fppk">
+                      <div id="imgPrv#{fppk.id}">
+                         <p:graphicImage value="#{manejadorDeImagenes.imagenDeArchivo}" style="width: 100%">
+                            <f:param name="ruta" value="#{fppk.url}"/>
+                         </p:graphicImage>
+                         <b:commandButton value="Eliminar" action="#{editorPuesto.eliminaImagen(fppk.id)}"/>
+                      </div>
+                   </c:forEach>                    
+                </h:form>
+             </div>
+
+             <div>
+                <h4>Subir imágenes</h4>
+                <h:form> 
+                    <p:fileUpload value="#{editorPuesto.foto}" mode="simple" skinSimple="true" />
+                    <b:commandButton value="Subir Imagen" action="#{editorPuesto.subeImagen()}"/>
+                </h:form>
+             </div>                
+          </b:column>
       </b:column>
       </b:panel>
 
