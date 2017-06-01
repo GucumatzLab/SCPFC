@@ -81,6 +81,7 @@ public class EliminadorUsuario implements java.io.Serializable {
             for (Comentario com : usuario.getComentarios()) {
                 for (Reaccion r : com.getReacciones()) {
                     jpaReaccion.destruir(r.getId());
+                    usuario.getReacciones().remove(r);
                 }
                 jpaComentario.destruir(com.getId());
             }
